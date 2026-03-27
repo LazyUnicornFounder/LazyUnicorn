@@ -1,6 +1,6 @@
 # Lazy Design
 
-> Category: 🛡️ Shield · Version: 0.0.1
+> Category: 🛠️ Dev · Version: 0.0.1
 
 ## Prompt
 
