@@ -33,29 +33,29 @@ Most engines work immediately with no setup. Some require external API keys or c
 
 | Engine | Category | Prompt |
 | ------ | -------- | ------ |
-| Lazy Security | ⚙️ Ops | [View prompt](prompts/lazy-security.md) |
-| Lazy Supabase | ⚙️ Ops | [View prompt](prompts/lazy-supabase.md) |
-| Lazy Telegram | ⚙️ Ops | [View prompt](prompts/lazy-telegram.md) |
 | Lazy Alert | ⚙️ Ops | [View prompt](prompts/lazy-alert.md) |
-| Lazy Contentful | ✍️ Content | [View prompt](prompts/lazy-contentful.md) |
-| Lazy Perplexity | ✍️ Content | [View prompt](prompts/lazy-perplexity.md) |
-| Lazy Crawl | ✍️ Content | [View prompt](prompts/lazy-crawl.md) |
-| Lazy GEO | ✍️ Content | [View prompt](prompts/lazy-geo.md) |
-| Lazy SEO | ✍️ Content | [View prompt](prompts/lazy-seo.md) |
+| Lazy Telegram | ⚙️ Ops | [View prompt](prompts/lazy-telegram.md) |
+| Lazy Supabase | ⚙️ Ops | [View prompt](prompts/lazy-supabase.md) |
+| Lazy Security | ⚙️ Ops | [View prompt](prompts/lazy-security.md) |
 | Lazy Blogger | ✍️ Content | [View prompt](prompts/lazy-blogger.md) |
-| Lazy Stream | 🎙️ Media | [View prompt](prompts/lazy-stream.md) |
-| Lazy Stream | 🎙️ Media | [View prompt](prompts/lazy-stream.md) |
+| Lazy SEO | ✍️ Content | [View prompt](prompts/lazy-seo.md) |
+| Lazy GEO | ✍️ Content | [View prompt](prompts/lazy-geo.md) |
+| Lazy Crawl | ✍️ Content | [View prompt](prompts/lazy-crawl.md) |
+| Lazy Perplexity | ✍️ Content | [View prompt](prompts/lazy-perplexity.md) |
+| Lazy Contentful | ✍️ Content | [View prompt](prompts/lazy-contentful.md) |
 | Lazy Voice | 🎙️ Media | [View prompt](prompts/lazy-voice.md) |
-| Lazy Admin | 🚀 Unicorn | [View prompt](prompts/lazy-admin.md) |
+| Lazy Stream | 🎙️ Media | [View prompt](prompts/lazy-stream.md) |
+| Lazy Stream | 🎙️ Media | [View prompt](prompts/lazy-stream.md) |
 | Lazy Run | 🚀 Unicorn | [View prompt](prompts/lazy-run.md) |
-| Lazy Mail | 🛒 Commerce | [View prompt](prompts/lazy-mail.md) |
-| Lazy SMS | 🛒 Commerce | [View prompt](prompts/lazy-sms.md) |
-| Lazy Pay | 🛒 Commerce | [View prompt](prompts/lazy-pay.md) |
+| Lazy Admin | 🚀 Unicorn | [View prompt](prompts/lazy-admin.md) |
 | Lazy Store | 🛒 Commerce | [View prompt](prompts/lazy-store.md) |
-| Lazy Design | 🛠️ Dev | [View prompt](prompts/lazy-design.md) |
-| Lazy GitHub | 🛠️ Dev | [View prompt](prompts/lazy-code.md) |
-| Lazy Linear | 🛠️ Dev | [View prompt](prompts/lazy-linear.md) |
+| Lazy Pay | 🛒 Commerce | [View prompt](prompts/lazy-pay.md) |
+| Lazy SMS | 🛒 Commerce | [View prompt](prompts/lazy-sms.md) |
+| Lazy Mail | 🛒 Commerce | [View prompt](prompts/lazy-mail.md) |
 | Lazy GitLab | 🛠️ Dev | [View prompt](prompts/lazy-gitlab.md) |
+| Lazy Linear | 🛠️ Dev | [View prompt](prompts/lazy-linear.md) |
+| Lazy GitHub | 🛠️ Dev | [View prompt](prompts/lazy-code.md) |
+| Lazy Design | 🛠️ Dev | [View prompt](prompts/lazy-design.md) |
 
 ## 📄 License
 
