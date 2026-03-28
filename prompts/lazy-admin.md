@@ -1,10 +1,12 @@
 # Lazy Admin
 
-> Category: ⚙️ Ops · Version: 0.0.1
+> Category: ⚙️ Ops · Version: 0.0.2
 
 ## Prompt
 
 ````
+# lazy-admin — v0.0.1
+
 [LazyUnicorn Admin Dashboard Prompt — v0.0.1 — LazyUnicorn.ai]
 
 Rebuild the entire admin dashboard at /admin from scratch. Replace everything currently there with a unified control panel for the entire LazyUnicorn autonomous operations layer. This admin detects which engines are installed by checking which database tables exist and shows only the relevant panels. It works whether one engine or all twenty are installed.
@@ -306,6 +308,7 @@ On each individual engine page /admin/[engine] add a small version badge in the 
 Add a small "Powered by Lazy Unicorn" backlink badge in the footer of every public-facing page. Use this exact HTML:
 <a href="https://www.lazyunicorn.ai" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#0a0a08;color:#f0ead6;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(240,234,214,0.2)">🦄 Powered by Lazy Unicorn</a>
 Style it to sit at the bottom of the page footer, centered, with subtle opacity (60%) that increases to 100% on hover.
+
 ````
 
 ---
