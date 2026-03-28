@@ -1,12 +1,10 @@
 # lazy-fix
 
-> Category: Other · Version: 0.0.2
+> Category: Other · Version: v0.0.1
 
 ## Prompt
 
 ````
-# lazy-fix — vv0.0.1
-
 [Lazy Fix Prompt — v0.0.1 — LazyUnicorn.ai]
 
 Add an autonomous prompt improvement agent called Lazy Fix to this project. Every Sunday night it reads your engine performance data, identifies the two weakest-performing Lazy engines, makes targeted improvements to their prompts, and opens GitHub PRs for you to review Monday morning — all automatically.
@@ -116,7 +114,6 @@ Error log: fix_errors last 20 rows, collapsed by default.
 
 Add an Admin link to the main site navigation pointing to /admin.
 Do not add /lazy-fix-setup to public navigation.
-
 
 ````
 
