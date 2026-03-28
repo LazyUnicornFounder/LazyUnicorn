@@ -1,10 +1,12 @@
 # Lazy Auth
 
-> Category: 🛠️ Dev · Version: 0.0.3
+> Category: 🛠️ Dev · Version: 0.0.4
 
 ## Prompt
 
 ````
+# lazy-auth — v0.0.3
+
 [Lazy Auth Prompt — v0.0.1 — LazyUnicorn.ai]
 
 Add a complete authentication system called Lazy Auth to this project. It installs Google Sign-In, email/password login, protected routes, user profiles, role-based access control, and a user management dashboard — in one prompt. Uses Lovable Cloud and Supabase Auth.
@@ -134,6 +136,7 @@ Add Sign in and Sign up links to the main site navigation when the user is not a
 Show the UserMenu component in the main site navigation when the user is authenticated.
 Do not add /lazy-auth-setup to public navigation.
 Add an Admin link to the main site navigation pointing to /admin — only visible when the current user is an admin.
+
 
 ````
 
