@@ -1,6 +1,6 @@
-# lazy-fix
+# Lazy Fix
 
-> Category: Other · Version: v0.0.1
+> Category: 🤖 Agents · Version: 0.0.1
 
 ## Prompt
 
