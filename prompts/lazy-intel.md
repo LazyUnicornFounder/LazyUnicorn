@@ -1,6 +1,6 @@
-# lazy-intel
+# Lazy Intel
 
-> Category: Other · Version: 0.0.2
+> Category: 🤖 Agents · Version: 0.0.2
 
 ## Prompt
 
