@@ -1,10 +1,12 @@
 # Lazy Drop
 
-> Category: 🛒 Commerce · Version: 0.0.2
+> Category: 🛒 Commerce · Version: 0.0.3
 
 ## Prompt
 
 ````
+# lazy-drop — v0.0.2
+
 [Lazy Drop Prompt — v0.0.1 — LazyUnicorn.ai]
 
 Add a complete autonomous dropshipping engine called Lazy Drop to this project. It connects your Lovable site to AutoDS — giving you access to 800M+ products from 25+ global suppliers, automatic price and stock monitoring, one-click product import, and fully automated order fulfilment. Your store discovers trending products, writes their listings, monitors prices, and fulfils orders automatically. You do nothing after setup.
@@ -215,6 +217,7 @@ Controls section: Test Connection button, Discover Products Now button (triggers
 Add a Shop link to the main site navigation pointing to /shop if no store existed before this prompt.
 Add an Admin link to the main site navigation pointing to /admin.
 Do not add /lazy-drop-setup to public navigation.
+
 
 ````
 
