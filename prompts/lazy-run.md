@@ -1,11 +1,11 @@
 # Lazy Run
 
-> Category: 🚀 Unicorn · Version: 0.0.4
+> Category: 🚀 Unicorn · Version: 0.0.5
 
 ## Prompt
 
 ````
-[Lazy Run Prompt — v0.0.4 — LazyUnicorn.ai]
+[Lazy Run Prompt — v0.0.5 — LazyUnicorn.ai]
 
 Add a complete unified autonomous operations runtime called Lazy Run to this project. Lazy Run installs and manages all Lazy engines from a single setup prompt, a single dashboard, and a unified scheduling and monitoring system. Install only the engines the user activates during setup.
 
@@ -25,6 +25,7 @@ All edge functions must use these exact names. Lazy Run calls them by these name
 | Pay | pay-checkout, pay-webhook, pay-optimise, pay-recover, pay-portal |
 | SMS | sms-send, sms-receive, sms-status, sms-sequences-run, sms-optimise |
 | Stream | stream-monitor, stream-process, stream-write-content, stream-optimise |
+| YouTube | youtube-sync, youtube-process, youtube-fetch-transcript, youtube-write-transcript, youtube-write-seo, youtube-write-geo, youtube-write-summary, youtube-generate-chapters, youtube-extract-comments, youtube-track-performance |
 | Code | github-webhook, code-sync-roadmap, code-write-content, code-optimise |
 | GitLab | gitlab-webhook, gitlab-sync-roadmap, gitlab-write-content, gitlab-optimise |
 | Linear | linear-sync-all, linear-write-content, linear-velocity-report, linear-optimise |
@@ -50,6 +51,7 @@ Required secrets by engine:
 - Pay: STRIPE_SECRET_KEY, STRIPE_PUBLISHABLE_KEY, STRIPE_WEBHOOK_SECRET
 - SMS: TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN
 - Stream: TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET
+- YouTube: YOUTUBE_API_KEY, SUPADATA_API_KEY
 - Code: GITHUB_TOKEN, GITHUB_WEBHOOK_SECRET
 - GitLab: GITLAB_TOKEN, GITLAB_WEBHOOK_SECRET
 - Linear: LINEAR_API_KEY
@@ -112,6 +114,7 @@ Voice: voice_settings, voice_episodes, voice_errors
 Pay: pay_settings, pay_products, pay_customers, pay_transactions, pay_subscriptions, pay_abandoned, pay_optimisation_log, pay_errors
 SMS: sms_settings, sms_contacts, sms_messages, sms_sequences, sms_optouts, sms_optimisation_log, sms_errors
 Stream: stream_settings, stream_sessions, stream_content, stream_clips, stream_transcripts, stream_optimisation_log, stream_errors
+YouTube: youtube_settings, youtube_videos, youtube_content, youtube_comments, youtube_intelligence, youtube_performance, youtube_errors
 Code: code_settings, code_commits, code_releases, code_content, code_roadmap, code_optimisation_log, code_errors
 GitLab: gitlab_settings, gitlab_commits, gitlab_merge_requests, gitlab_releases, gitlab_content, gitlab_roadmap, gitlab_optimisation_log, gitlab_errors
 Linear: linear_settings, linear_issues, linear_cycles, linear_projects, linear_content, linear_optimisation_log, linear_errors
@@ -153,6 +156,7 @@ Group: Commerce Engines
 Group: Media Engines
 - Lazy Voice: Narrates every post in your voice via ElevenLabs
 - Lazy Stream: Turns every Twitch stream into blog posts and SEO content
+- Lazy YouTube: Monitors your YouTube channel and turns every video into a transcript, SEO article, GEO article, summary, and chapter markers — plus extracts comment intelligence
 
 Group: Developer Engines
 - Lazy Code: Turns every GitHub commit into a changelog and developer post
@@ -199,6 +203,8 @@ Twilio section (if Lazy SMS active): Account SID as TWILIO_ACCOUNT_SID, Auth Tok
 
 Twitch section (if Lazy Stream active): Client ID as TWITCH_CLIENT_ID, Client Secret as TWITCH_CLIENT_SECRET, Username.
 
+YouTube section (if Lazy YouTube active): YouTube API key — from Google Cloud Console with YouTube Data API v3 enabled. Stored as YOUTUBE_API_KEY. Supadata API key — from supadata.ai for transcript extraction. Stored as SUPADATA_API_KEY. YouTube Channel ID (starts with UC).
+
 GitHub section (if Lazy Code active): Personal Access Token as GITHUB_TOKEN, Webhook Secret as GITHUB_WEBHOOK_SECRET, Username, Repository.
 
 GitLab section (if Lazy GitLab active): Personal Access Token as GITLAB_TOKEN, Webhook Secret as GITLAB_WEBHOOK_SECRET, Username, Project path.
@@ -227,7 +233,7 @@ Launch button.
 **On submit:**
 1. Store all API keys as Supabase secrets
 2. Save run_settings with active_engines as comma-separated list
-3. Set setup_complete to true and prompt_version to 'v0.0.4'
+3. Set setup_complete to true and prompt_version to 'v0.0.5'
 4. Seed all engine-specific settings tables with provided values
 5. Create all required database tables for active engines
 6. For content engines immediately trigger: blog-publish, seo-discover, geo-discover
@@ -236,8 +242,9 @@ Launch button.
 9. For Contentful if active immediately trigger contentful-pull
 10. For Supabase if active immediately trigger supabase-monitor
 11. For Security if active immediately trigger security-scan
-12. Show loading: "Launching your autonomous operations layer..."
-13. Redirect to /admin with message: "Lazy Run is active. Your autonomous operations layer is running."
+12. For YouTube if active immediately trigger youtube-sync
+13. Show loading: "Launching your autonomous operations layer..."
+14. Redirect to /admin with message: "Lazy Run is active. Your autonomous operations layer is running."
 
 ---
 
@@ -267,6 +274,7 @@ Commerce engines:
 Media engines:
 - Voice: voice-narrate every 30 min
 - Stream: stream-monitor every 5 min
+- YouTube: youtube-sync every 30 min, youtube-extract-comments daily 4am, youtube-track-performance Monday 5am
 
 Developer engines:
 - Code: code-sync-roadmap every hour
@@ -296,6 +304,7 @@ Cron: every Monday at 7am UTC — 0 7 * * 1
 - SMS: sms_messages sent count, response rate from sms_sequences
 - Voice: voice_episodes count
 - Stream: stream_sessions processed, stream_content count
+- YouTube: youtube_videos processed, youtube_content count, youtube_intelligence count, top performing video
 - Code: code_commits processed, code_content count
 - GitLab: gitlab_commits processed, gitlab_content count
 - Linear: linear_issues completed, linear_content count
@@ -330,7 +339,7 @@ Log errors to run_errors.
 ## 4. Install all engine edge functions
 
 Install all edge functions for each active engine using these exact function names:
-blog-publish, seo-discover, seo-publish, geo-discover, geo-publish, geo-test, store-discover, store-listings, store-prices, store-promote, store-optimise, store-content, voice-narrate, voice-rss, pay-checkout, pay-webhook, pay-optimise, pay-recover, pay-portal, sms-send, sms-receive, sms-status, sms-sequences-run, sms-optimise, stream-monitor, stream-process, stream-write-content, stream-optimise, github-webhook, code-sync-roadmap, code-write-content, code-optimise, gitlab-webhook, gitlab-sync-roadmap, gitlab-write-content, gitlab-optimise, linear-sync-all, linear-write-content, linear-velocity-report, linear-optimise, crawl-run, crawl-extract, crawl-publish, perplexity-research, perplexity-feed-engines, perplexity-test-citations, perplexity-improve-content, alert-send, alert-monitor, alert-briefing, alert-command, telegram-send, telegram-monitor, telegram-briefing, telegram-command, contentful-pull, contentful-webhook, contentful-push, supabase-monitor, supabase-publish-milestone, supabase-weekly-report, security-scan, security-poll, security-alert, security-generate-report, security-monitor.
+blog-publish, seo-discover, seo-publish, geo-discover, geo-publish, geo-test, store-discover, store-listings, store-prices, store-promote, store-optimise, store-content, voice-narrate, voice-rss, pay-checkout, pay-webhook, pay-optimise, pay-recover, pay-portal, sms-send, sms-receive, sms-status, sms-sequences-run, sms-optimise, stream-monitor, stream-process, stream-write-content, stream-optimise, youtube-sync, youtube-process, youtube-fetch-transcript, youtube-write-transcript, youtube-write-seo, youtube-write-geo, youtube-write-summary, youtube-generate-chapters, youtube-extract-comments, youtube-track-performance, github-webhook, code-sync-roadmap, code-write-content, code-optimise, gitlab-webhook, gitlab-sync-roadmap, gitlab-write-content, gitlab-optimise, linear-sync-all, linear-write-content, linear-velocity-report, linear-optimise, crawl-run, crawl-extract, crawl-publish, perplexity-research, perplexity-feed-engines, perplexity-test-citations, perplexity-improve-content, alert-send, alert-monitor, alert-briefing, alert-command, telegram-send, telegram-monitor, telegram-briefing, telegram-command, contentful-pull, contentful-webhook, contentful-push, supabase-monitor, supabase-publish-milestone, supabase-weekly-report, security-scan, security-poll, security-alert, security-generate-report, security-monitor.
 
 Only install functions for active engines.
 
