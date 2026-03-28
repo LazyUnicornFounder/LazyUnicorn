@@ -43,21 +43,24 @@ Most engines work immediately with no setup. Some require external API keys or c
 | Lazy Perplexity | ✍️ Content | [View prompt](prompts/lazy-perplexity.md) |
 | Lazy Contentful | ✍️ Content | [View prompt](prompts/lazy-contentful.md) |
 | Lazy Store | 🛒 Commerce | [View prompt](prompts/lazy-store.md) |
+| Lazy Drop | 🛒 Commerce | [View prompt](prompts/lazy-drop.md) |
+| Lazy Print | 🛒 Commerce | [View prompt](prompts/lazy-print.md) |
 | Lazy Pay | 🛒 Commerce | [View prompt](prompts/lazy-pay.md) |
 | Lazy SMS | 🛒 Commerce | [View prompt](prompts/lazy-sms.md) |
 | Lazy Mail | 🛒 Commerce | [View prompt](prompts/lazy-mail.md) |
 | Lazy Voice | 🎙️ Media | [View prompt](prompts/lazy-voice.md) |
 | Lazy Stream | 🎙️ Media | [View prompt](prompts/lazy-stream.md) |
-| Lazy Stream | 🎙️ Media | [View prompt](prompts/lazy-stream.md) |
 | Lazy GitHub | 🛠️ Dev | [View prompt](prompts/lazy-code.md) |
 | Lazy GitLab | 🛠️ Dev | [View prompt](prompts/lazy-gitlab.md) |
 | Lazy Linear | 🛠️ Dev | [View prompt](prompts/lazy-linear.md) |
 | Lazy Design | 🛠️ Dev | [View prompt](prompts/lazy-design.md) |
+| Lazy Auth | 🛠️ Dev | [View prompt](prompts/lazy-auth.md) |
 | Lazy Admin | ⚙️ Ops | [View prompt](prompts/lazy-admin.md) |
 | Lazy Alert | ⚙️ Ops | [View prompt](prompts/lazy-alert.md) |
 | Lazy Telegram | ⚙️ Ops | [View prompt](prompts/lazy-telegram.md) |
 | Lazy Supabase | ⚙️ Ops | [View prompt](prompts/lazy-supabase.md) |
 | Lazy Security | ⚙️ Ops | [View prompt](prompts/lazy-security.md) |
+| Lazy Granola | ⚙️ Ops | [View prompt](prompts/lazy-granola.md) |
 
 ## 📄 License
 
