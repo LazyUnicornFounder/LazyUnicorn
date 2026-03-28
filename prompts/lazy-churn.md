@@ -1,6 +1,6 @@
-# lazy-churn
+# Lazy Churn
 
-> Category: Other · Version: v0.0.2
+> Category: 🤖 Agents · Version: 0.0.1
 
 ## Prompt
 
