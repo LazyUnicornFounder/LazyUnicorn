@@ -62,14 +62,21 @@ Most engines work immediately with no setup. Some require external API keys or c
 | Lazy Telegram | ⚙️ Ops | [View prompt](prompts/lazy-telegram.md) |
 | Lazy Supabase | ⚙️ Ops | [View prompt](prompts/lazy-supabase.md) |
 | Lazy Security | ⚙️ Ops | [View prompt](prompts/lazy-security.md) |
-| Lazy Watch | 🤖 Agents | [View prompt](prompts/lazy-watch.md) |
-| Lazy Fix | 🤖 Agents | [View prompt](prompts/lazy-fix.md) |
-| Lazy Build | 🤖 Agents | [View prompt](prompts/lazy-build.md) |
-| Lazy Intel | 🤖 Agents | [View prompt](prompts/lazy-intel.md) |
-| Lazy Repurpose | 🤖 Agents | [View prompt](prompts/lazy-repurpose.md) |
-| Lazy Trend | 🤖 Agents | [View prompt](prompts/lazy-trend.md) |
-| Lazy Churn | 🤖 Agents | [View prompt](prompts/lazy-churn.md) |
 | lazy-agents | Other | [View prompt](prompts/lazy-agents.md) |
+
+## 🤖 Agents
+
+Autonomous agents that monitor, fix, and improve your engine stack.
+
+| Agent | What it does | Prompt |
+| ----- | ------------ | ------ |
+| Lazy Watch | Monitors errors across all engines every hour | [View prompt](prompts/lazy-watch.md) |
+| Lazy Fix | Auto-fixes broken prompts and creates GitHub PRs | [View prompt](prompts/lazy-fix.md) |
+| Lazy Build | Generates new engine prompts from a brief | [View prompt](prompts/lazy-build.md) |
+| Lazy Intel | Weekly strategy reports and keyword fuelling | [View prompt](prompts/lazy-intel.md) |
+| Lazy Repurpose | Recycles top content into new formats | [View prompt](prompts/lazy-repurpose.md) |
+| Lazy Trend | Scans for trending topics every 6 hours | [View prompt](prompts/lazy-trend.md) |
+| Lazy Churn | Detects at-risk users and triggers retention flows | [View prompt](prompts/lazy-churn.md) |
 
 ## 📄 License
 
