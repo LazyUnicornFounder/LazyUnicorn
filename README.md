@@ -52,6 +52,7 @@ Most engines work immediately with no setup. Some require external API keys or c
 | Lazy Mail | 🛒 Commerce | [View prompt](prompts/lazy-mail.md) |
 | Lazy Voice | 🎙️ Media | [View prompt](prompts/lazy-voice.md) |
 | Lazy Stream | 🎙️ Media | [View prompt](prompts/lazy-stream.md) |
+| Lazy YouTube | 🎙️ Media | [View prompt](prompts/lazy-youtube.md) |
 | Lazy GitHub | 🛠️ Dev | [View prompt](prompts/lazy-code.md) |
 | Lazy GitLab | 🛠️ Dev | [View prompt](prompts/lazy-gitlab.md) |
 | Lazy Linear | 🛠️ Dev | [View prompt](prompts/lazy-linear.md) |
