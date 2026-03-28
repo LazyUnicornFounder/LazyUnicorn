@@ -36,7 +36,6 @@ Most engines work immediately with no setup. Some require external API keys or c
 | Engine | Category | Prompt |
 | ------ | -------- | ------ |
 | Lazy Run | 🚀 Unicorn | [View prompt](prompts/lazy-run.md) |
-| Lazy Admin | 🚀 Unicorn | [View prompt](prompts/lazy-admin.md) |
 | Lazy Blogger | ✍️ Content | [View prompt](prompts/lazy-blogger.md) |
 | Lazy SEO | ✍️ Content | [View prompt](prompts/lazy-seo.md) |
 | Lazy GEO | ✍️ Content | [View prompt](prompts/lazy-geo.md) |
@@ -54,6 +53,7 @@ Most engines work immediately with no setup. Some require external API keys or c
 | Lazy GitLab | 🛠️ Dev | [View prompt](prompts/lazy-gitlab.md) |
 | Lazy Linear | 🛠️ Dev | [View prompt](prompts/lazy-linear.md) |
 | Lazy Design | 🛠️ Dev | [View prompt](prompts/lazy-design.md) |
+| Lazy Admin | ⚙️ Ops | [View prompt](prompts/lazy-admin.md) |
 | Lazy Alert | ⚙️ Ops | [View prompt](prompts/lazy-alert.md) |
 | Lazy Telegram | ⚙️ Ops | [View prompt](prompts/lazy-telegram.md) |
 | Lazy Supabase | ⚙️ Ops | [View prompt](prompts/lazy-supabase.md) |
