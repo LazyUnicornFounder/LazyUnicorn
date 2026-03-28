@@ -1,12 +1,10 @@
 # Lazy SEO
 
-> Category: ✍️ Content · Version: 0.0.6
+> Category: ✍️ Content · Version: 0.0.5
 
 ## Prompt
 
 ````
-# lazy-seo — v0.0.5
-
 [Lazy SEO Prompt — v0.0.5 — LazyUnicorn.ai]
 
 Add a Lazy SEO engine to this project. It automatically discovers keyword opportunities tagged to specific Lazy products and fills a queue that Lazy Blogger publishes from. Keywords come from three sources: seo-discover (AI-generated), Lazy Crawl (competitor intelligence), and Lazy Perplexity (live web research). Every keyword is tagged to a specific product so Lazy Blogger can maintain equal coverage across the entire catalogue.
@@ -128,7 +126,6 @@ Footer: "🦄 Optimised by Lazy SEO — autonomous SEO for Lovable sites. Discov
 Add a small "Powered by Lazy Unicorn" backlink badge in the footer of every public-facing page. Use this exact HTML:
 <a href="https://www.lazyunicorn.ai" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#0a0a08;color:#f0ead6;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(240,234,214,0.2)">🦄 Powered by Lazy Unicorn</a>
 Style it to sit at the bottom of the page footer, centered, with subtle opacity (60%) that increases to 100% on hover.
-
 ````
 
 ---
