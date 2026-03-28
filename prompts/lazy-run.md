@@ -1,11 +1,11 @@
 # Lazy Run
 
-> Category: 🚀 Unicorn · Version: 0.0.5
+> Category: 🚀 Unicorn · Version: v0.0.6
 
 ## Prompt
 
 ````
-[Lazy Run Prompt — v0.0.5 — LazyUnicorn.ai]
+[Lazy Run Prompt — v0.0.6 — LazyUnicorn.ai]
 
 Add a complete unified autonomous operations runtime called Lazy Run to this project. Lazy Run installs and manages all Lazy engines from a single setup prompt, a single dashboard, and a unified scheduling and monitoring system. Install only the engines the user activates during setup.
 
@@ -16,7 +16,7 @@ Add a complete unified autonomous operations runtime called Lazy Run to this pro
 All edge functions must use these exact names. Lazy Run calls them by these names.
 
 | Engine | Functions |
-|--------|-----------|
+|--------|----------|
 | Blogger | blog-publish |
 | SEO | seo-discover, seo-publish |
 | GEO | geo-discover, geo-publish, geo-test |
@@ -36,6 +36,7 @@ All edge functions must use these exact names. Lazy Run calls them by these name
 | Contentful | contentful-pull, contentful-webhook, contentful-push |
 | Supabase | supabase-monitor, supabase-publish-milestone, supabase-weekly-report |
 | Security | security-scan, security-poll, security-alert, security-generate-report, security-monitor |
+| Agents | agent-error-monitor, agent-prompt-improver, agent-engine-writer, agent-performance-intel |
 | Run | run-orchestrator, run-weekly-report, run-health-check |
 
 ---
@@ -62,6 +63,7 @@ Required secrets by engine:
 - Contentful: CONTENTFUL_DELIVERY_TOKEN, CONTENTFUL_MANAGEMENT_TOKEN, CONTENTFUL_WEBHOOK_SECRET
 - Supabase monitoring: SUPABASE_SERVICE_ROLE_KEY
 - Security: AIKIDO_API_KEY
+- Agents: ANTHROPIC_API_KEY, GITHUB_TOKEN (repo scope), GITHUB_REPO
 
 ---
 
@@ -125,6 +127,7 @@ Telegram: telegram_settings, telegram_log, telegram_errors
 Contentful: contentful_settings, contentful_entries, contentful_sync_log, contentful_errors
 Supabase monitoring: supabase_settings, supabase_snapshots, supabase_milestones, supabase_content, supabase_errors
 Security: security_settings, security_scans, security_vulnerabilities, security_reports, security_errors
+Agents: agent_settings, agent_runs, agent_issues, agent_improvements, agent_errors
 
 Create only the tables for engines the user activates.
 
@@ -171,6 +174,9 @@ Group: Channels
 
 Group: Security
 - Lazy Security: Runs automated Aikido pentests, tracks vulnerabilities, and generates audit-ready reports
+
+Group: Autonomous Agents
+- Lazy Agents: Four autonomous agents that monitor errors, improve prompts, write new engines, and generate weekly performance intelligence — all via GitHub PRs and issues
 
 Below the cards show which API keys each selected engine requires.
 Next button.
@@ -224,6 +230,13 @@ Aikido section (if Lazy Security active):
 - Aikido Project ID (text) — find in your Aikido project settings.
 - Pentest frequency (select: Weekly / Monthly / Quarterly / Manual only)
 
+Agents section (if Lazy Agents active):
+- GitHub repo (text) — your LazyUnicorn prompts repo e.g. yourname/lazyunicorn. Stored in agent_settings.
+- ANTHROPIC_API_KEY — already set if using other engines, otherwise stored as ANTHROPIC_API_KEY secret.
+- GITHUB_TOKEN — already set if using Lazy Code, otherwise stored as GITHUB_TOKEN secret with repo scope.
+- Error threshold (number, default 3) — how many errors in an hour before opening a GitHub issue.
+- Slack webhook URL (text, optional) — paste from Lazy Alert settings if installed.
+
 Next button.
 
 **Step 5 — Schedule**
@@ -233,7 +246,7 @@ Launch button.
 **On submit:**
 1. Store all API keys as Supabase secrets
 2. Save run_settings with active_engines as comma-separated list
-3. Set setup_complete to true and prompt_version to 'v0.0.5'
+3. Set setup_complete to true and prompt_version to 'v0.0.6'
 4. Seed all engine-specific settings tables with provided values
 5. Create all required database tables for active engines
 6. For content engines immediately trigger: blog-publish, seo-discover, geo-discover
@@ -243,8 +256,9 @@ Launch button.
 10. For Supabase if active immediately trigger supabase-monitor
 11. For Security if active immediately trigger security-scan
 12. For YouTube if active immediately trigger youtube-sync
-13. Show loading: "Launching your autonomous operations layer..."
-14. Redirect to /admin with message: "Lazy Run is active. Your autonomous operations layer is running."
+13. For Agents if active immediately trigger agent-error-monitor
+14. Show loading: "Launching your autonomous operations layer..."
+15. Redirect to /admin with message: "Lazy Run is active. Your autonomous operations layer is running."
 
 ---
 
@@ -288,6 +302,9 @@ Channels:
 - Supabase: supabase-monitor every hour, supabase-weekly-report Monday
 - Security: security-scan every hour (checks if pentest is due), security-poll every 10 min (checks scan status), security-monitor daily 3am
 
+Autonomous Agents:
+- Agents: agent-error-monitor every hour, agent-prompt-improver Sunday 11pm, agent-performance-intel Monday 6am
+
 6. Log each execution to run_activity: engine, action, result, details.
 7. Log failures to run_errors.
 
@@ -315,6 +332,7 @@ Cron: every Monday at 7am UTC — 0 7 * * 1
 - Contentful: contentful_entries synced, contentful_sync_log push count
 - Supabase: supabase_milestones reached, supabase_content count
 - Security: current security score from latest security_scans, open critical count, open high count from security_vulnerabilities, last pentest date
+- Agents: agent_runs count by agent, issues opened, PRs opened, improvements merged
 
 3. Call the built-in Lovable AI:
 "Write a weekly performance report for [brand_name]. Metrics from the last 7 days: [metrics list]. Write a friendly report under 300 words. Cover what the engines accomplished, the best performing engine, any areas for improvement, projection for next week. Write in second person. Return only the report text."
@@ -331,7 +349,8 @@ Cron: every hour — 0 * * * *
 2. For each active engine query its errors table for errors in the last hour.
 3. If any engine has more than 3 errors in the last hour: insert warning into run_activity with result error. If Lazy Alert is installed call alert-send with the warning. If Lazy Telegram is installed call telegram-send.
 4. For Security engine: also check security_vulnerabilities for any new critical severity vulnerabilities found in the last hour. If found and Lazy Alert or Lazy Telegram is installed send an immediate alert regardless of error threshold.
-5. Insert performance snapshot into run_performance for each engine.
+5. For Agents engine: also check agent_issues for any new critical severity issues opened in the last hour. If found send alert.
+6. Insert performance snapshot into run_performance for each engine.
 Log errors to run_errors.
 
 ---
@@ -339,7 +358,7 @@ Log errors to run_errors.
 ## 4. Install all engine edge functions
 
 Install all edge functions for each active engine using these exact function names:
-blog-publish, seo-discover, seo-publish, geo-discover, geo-publish, geo-test, store-discover, store-listings, store-prices, store-promote, store-optimise, store-content, voice-narrate, voice-rss, pay-checkout, pay-webhook, pay-optimise, pay-recover, pay-portal, sms-send, sms-receive, sms-status, sms-sequences-run, sms-optimise, stream-monitor, stream-process, stream-write-content, stream-optimise, youtube-sync, youtube-process, youtube-fetch-transcript, youtube-write-transcript, youtube-write-seo, youtube-write-geo, youtube-write-summary, youtube-generate-chapters, youtube-extract-comments, youtube-track-performance, github-webhook, code-sync-roadmap, code-write-content, code-optimise, gitlab-webhook, gitlab-sync-roadmap, gitlab-write-content, gitlab-optimise, linear-sync-all, linear-write-content, linear-velocity-report, linear-optimise, crawl-run, crawl-extract, crawl-publish, perplexity-research, perplexity-feed-engines, perplexity-test-citations, perplexity-improve-content, alert-send, alert-monitor, alert-briefing, alert-command, telegram-send, telegram-monitor, telegram-briefing, telegram-command, contentful-pull, contentful-webhook, contentful-push, supabase-monitor, supabase-publish-milestone, supabase-weekly-report, security-scan, security-poll, security-alert, security-generate-report, security-monitor.
+blog-publish, seo-discover, seo-publish, geo-discover, geo-publish, geo-test, store-discover, store-listings, store-prices, store-promote, store-optimise, store-content, voice-narrate, voice-rss, pay-checkout, pay-webhook, pay-optimise, pay-recover, pay-portal, sms-send, sms-receive, sms-status, sms-sequences-run, sms-optimise, stream-monitor, stream-process, stream-write-content, stream-optimise, youtube-sync, youtube-process, youtube-fetch-transcript, youtube-write-transcript, youtube-write-seo, youtube-write-geo, youtube-write-summary, youtube-generate-chapters, youtube-extract-comments, youtube-track-performance, github-webhook, code-sync-roadmap, code-write-content, code-optimise, gitlab-webhook, gitlab-sync-roadmap, gitlab-write-content, gitlab-optimise, linear-sync-all, linear-write-content, linear-velocity-report, linear-optimise, crawl-run, crawl-extract, crawl-publish, perplexity-research, perplexity-feed-engines, perplexity-test-citations, perplexity-improve-content, alert-send, alert-monitor, alert-briefing, alert-command, telegram-send, telegram-monitor, telegram-briefing, telegram-command, contentful-pull, contentful-webhook, contentful-push, supabase-monitor, supabase-publish-milestone, supabase-weekly-report, security-scan, security-poll, security-alert, security-generate-report, security-monitor, agent-error-monitor, agent-prompt-improver, agent-engine-writer, agent-performance-intel.
 
 Only install functions for active engines.
 
