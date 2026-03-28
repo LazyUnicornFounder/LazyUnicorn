@@ -1,12 +1,10 @@
 # lazy-build
 
-> Category: Other · Version: 0.0.2
+> Category: Other · Version: v0.0.1
 
 ## Prompt
 
 ````
-# lazy-build — vv0.0.1
-
 [Lazy Build Prompt — v0.0.1 — LazyUnicorn.ai]
 
 Add an autonomous engine writer agent called Lazy Build to this project. Give it a name, integration, tagline, and one-paragraph brief — it reads three reference prompt files and your CLAUDE.md rules, writes a complete new Lazy engine prompt following your exact SPEC pattern, and opens a draft GitHub PR for your review. Your prompt stack grows without you writing a word.
@@ -138,7 +136,6 @@ Error log: build_errors last 20 rows, collapsed by default.
 
 Add an Admin link to the main site navigation pointing to /admin.
 Do not add /lazy-build-setup to public navigation.
-
 
 ````
 
