@@ -1,6 +1,6 @@
 # Lazy Admin
 
-> Category: 🚀 Unicorn · Version: 0.0.1
+> Category: ⚙️ Ops · Version: 0.0.1
 
 ## Prompt
 
