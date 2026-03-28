@@ -1,12 +1,10 @@
 # Lazy Granola
 
-> Category: ⚙️ Ops · Version: 0.0.3
+> Category: ⚙️ Ops · Version: 0.0.2
 
 ## Prompt
 
 ````
-# lazy-granola — v0.0.2
-
 [Lazy Granola Prompt — v0.0.1 — LazyUnicorn.ai]
 
 Add an autonomous meeting-to-content engine called Lazy Granola to this project. It connects to Granola via the Granola MCP server, detects new meetings, and automatically turns them into blog posts, product updates, Linear issues, customer intelligence, and Slack summaries — without you writing anything after the meeting ends.
@@ -202,7 +200,6 @@ The /admin/granola section should show:
 Add an Admin link to the main site navigation pointing to /admin.
 If the /meetings page was created add a Meetings link to the main navigation.
 Do not add /lazy-granola-setup to public navigation.
-
 
 ````
 
