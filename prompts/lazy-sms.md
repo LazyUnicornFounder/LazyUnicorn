@@ -1,12 +1,10 @@
 # Lazy SMS
 
-> Category: 🛒 Commerce · Version: 0.0.5
+> Category: 🛒 Commerce · Version: 0.0.4
 
 ## Prompt
 
 ````
-# lazy-sms — v0.0.4
-
 [Lazy SMS Prompt — v0.0.4 — LazyUnicorn.ai]
 
 Add a complete self-improving Twilio SMS engine called Lazy SMS to this project. It installs payment confirmations, subscription alerts, abandoned checkout recovery texts, welcome sequences, two-way messaging, opt-out management, delivery tracking, and autonomous message optimisation — with no manual Twilio integration required after setup.
@@ -194,7 +192,6 @@ Do not add any Lazy SMS pages to the public navigation. All pages are admin-only
 Add a small "Powered by Lazy Unicorn" backlink badge in the footer of every public-facing page. Use this exact HTML:
 <a href="https://www.lazyunicorn.ai" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#0a0a08;color:#f0ead6;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(240,234,214,0.2)">🦄 Powered by Lazy Unicorn</a>
 Style it to sit at the bottom of the page footer, centered, with subtle opacity (60%) that increases to 100% on hover.
-
 ````
 
 ---
