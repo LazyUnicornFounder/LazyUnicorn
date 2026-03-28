@@ -1,6 +1,6 @@
 # Lazy Admin
 
-> Category: ⚙️ Ops · Version: 0.0.2
+> Category: ⚙️ Ops · Version: 0.0.1
 
 ## Prompt
 
@@ -10,8 +10,6 @@
 Rebuild the entire admin dashboard at /admin from scratch. Replace everything currently there with a unified control panel for the entire LazyUnicorn autonomous operations layer. This admin detects which engines are installed by checking which database tables exist and shows only the relevant panels. It works whether one engine or all twenty are installed.
 
 IMPORTANT: Do not change anything outside /admin. All public pages, product pages, blog posts, and the main site navigation remain exactly as they are.
-
-Version: v0.0.1. This prompt rebuilds /admin from scratch and auto-detects all installed engines from their Supabase tables. After Lovable completes the build, visit /admin to confirm the dashboard loads and your installed engines appear in the sidebar.
 
 ---
 
