@@ -1,6 +1,6 @@
 # Lazy Auth
 
-> Category: 🛠️ Dev · Version: 0.0.2
+> Category: 🛠️ Dev · Version: 0.0.3
 
 ## Prompt
 
@@ -17,7 +17,7 @@ Note: Google authentication requires Lovable Cloud to be enabled. Go to Cloud �
 
 Create these Supabase tables with RLS enabled:
 
-auth_settings: id (uuid, primary key, default gen_random_uuid()), brand_name (text), site_url (text), google_auth_enabled (boolean, default true), email_auth_enabled (boolean, default true), magic_link_enabled (boolean, default false), default_role (text, default 'user'), redirect_after_login (text, default '/dashboard'), redirect_after_logout (text, default '/'), setup_complete (boolean, default false), prompt_version (text, nullable), created_at (timestamptz, default now())
+auth_settings: id (uuid, primary key, default gen_random_uuid()), brand_name (text), site_url (text), google_auth_enabled (boolean, default true), email_auth_enabled (boolean, default true), magic_link_enabled (boolean, default false), default_role (text, default 'user'), redirect_after_login (text, default '/dashboard'), redirect_after_logout (text, default '/'), is_running (boolean, default false), setup_complete (boolean, default false), prompt_version (text, nullable), created_at (timestamptz, default now())
 
 user_profiles: id (uuid, primary key references auth.users on delete cascade), email (text), full_name (text), avatar_url (text), role (text, default 'user' — one of user, admin, moderator), onboarded (boolean, default false), last_seen (timestamptz), created_at (timestamptz, default now())
 
