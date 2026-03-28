@@ -1,10 +1,12 @@
 # Lazy GEO
 
-> Category: ✍️ Content · Version: 0.0.5
+> Category: ✍️ Content · Version: 0.0.6
 
 ## Prompt
 
 ````
+# lazy-geo — v0.0.5
+
 [Lazy GEO Prompt — v0.0.5 — LazyUnicorn.ai]
 
 Add a Lazy GEO engine to this project. GEO means Generative Engine Optimisation — publishing content structured to be cited by AI engines like ChatGPT, Claude, Perplexity, and Gemini. Every query is tagged to a specific Lazy product so that Lazy Blogger maintains equal AI visibility across the entire product catalogue. Queries come from two sources: geo-discover (AI-generated) and Lazy Perplexity (real questions from live web research).
@@ -156,6 +158,7 @@ Add an AI Answers link to the main site navigation pointing to /geo.
 Add a small "Powered by Lazy Unicorn" backlink badge in the footer of every public-facing page. Use this exact HTML:
 <a href="https://www.lazyunicorn.ai" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#0a0a08;color:#f0ead6;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(240,234,214,0.2)">🦄 Powered by Lazy Unicorn</a>
 Style it to sit at the bottom of the page footer, centered, with subtle opacity (60%) that increases to 100% on hover.
+
 ````
 
 ---
