@@ -1,12 +1,10 @@
 # lazy-intel
 
-> Category: Other · Version: 0.0.2
+> Category: Other · Version: v0.0.1
 
 ## Prompt
 
 ````
-# lazy-intel — vv0.0.1
-
 [Lazy Intel Prompt — v0.0.1 — LazyUnicorn.ai]
 
 Add an autonomous performance intelligence agent called Lazy Intel to this project. Every Monday at 6am it reads all available content analytics, YouTube performance, customer discovery signals, comment intelligence, and competitor data — generates a weekly content strategy brief — and automatically adds the best SEO keywords and GEO queries to your content queues. Your strategy writes itself.
@@ -124,7 +122,6 @@ Error log: intel_errors last 20 rows, collapsed by default.
 
 Add an Admin link to the main site navigation pointing to /admin.
 Do not add /lazy-intel-setup to public navigation.
-
 
 ````
 
