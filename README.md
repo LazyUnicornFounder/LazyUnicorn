@@ -89,16 +89,19 @@ Most engines work immediately with no setup. Some require external API keys or c
 | Lazy Security | ⚙️ Ops | [View prompt](prompts/lazy-security.md) |
 | Lazy Granola | ⚙️ Ops | [View prompt](prompts/lazy-granola.md) |
 | Lazy Granola | ⚙️ Ops | [View prompt](prompts/lazy-granola.md) |
+| lazy-churn | Other | [View prompt](prompts/lazy-churn.md) |
+| lazy-trend | Other | [View prompt](prompts/lazy-trend.md) |
+| lazy-repurpose | Other | [View prompt](prompts/lazy-repurpose.md) |
+| lazy-watch | Other | [View prompt](prompts/lazy-watch.md) |
+| lazy-intel | Other | [View prompt](prompts/lazy-intel.md) |
+| lazy-fix | Other | [View prompt](prompts/lazy-fix.md) |
+| lazy-build | Other | [View prompt](prompts/lazy-build.md) |
 | lazy-agents | Other | [View prompt](prompts/lazy-agents.md) |
 | lazy-build | Other | [View prompt](prompts/lazy-build.md) |
 | lazy-intel | Other | [View prompt](prompts/lazy-intel.md) |
+| lazy-watch | Other | [View prompt](prompts/lazy-watch.md) |
+| lazy-fix | Other | [View prompt](prompts/lazy-fix.md) |
 | lazy-agents | Other | [View prompt](prompts/lazy-agents.md) |
-| lazy-build | Other | [View prompt](prompts/lazy-build.md) |
-| lazy-fix | Other | [View prompt](prompts/lazy-fix.md) |
-| lazy-intel | Other | [View prompt](prompts/lazy-intel.md) |
-| lazy-watch | Other | [View prompt](prompts/lazy-watch.md) |
-| lazy-fix | Other | [View prompt](prompts/lazy-fix.md) |
-| lazy-watch | Other | [View prompt](prompts/lazy-watch.md) |
 
 ## 📄 License
 
