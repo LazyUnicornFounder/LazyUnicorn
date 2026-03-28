@@ -1,6 +1,6 @@
 # Lazy Granola
 
-> Category: ⚙️ Ops · Version: 0.0.2
+> Category: 🛠️ Dev · Version: 0.0.2
 
 ## Prompt
 
