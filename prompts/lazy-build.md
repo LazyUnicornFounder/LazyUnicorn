@@ -1,6 +1,6 @@
-# lazy-build
+# Lazy Build
 
-> Category: Other · Version: 0.0.2
+> Category: 🤖 Agents · Version: 0.0.2
 
 ## Prompt
 
