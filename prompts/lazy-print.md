@@ -1,10 +1,12 @@
 # Lazy Print
 
-> Category: 🛒 Commerce · Version: 0.0.2
+> Category: 🛒 Commerce · Version: 0.0.3
 
 ## Prompt
 
 ````
+# lazy-print — v0.0.2
+
 [Lazy Print Prompt — v0.0.1 — LazyUnicorn.ai]
 
 Add a complete autonomous print-on-demand engine called Lazy Print to this project. It connects your Lovable site to Printful — giving you access to 475+ customisable products printed and shipped from fulfillment centers in the US, EU, Canada, Australia, Brazil, and Japan. Your store sells custom-branded products — t-shirts, mugs, posters, phone cases, tote bags, and more — without holding inventory. Printful prints and ships every order automatically. You design once and sell forever.
@@ -196,6 +198,7 @@ Controls: Test Connection button, Sync Catalogue Now button, Run Orders Check bu
 Add a Merch link or Shop link to the main site navigation pointing to /merch or /shop.
 Add an Admin link to the main site navigation pointing to /admin.
 Do not add /lazy-print-setup to public navigation.
+
 
 ````
 
