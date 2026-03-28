@@ -1,10 +1,12 @@
 # lazy-watch
 
-> Category: Other · Version: v0.0.1
+> Category: Other · Version: 0.0.2
 
 ## Prompt
 
 ````
+# lazy-watch — vv0.0.1
+
 [Lazy Watch Prompt — v0.0.1 — LazyUnicorn.ai]
 
 Add an autonomous error monitoring agent called Lazy Watch to this project. It reads every Lazy engine error table in your Supabase project every hour, diagnoses issues using Claude, opens GitHub issues with full diagnosis and fix recommendations, and pings Slack — all automatically with no manual input required after setup.
@@ -106,6 +108,7 @@ Error log: all watch_errors ordered by created_at descending, last 20 rows. Coll
 
 Add an Admin link to the main site navigation pointing to /admin.
 Do not add /lazy-watch-setup to public navigation.
+
 
 ````
 
