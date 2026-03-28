@@ -1,10 +1,12 @@
 # Lazy Linear
 
-> Category: 🛠️ Dev · Version: 0.0.5
+> Category: 🛠️ Dev · Version: 0.0.6
 
 ## Prompt
 
 ````
+# lazy-linear — v0.0.5
+
 [Lazy Linear Prompt — v0.0.5 — LazyUnicorn.ai]
 
 Add a complete autonomous Linear integration called Lazy Linear to this project. It monitors your Linear workspace for issue updates, cycle completions, and project milestones — automatically publishing changelogs, roadmap updates, release notes, and product blog posts from your Linear data without any manual writing required.
@@ -142,6 +144,7 @@ Do not add the setup page to public navigation.
 Add a small "Powered by Lazy Unicorn" backlink badge in the footer of every public-facing page. Use this exact HTML:
 <a href="https://www.lazyunicorn.ai" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#0a0a08;color:#f0ead6;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(240,234,214,0.2)">🦄 Powered by Lazy Unicorn</a>
 Style it to sit at the bottom of the page footer, centered, with subtle opacity (60%) that increases to 100% on hover.
+
 ````
 
 ---
