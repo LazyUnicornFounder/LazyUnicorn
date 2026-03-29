@@ -42,22 +42,19 @@ Platform tools (Run, Admin, Cloud, Waitlist) are not in the tab system.
 
 ## Overview (/admin)
 
-Stat row — show only what exists:
-- Posts today (blog_posts + seo_posts + geo_posts)
-- Posts this week
-- Active agents (is_running true across all settings tables)
-- Errors today (all _errors tables, last 24h — red tint if above zero)
-- Revenue today (pay_transactions succeeded today)
-- Security score (security_scans latest — green 80+, amber 60-79, red below 60)
-- Installs total (installs table count)
+Only show the stats row when at least one agent settings table exists and setup_complete is true. If no agents are installed, skip the stats row entirely and go straight to the agent grid.
 
-Agent grid — one card per installed agent. Shows: name, status dot, one primary metric, last run time, Run Now button.
+Stats row — 5 stats in equal-width columns:
 
-Two columns below:
+Posts Today — sum of blog_posts + seo_posts + geo_posts published today where each table exists.
 
-Left — activity feed. Last 50 actions across all agents from run_activity + synthetic rows from content tables. Filter pills: All / Errors / Content / Commerce / Ops.
+Agents Active — count of settings tables where is_running is true, shown as "[n]/36".
 
-Right — error log. All _errors tables last 24h grouped by agent. If none: green checkmark. Clear All button.
+Revenue Today — sum of pay_transactions where status is succeeded and created_at is today. Only show if pay_settings exists. Show as "$[amount]" in gold.
+
+Errors Today — count of all rows across all _errors tables where created_at is today. Show in red tint if above zero.
+
+Security Score — latest score from security_scans. Green if 80+, amber if 60–79, red if below 60. Only show if security_settings exists.
 
 ---
 
