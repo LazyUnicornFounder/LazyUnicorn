@@ -218,4 +218,3 @@ Controls: Sync Now button (calls youtube-sync), Extract Comments Now button, Tra
 Add a Videos link to the main site navigation pointing to /videos.
 Add an Admin link to the main site navigation pointing to /admin.
 Do not add /lazy-youtube-setup to public navigation.
-
