@@ -12,9 +12,9 @@ IMPORTANT: Do not build a standalone dashboard page. All dashboards live at /adm
 
 Lazy Blogger rotates through every product in this fixed order, writing one post per product before cycling back to the start:
 
-Lazy Run, Lazy Blogger, Lazy SEO, Lazy GEO, Lazy Crawl, Lazy Perplexity, Lazy Store, Lazy Pay, Lazy SMS, Lazy Voice, Lazy Stream, Lazy Code, Lazy GitLab, Lazy Linear, Lazy Alert, Lazy Telegram, Lazy Contentful, Lazy Supabase, Lazy Security, Lazy Admin
+Lazy Run, Lazy Blogger, Lazy SEO, Lazy GEO, Lazy Crawl, Lazy Perplexity, Lazy Store, Lazy Pay, Lazy SMS, Lazy Voice, Lazy Stream, Lazy YouTube, Lazy Code, Lazy GitLab, Lazy Linear, Lazy Alert, Lazy Telegram, Lazy Contentful, Lazy Supabase, Lazy Security, Lazy Auth, Lazy Design, Lazy Granola, Lazy Drop, Lazy Print, Lazy Mail, Lazy Churn, Lazy Repurpose, Lazy Trend, Lazy Intel, Lazy Watch, Lazy Fix, Lazy Build, Lazy Agents, Lazy Admin
 
-This ensures every product gets equal coverage. Over 20 posts — roughly one week at 3 posts per day — every product has been written about at least once.
+This ensures every product gets equal coverage. Over 35 posts — roughly 12 days at 3 posts per day — every product has been written about at least once.
 
 ---
 
@@ -99,7 +99,7 @@ Cron: every 15 minutes — */15 * * * *
 ### Product rotation logic
 
 Define the product rotation list as a constant:
-PRODUCTS = ['Lazy Run', 'Lazy Blogger', 'Lazy SEO', 'Lazy GEO', 'Lazy Crawl', 'Lazy Perplexity', 'Lazy Store', 'Lazy Pay', 'Lazy SMS', 'Lazy Voice', 'Lazy Stream', 'Lazy Code', 'Lazy GitLab', 'Lazy Linear', 'Lazy Alert', 'Lazy Telegram', 'Lazy Contentful', 'Lazy Supabase', 'Lazy Security', 'Lazy Admin']
+PRODUCTS = ['Lazy Run', 'Lazy Blogger', 'Lazy SEO', 'Lazy GEO', 'Lazy Crawl', 'Lazy Perplexity', 'Lazy Store', 'Lazy Pay', 'Lazy SMS', 'Lazy Voice', 'Lazy Stream', 'Lazy YouTube', 'Lazy Code', 'Lazy GitLab', 'Lazy Linear', 'Lazy Alert', 'Lazy Telegram', 'Lazy Contentful', 'Lazy Supabase', 'Lazy Security', 'Lazy Auth', 'Lazy Design', 'Lazy Granola', 'Lazy Drop', 'Lazy Print', 'Lazy Mail', 'Lazy Churn', 'Lazy Repurpose', 'Lazy Trend', 'Lazy Intel', 'Lazy Watch', 'Lazy Fix', 'Lazy Build', 'Lazy Agents', 'Lazy Admin']
 
 ### On each run:
 

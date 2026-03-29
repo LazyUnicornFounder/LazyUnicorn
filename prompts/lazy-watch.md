@@ -56,7 +56,7 @@ Cron: every hour — 0 * * * *
 
 1. Read watch_settings. If is_running false or setup_complete false exit.
 2. Insert a row into watch_runs with status running.
-3. Define the full list of known Lazy agent error tables: blogger_errors, seo_errors, geo_errors, crawl_errors, perplexity_errors, store_errors, pay_errors, sms_errors, voice_errors, stream_errors, code_errors, gitlab_errors, linear_errors, alert_errors, telegram_errors, contentful_errors, supabase_errors, security_errors, design_errors, auth_errors, drop_errors, granola_errors, print_errors, youtube_errors, mail_errors, watch_errors.
+3. Define the full list of known Lazy agent error tables: blogger_errors, seo_errors, geo_errors, crawl_errors, perplexity_errors, store_errors, pay_errors, sms_errors, voice_errors, stream_errors, youtube_errors, code_errors, gitlab_errors, linear_errors, alert_errors, telegram_errors, contentful_errors, supabase_errors, security_errors, auth_errors, design_errors, granola_errors, drop_errors, print_errors, mail_errors, churn_errors, repurpose_errors, trend_errors, intel_errors, watch_errors, fix_errors, build_errors, agent_errors, run_errors.
 4. For each table in the list:
    a. Try to query it: SELECT * FROM [table] WHERE created_at > now() - interval '1 hour'. If the table does not exist catch the error and skip silently — this means that agent is not installed.
    b. If row count is less than error_threshold skip.
@@ -89,7 +89,7 @@ Run history table: all watch_runs ordered by started_at descending, last 20 rows
 
 Open issues table: all watch_issues where resolved is false, ordered by created_at descending. Columns: agent name badge colour-coded by category, issue title as a clickable link to GitHub, severity badge (red/orange/yellow), error count, opened date, a Mark Resolved button that sets resolved to true and adds a resolved_at timestamp.
 
-Agent coverage list: show all 26 known error table names. For each one show a status: Active (table exists and was checked in last run) or Not installed (table does not exist — agent not installed) in muted grey. This tells the user which agents are being monitored.
+Agent coverage list: show all 34 known error table names. For each one show a status: Active (table exists and was checked in last run) or Not installed (table does not exist — agent not installed) in muted grey. This tells the user which agents are being monitored.
 
 Settings: current error threshold with an edit button, GitHub repo, Slack webhook status (Connected / Not connected), is_running toggle.
 
