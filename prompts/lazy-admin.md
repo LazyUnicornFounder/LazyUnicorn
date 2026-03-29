@@ -1,13 +1,20 @@
 # Lazy Admin
 
-> Category: ⚙️ Ops · Version: 0.0.1
+> Category: ⚙️ Ops · Version: 0.0.2
+
+## Prompt
+
+````
+# lazy-admin
+
+> Version: 0.0.1
 
 ## Prompt
 
 ````
 [LazyUnicorn Admin Dashboard Prompt — v0.0.1 — LazyUnicorn.ai]
 
-Rebuild the entire admin dashboard at /admin from scratch. Replace everything currently there with a unified control panel for the entire LazyUnicorn autonomous operations layer. This admin detects which engines are installed by checking which database tables exist and shows only the relevant panels. It works whether one engine or all twenty are installed.
+Rebuild the entire admin dashboard at /admin from scratch. Replace everything currently there with a unified control panel for the entire LazyUnicorn autonomous operations layer. This admin detects which agents are installed by checking which database tables exist and shows only the relevant panels. It works whether one agent or all twenty are installed.
 
 IMPORTANT: Do not change anything outside /admin. All public pages, product pages, blog posts, and the main site navigation remain exactly as they are.
 
@@ -31,20 +38,20 @@ Fixed left sidebar navigation. Main content area on the right. Sidebar never scr
 
 At the top: LazyUnicorn logo and wordmark.
 
-Below it: master status indicator — a single large dot and label. Green dot: All systems running. Red dot: [n] engines need attention. Gold dot: Everything paused. This is the first thing the eye goes to.
+Below it: master status indicator — a single large dot and label. Green dot: All systems running. Red dot: [n] agents need attention. Gold dot: Everything paused. This is the first thing the eye goes to.
 
-Below that: vertical navigation list. Each item is an engine name with its icon. Only show engines whose settings table exists in the database — do not show uninstalled engines. Active item has a gold left border and gold text. Each item shows a small coloured dot on the right — green if running with no errors, red if errors in last 24 hours, grey if paused. Navigation order:
+Below that: vertical navigation list. Each item is an agent name with its icon. Only show agents whose settings table exists in the database — do not show uninstalled agents. Active item has a gold left border and gold text. Each item shows a small coloured dot on the right — green if running with no errors, red if errors in last 24 hours, grey if paused. Navigation order:
 
 Overview (always show)
-Category label: Content Engines — Blogger (if blog_settings exists), SEO (if seo_settings exists), GEO (if geo_settings exists), Crawl (if crawl_settings exists), Perplexity (if perplexity_settings exists)
-Category label: Commerce Engines — Store (if store_settings exists), Pay (if pay_settings exists), SMS (if sms_settings exists)
-Category label: Media Engines — Voice (if voice_settings exists), Stream (if stream_settings exists)
-Category label: Developer Engines — Code (if code_settings exists), GitLab (if gitlab_settings exists), Linear (if linear_settings exists)
+Category label: Content Agents — Blogger (if blog_settings exists), SEO (if seo_settings exists), GEO (if geo_settings exists), Crawl (if crawl_settings exists), Perplexity (if perplexity_settings exists)
+Category label: Commerce Agents — Store (if store_settings exists), Pay (if pay_settings exists), SMS (if sms_settings exists)
+Category label: Media Agents — Voice (if voice_settings exists), Stream (if stream_settings exists)
+Category label: Developer Agents — Code (if code_settings exists), GitLab (if gitlab_settings exists), Linear (if linear_settings exists)
 Category label: Channels — Alert (if alert_settings exists), Telegram (if telegram_settings exists), Contentful (if contentful_settings exists), Supabase (if supabase_settings exists)
 Category label: Security — Security (if security_settings exists)
 Settings (always show)
 
-Below navigation: master pause button. Full sidebar width. When everything is running: Pause Everything in muted style. When paused: Resume Everything in gold. One click updates master_running in run_settings if that table exists. If run_settings does not exist toggle is_running individually across all detected engine settings tables.
+Below navigation: master pause button. Full sidebar width. When everything is running: Pause Everything in muted style. When paused: Resume Everything in gold. One click updates master_running in run_settings if that table exists. If run_settings does not exist toggle is_running individually across all detected agent settings tables.
 
 ---
 
@@ -56,40 +63,40 @@ Row 1 — stat cards in a horizontal row. Only show cards for data that exists. 
 
 Posts published today: count blog_posts + seo_posts + geo_posts published today if those tables exist.
 Posts this week: same tables, last 7 days.
-Active engines: count of settings tables where is_running is true, across all detected engine settings tables.
-Errors today: count of rows from all detected engine error tables (blog_errors, seo_errors, geo_errors, store_errors, voice_errors, pay_errors, sms_errors, stream_errors, code_errors, gitlab_errors, linear_errors, crawl_errors, perplexity_errors, alert_errors, telegram_errors, contentful_errors, supabase_errors, security_errors, run_errors) from last 24 hours. Red background tint if above zero.
+Active agents: count of settings tables where is_running is true, across all detected agent settings tables.
+Errors today: count of rows from all detected agent error tables (blog_errors, seo_errors, geo_errors, store_errors, voice_errors, pay_errors, sms_errors, stream_errors, code_errors, gitlab_errors, linear_errors, crawl_errors, perplexity_errors, alert_errors, telegram_errors, contentful_errors, supabase_errors, security_errors, run_errors) from last 24 hours. Red background tint if above zero.
 Last publish: most recent published_at across all content tables if any exist.
 Security score: latest score from security_scans if security_settings exists. Green above 80, amber 60-79, red below 60. Dash if not installed.
 
-Row 2 — engine status grid. One compact card per installed engine. Four columns on large screens, three on medium, two on small. Each card: engine name in small bold text, status dot top right, one primary metric below the name, last run time in muted text, small Run Now button. Metrics: posts today for content engines, revenue today for Pay (sum of pay_transactions amount_cents where status succeeded today divided by 100), messages sent today for SMS, episodes today for Voice, streams processed for Stream, commits processed for Code and GitLab, issues synced for Linear, intel items found today for Crawl, brand citation rate for Perplexity (brand_mentioned true divided by total in perplexity_citations), alerts sent today for Alert and Telegram, entries synced today for Contentful, milestones reached total for Supabase, current security score for Security.
+Row 2 — agent status grid. One compact card per installed agent. Four columns on large screens, three on medium, two on small. Each card: agent name in small bold text, status dot top right, one primary metric below the name, last run time in muted text, small Run Now button. Metrics: posts today for content agents, revenue today for Pay (sum of pay_transactions amount_cents where status succeeded today divided by 100), messages sent today for SMS, episodes today for Voice, streams processed for Stream, commits processed for Code and GitLab, issues synced for Linear, intel items found today for Crawl, brand citation rate for Perplexity (brand_mentioned true divided by total in perplexity_citations), alerts sent today for Alert and Telegram, entries synced today for Contentful, milestones reached total for Supabase, current security score for Security.
 
 Row 3 — two columns.
 
-Left: unified activity feed. Reverse chronological list of every action across all engines in the last 24 hours. Sources: run_activity if run_settings exists, plus last published_at from each content table as synthetic activity rows labelled by engine. Each row: coloured dot (green success, red error, gold optimisation), engine name in muted small text, action description, timestamp. Maximum 50 rows. Scrollable. Filter pills: All, Errors Only, Content, Commerce, Security.
+Left: unified activity feed. Reverse chronological list of every action across all agents in the last 24 hours. Sources: run_activity if run_settings exists, plus last published_at from each content table as synthetic activity rows labelled by agent. Each row: coloured dot (green success, red error, gold optimisation), agent name in muted small text, action description, timestamp. Maximum 50 rows. Scrollable. Filter pills: All, Errors Only, Content, Commerce, Security.
 
-Right: error log. All errors from all engine error tables in the last 24 hours grouped by engine. Each group: engine name header in small red text, errors listed below with function name, error message truncated to 120 characters, time. If no errors: large green checkmark and text: No errors in the last 24 hours. Clear All button at top marks all as read.
+Right: error log. All errors from all agent error tables in the last 24 hours grouped by agent. Each group: agent name header in small red text, errors listed below with function name, error message truncated to 120 characters, time. If no errors: large green checkmark and text: No errors in the last 24 hours. Clear All button at top marks all as read.
 
 ---
 
-## Individual engine pages
+## Individual agent pages
 
-Each engine in the sidebar opens its own page at /admin/[engine]. All engine pages follow the same four-section layout.
+Each agent in the sidebar opens its own page at /admin/[agent]. All agent pages follow the same four-section layout.
 
-Section 1 — Status bar. Full width. Left: engine name large, subtitle one sentence, status badge (Running green / Paused grey / Error red). Right: large on/off toggle updating is_running in that engine's settings table immediately. Green when running, grey when paused.
+Section 1 — Status bar. Full width. Left: agent name large, subtitle one sentence, status badge (Running green / Paused grey / Error red). Right: large on/off toggle updating is_running in that agent's settings table immediately. Green when running, grey when paused.
 
 Section 2 — Quick actions. Horizontal row of buttons. Each triggers one immediate edge function without navigating away. Button shows loading spinner while running, checkmark for 2 seconds on success, then reverts. Show an error toast if the function fails.
 
-Section 3 — Stats and queue. Two columns. Left: four to six stat cards with the most important numbers for that engine. Right: the queue or upcoming items for that engine. Maximum 20 rows with View All link if more.
+Section 3 — Stats and queue. Two columns. Left: four to six stat cards with the most important numbers for that agent. Right: the queue or upcoming items for that agent. Maximum 20 rows with View All link if more.
 
-Section 4 — History log. Last 50 rows of what this engine produced or processed. Columns vary by engine but always include title or description, date, status badge. For content engines include a View link. Sortable by date descending. Search input filters by title or keyword. Paginate at 50 rows.
+Section 4 — History log. Last 50 rows of what this agent produced or processed. Columns vary by agent but always include title or description, date, status badge. For content agents include a View link. Sortable by date descending. Search input filters by title or keyword. Paginate at 50 rows.
 
-Below Section 4 — collapsible Settings panel. Click to expand. Shows all setup form fields for that engine inline. Save Settings button updates the database. On save show a toast: Settings saved. No page reload.
+Below Section 4 — collapsible Settings panel. Click to expand. Shows all setup form fields for that agent inline. Save Settings button updates the database. On save show a toast: Settings saved. No page reload.
 
-Below Settings — collapsible Error log. Click to expand. Last 10 errors from that engine's error table. Clear button marks as read. Red dot on the chevron if unread errors.
+Below Settings — collapsible Error log. Click to expand. Last 10 errors from that agent's error table. Clear button marks as read. Red dot on the chevron if unread errors.
 
 ---
 
-## Engine-specific page specs
+## Agent-specific page specs
 
 LAZY BLOGGER (/admin/blogger — only show if blog_settings exists)
 Subtitle: Publishes SEO and GEO blog posts every 15 minutes.
@@ -119,7 +126,7 @@ History: last 50 geo_posts with title, product badge, target query, published da
 Settings: all geo_settings fields.
 
 LAZY CRAWL (/admin/crawl — only show if crawl_settings exists)
-Subtitle: Monitors competitors and feeds real intelligence into your content engines.
+Subtitle: Monitors competitors and feeds real intelligence into your content agents.
 Quick actions: Crawl All Targets Now (crawl-run), Publish Intelligence Now (crawl-publish).
 Stats: Active targets, Pages crawled today, Intel items found today, Keywords fed to SEO, Leads found total.
 Queue: all crawl_targets with name, URL, type tag, frequency, last crawled, next crawl, active toggle, Crawl Now button per row.
@@ -202,20 +209,20 @@ History: last 50 linear_content with title, type badge, published date, views, V
 Settings: all linear_settings fields.
 
 LAZY ALERT (/admin/alert — only show if alert_settings exists)
-Subtitle: Real-time Slack alerts for every engine event.
+Subtitle: Real-time Slack alerts for every agent event.
 Quick actions: Send Test Message, Send Briefing Now (alert-briefing).
 Stats: Alerts sent today, Alerts this week, Success rate, Last alert sent time.
 Toggle grid: all alert_settings boolean toggles as labelled on/off switches. Updates in real time, no save button.
-History: last 50 alert_log rows with engine badge, event type, message preview, sent time, success badge.
+History: last 50 alert_log rows with agent badge, event type, message preview, sent time, success badge.
 Settings: all alert_settings fields.
 
 LAZY TELEGRAM (/admin/telegram — only show if telegram_settings exists)
-Subtitle: Real-time Telegram alerts and bot commands for every engine.
+Subtitle: Real-time Telegram alerts and bot commands for every agent.
 Quick actions: Send Test Message, Send Briefing Now (telegram-briefing), Register Webhook (calls Telegram setWebhook API).
 Stats: Messages sent today, Messages this week, Success rate, Last message time.
 Toggle grid: all telegram_settings boolean toggles.
 Webhook status: show current webhook URL and a Registered / Not Registered badge.
-History: last 50 telegram_log rows with engine badge, event type, message preview, sent time, success badge.
+History: last 50 telegram_log rows with agent badge, event type, message preview, sent time, success badge.
 Settings: all telegram_settings fields.
 
 LAZY CONTENTFUL (/admin/contentful — only show if contentful_settings exists)
@@ -248,11 +255,11 @@ Settings: all security_settings fields except the Aikido API key — that update
 
 Three sections.
 
-Site settings: site URL, brand name, business description, support email. These update run_settings if that table exists, and if not update each detected engine settings table that has those fields. A Propagate to All Engines button pushes updated values to all engine settings tables simultaneously.
+Site settings: site URL, brand name, business description, support email. These update run_settings if that table exists, and if not update each detected agent settings table that has those fields. A Propagate to All Agents button pushes updated values to all agent settings tables simultaneously.
 
-API keys: one section per service. Show only services whose engine is installed (detected by settings table). Each section: service name, connection status badge (Connected green if secret exists / Not connected grey), password input to update the key, show/hide eye toggle, Test Connection button that verifies the key works. On success: Connected badge for 3 seconds. On failure: error message in red. Services to show if installed: ElevenLabs (test by fetching voices list), Stripe (test by fetching account), Twilio (test by fetching account info), Twitch (test by fetching public stream), GitHub (test by fetching user profile), GitLab (test by fetching user profile), Linear (test by fetching team info), Firecrawl (test by fetching account info), Perplexity (test with a simple completion), Aikido (test by fetching project list), Slack (test by posting to webhook), Telegram (test by fetching bot info), Contentful (test by fetching space info), Supabase service role (test by fetching table list).
+API keys: one section per service. Show only services whose agent is installed (detected by settings table). Each section: service name, connection status badge (Connected green if secret exists / Not connected grey), password input to update the key, show/hide eye toggle, Test Connection button that verifies the key works. On success: Connected badge for 3 seconds. On failure: error message in red. Services to show if installed: ElevenLabs (test by fetching voices list), Stripe (test by fetching account), Twilio (test by fetching account info), Twitch (test by fetching public stream), GitHub (test by fetching user profile), GitLab (test by fetching user profile), Linear (test by fetching team info), Firecrawl (test by fetching account info), Perplexity (test with a simple completion), Aikido (test by fetching project list), Slack (test by posting to webhook), Telegram (test by fetching bot info), Contentful (test by fetching space info), Supabase service role (test by fetching table list).
 
-Weekly schedule: a read-only visual timeline showing the full weekly publishing cadence. Seven columns, one per day. Each column shows scheduled runs as stacked time blocks. Each block shows engine name and function. Colour coded by category: content engines gold, commerce green, media blue, developer purple, channels grey, security red. Build this from the cron schedules defined in each installed engine rather than hardcoding — read the cron expressions and render them as human-readable time blocks.
+Weekly schedule: a read-only visual timeline showing the full weekly publishing cadence. Seven columns, one per day. Each column shows scheduled runs as stacked time blocks. Each block shows agent name and function. Colour coded by category: content agents gold, commerce green, media blue, developer purple, channels grey, security red. Build this from the cron schedules defined in each installed agent rather than hardcoding — read the cron expressions and render them as human-readable time blocks.
 
 ---
 
@@ -275,7 +282,7 @@ Every table with more than 50 rows shows pagination — Previous and Next button
 /admin/security
 /admin/settings
 
-Use client-side routing. Direct linking to any route works correctly. Navigating between pages does not trigger a full page reload. Sidebar highlights the active route. Only show routes for installed engines.
+Use client-side routing. Direct linking to any route works correctly. Navigating between pages does not trigger a full page reload. Sidebar highlights the active route. Only show routes for installed agents.
 
 ---
 
@@ -285,27 +292,28 @@ Add a PromptVersionChecker component that mounts at the top of every admin page.
 
 On mount fetch https://lazyunicorn.ai/api/versions with a 5-second timeout. If the fetch fails silently exit — never show an error, never block the page.
 
-For each installed engine query its settings table for the prompt_version field. Compare each installed version against the API response. An engine is out of date if its installed version is numerically lower — compare by splitting on dots and comparing each segment as an integer.
+For each installed agent query its settings table for the prompt_version field. Compare each installed version against the API response. An agent is out of date if its installed version is numerically lower — compare by splitting on dots and comparing each segment as an integer.
 
-If all engines are up to date render nothing.
+If all agents are up to date render nothing.
 
-If one or more engines are out of date render a gold banner at the very top of the admin above the sidebar content area. Left side: update icon and text Updates available for [n] engine[s]. Right side: View Updates button and Dismiss button.
+If one or more agents are out of date render a gold banner at the very top of the admin above the sidebar content area. Left side: update icon and text Updates available for [n] agent[s]. Right side: View Updates button and Dismiss button.
 
-Clicking View Updates opens a slide-out panel from the right. One row per out-of-date engine showing: engine name, installed version in a grey badge, latest version in a gold badge with up arrow, upgrade_complexity badge from the API (drop-in=green, setup-required=amber, breaking=red), View Changelog button linking to https://lazyunicorn.ai/changelog, Get Latest Prompt button linking to https://lazyunicorn.ai/downloads/[engine-slug]-prompt.txt.
+Clicking View Updates opens a slide-out panel from the right. One row per out-of-date agent showing: agent name, installed version in a grey badge, latest version in a gold badge with up arrow, upgrade_complexity badge from the API (drop-in=green, setup-required=amber, breaking=red), View Changelog button linking to https://lazyunicorn.ai/changelog, Get Latest Prompt button linking to https://lazyunicorn.ai/downloads/[agent-slug]-prompt.txt.
 
-Below the list: "Drop-in updates can be pasted directly. Setup-required updates need a visit to the engine setup page after pasting. Breaking updates require following the upgrade instructions on the changelog."
+Below the list: "Drop-in updates can be pasted directly. Setup-required updates need a visit to the agent setup page after pasting. Breaking updates require following the upgrade instructions on the changelog."
 
-Dismiss stores the dismissed versions in localStorage under the key lazy-version-dismissed as a JSON object of engine slug to dismissed version string. The banner reappears when a newer version is released.
+Dismiss stores the dismissed versions in localStorage under the key lazy-version-dismissed as a JSON object of agent slug to dismissed version string. The banner reappears when a newer version is released.
 
-On the /admin/settings page add a Version Status section above the API keys section. Show a table: Engine, Installed Version, Latest Version, Status badge (Up to date green / Update available gold / Unknown grey). A Check for Updates button re-fetches the API. A Last checked timestamp below the button.
+On the /admin/settings page add a Version Status section above the API keys section. Show a table: Agent, Installed Version, Latest Version, Status badge (Up to date green / Update available gold / Unknown grey). A Check for Updates button re-fetches the API. A Last checked timestamp below the button.
 
-On each individual engine page /admin/[engine] add a small version badge in the Section 1 status bar next to the engine name showing the installed prompt_version in muted grey. If an update is available change the badge to gold and show: Installed: [old] → [new] available. Clicking the badge opens the slide-out panel filtered to that engine.
+On each individual agent page /admin/[agent] add a small version badge in the Section 1 status bar next to the agent name showing the installed prompt_version in muted grey. If an update is available change the badge to gold and show: Installed: [old] → [new] available. Clicking the badge opens the slide-out panel filtered to that agent.
 
 
 ## Backlink Badge
 Add a small "Powered by Lazy Unicorn" backlink badge in the footer of every public-facing page. Use this exact HTML:
 <a href="https://www.lazyunicorn.ai" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#0a0a08;color:#f0ead6;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(240,234,214,0.2)">🦄 Powered by Lazy Unicorn</a>
 Style it to sit at the bottom of the page footer, centered, with subtle opacity (60%) that increases to 100% on hover.
+````
 ````
 
 ---
