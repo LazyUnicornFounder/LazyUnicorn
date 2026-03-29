@@ -246,9 +246,11 @@ Compare each installed agent's prompt_version against the API response. If any a
 
 ## Interaction rules
 
-All edge function calls: loading spinner on button, success toast + green checkmark for 2 seconds. Never reload the page. Tables refresh after function completes. Status dots poll every 60 seconds.
+All edge function calls: loading spinner on button, success toast + green checkmark for 2 seconds. Never reload the page. Stats and tables refresh after function completes. Status dots poll every 60 seconds.
 
 All tables: search input filtering by main text field. Pagination at 50 rows with Previous/Next.
+
+Settings edits: inline pencil icon per row. On click, value becomes an input. Save button updates the settings table row. Cancel reverts. Show saving spinner. Success: row returns to read mode. Error: show error inline.
 
 ---
 
@@ -260,7 +262,7 @@ Never show a generic "failed" message anywhere in admin. Every failure must show
 Before rendering any agent panel, check if its settings table exists and setup_complete is true. If not, replace the entire panel with a setup card:
 - Title: "[Agent Name] is not configured"
 - Message: "Complete setup to activate this agent."
-- Button: "Set Up [Agent Name]" linking to /lazy-[agent]-setup
+- Button: "SET UP [AGENT NAME] →" linking to /lazy-[agent]-setup
 - Do not show action buttons, stats, or history
 
 **Edge function call fails**
@@ -268,13 +270,16 @@ When a button triggers an edge function and it returns an error, show a red call
 - If the error contains "secret", "api key", or "unauthorized": "Add the required API key to your Supabase secrets — Project Settings → Edge Functions → Secrets"
 - If the error contains "not found" or "does not exist": "Check that all database tables were created. Re-run the setup page."
 - If the error contains "setup_complete": "Complete the setup page first."
-- For all other errors: show the raw error and a "View Error Log" button that scrolls to the agent's error log section
+- For all other errors: show the raw error and a "View Error Log" button that scrolls to the error log section
 
 **Missing secrets**
-Each agent panel that requires external API keys shows a Requirements section at the top. For each required secret: green checkmark if the last function call succeeded, red warning with the secret name and setup instructions if it failed due to that secret being missing.
+Each agent detail page that requires external API keys shows a Requirements section at the top of the right column. For each required secret: green checkmark if the last function call succeeded, red warning with the exact secret name and a link to Supabase secrets settings if it failed due to that secret being missing.
 
 **Empty states**
 If an agent is configured but has never run: "No data yet — click [primary action button] to run your first check."
+
+**Spinner with no resolution**
+Never show an indefinite spinner. All data fetches must have a 10 second timeout. On timeout show: "Could not load data. Check your Supabase connection." with a Retry button.
 
 ---
 
