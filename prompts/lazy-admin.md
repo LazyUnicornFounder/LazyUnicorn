@@ -335,4 +335,3 @@ All tables: search input filtering by main text field. Pagination at 50 rows wit
 /admin/installs
 
 Client-side routing. Direct links work. No full page reloads between pages. Only show routes for installed agents.
-
