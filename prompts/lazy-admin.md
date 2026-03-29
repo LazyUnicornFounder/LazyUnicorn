@@ -1,4 +1,4 @@
-[LazyUnicorn Admin Dashboard Prompt — v0.0.8 — LazyUnicorn.ai]
+[LazyUnicorn Admin Dashboard Prompt — v0.0.9 — LazyUnicorn.ai]
 
 Rebuild the entire admin dashboard at /admin from scratch. Replace everything currently there. This is a unified control panel for all LazyUnicorn agents. It detects which agents are installed by checking which database tables exist and shows only those panels.
 
@@ -8,7 +8,7 @@ IMPORTANT: Do not change anything outside /admin.
 
 ## Design
 
-Dark background. High contrast text. Numbers large. Status indicators immediate — green running, red broken, grey paused. No decoration. Fixed left sidebar, scrollable main area. Mobile: sidebar collapses to bottom icon bar.
+Dark background #0a0a08. Text #f0ead6 cream. Gold accent #c9a84c. Borders rgba(240,234,214,0.x) — subtle warm white. Font: Space Grotesk. Status dots are the only use of green/amber/red — everything else stays in the LazyUnicorn palette. No sidebar. No standalone dashboard pages. All navigation through top tabs.
 
 ---
 
