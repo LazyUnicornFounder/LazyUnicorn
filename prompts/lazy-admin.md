@@ -1,4 +1,4 @@
-[LazyUnicorn Admin Dashboard Prompt — v0.0.5 — LazyUnicorn.ai]
+[LazyUnicorn Admin Dashboard Prompt — v0.0.6 — LazyUnicorn.ai]
 
 Rebuild the entire admin dashboard at /admin from scratch. Replace everything currently there. This is a unified control panel for all LazyUnicorn agents. It detects which agents are installed by checking which database tables exist and shows only those panels.
 
@@ -35,6 +35,10 @@ Channels — Alert, Telegram, Contentful, Supabase
 Security — Security
 
 Autonomous — Watch, Fix, Build, Intel, Agents
+
+Orchestrator — Run (if run_settings exists)
+
+Commerce (additional) — Waitlist (if waitlist_settings exists)
 
 System — Installs, Settings
 
@@ -292,6 +296,24 @@ Subtitle: Autonomous agents that monitor, fix, and improve your stack via GitHub
 Stats: Issues opened, PRs opened, improvements merged, last run time.
 History: agent_runs — agent name, status badge, output summary, date.
 
+RUN (/admin/run — run_settings)
+Subtitle: Master orchestrator — coordinates all installed agents on a unified schedule.
+Actions: Run Orchestrator Now (run-orchestrator), Weekly Report Now (run-weekly-report), Health Check Now (run-health-check).
+Stats: Active engines count, runs today, issues flagged today, last orchestrator run, next orchestrator run (next 30 min mark).
+Active engines list: read active_engines from run_settings, show each as a badge with its is_running status.
+Activity feed: last 30 rows from run_activity — engine badge, action, result badge, timestamp.
+Error log: last 20 rows from run_errors — engine, function, error, date. Collapsed by default.
+Settings: all run_settings fields including master_running toggle, site_url, brand_name, business_description, active_engines.
+
+WAITLIST (/admin/waitlist — waitlist_settings)
+Subtitle: Pre-launch email capture with viral referral mechanics.
+Actions: Send Launch Emails (triggers launch flow), Export CSV.
+Stats: Total subscribers, signups today, priority subscribers (referral threshold reached), converted users, launch status badge (Collecting / Launched).
+Referral leaderboard: top 5 subscribers by referral_count — email, referral count, position.
+Subscriber table: waitlist_subscribers — email, position, referral count, status badge, joined date, Resend Welcome button per row. Search by email.
+Launch panel: current launch date if set, countdown, Send Test Launch Email button, Launch to All button (confirms before sending).
+Settings: all waitlist_settings fields.
+
 INSTALLS (/admin/installs — installs table)
 Subtitle: Every engine install registered from your users.
 Stats: Total installs, unique sites, most popular engine, installs this week.
@@ -338,6 +360,8 @@ All tables: search input filtering by main text field. Pagination at 50 rows wit
 /admin/alert, /admin/telegram, /admin/contentful, /admin/supabase
 /admin/security
 /admin/watch, /admin/fix, /admin/build, /admin/intel, /admin/agents
+/admin/run
+/admin/waitlist
 /admin/installs
 
 Client-side routing. Direct links work. No full page reloads between pages. Only show routes for installed agents.
