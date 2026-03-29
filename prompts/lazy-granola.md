@@ -1,10 +1,3 @@
-# Lazy Granola
-
-> Category: 🛠️ Dev · Version: 0.0.5
-
-## Prompt
-
-````
 [Lazy Granola Prompt — v0.0.5 — LazyUnicorn.ai]
 
 Add an autonomous meeting-to-content agent called Lazy Granola to this project. It connects to Granola via the Granola MCP server, detects new meetings, and automatically turns them into blog posts, product updates, Linear issues, customer intelligence, and Slack summaries — without you writing anything after the meeting ends.
@@ -210,8 +203,3 @@ Add a small "Powered by Lazy Unicorn" backlink badge in the footer of every publ
 <a href="https://www.lazyunicorn.ai" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#0a0a08;color:#f0ead6;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(240,234,214,0.2)">🦄 Powered by Lazy Unicorn</a>
 Style it to sit at the bottom of the page footer, centered, with subtle opacity (60%) that increases to 100% on hover.
 
-````
-````
-
----
-*Auto-synced from [Lazy Unicorn](https://lazyunicorn.co)*

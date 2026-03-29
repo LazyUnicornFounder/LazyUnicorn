@@ -1,17 +1,3 @@
-# Lazy YouTube
-
-> Category: 🎙️ Media · Version: 0.0.5
-
-## Prompt
-
-````
-# lazy-youtube
-
-> Version: 0.0.5
-
-## Prompt
-
-````
 # lazy-youtube — v0.0.5
 
 [Lazy YouTube Prompt — v0.0.5 — LazyUnicorn.ai]
@@ -233,8 +219,3 @@ Add a Videos link to the main site navigation pointing to /videos.
 Add an Admin link to the main site navigation pointing to /admin.
 Do not add /lazy-youtube-setup to public navigation.
 
-````
-````
-
----
-*Auto-synced from [Lazy Unicorn](https://lazyunicorn.co)*

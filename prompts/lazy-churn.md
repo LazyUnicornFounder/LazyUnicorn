@@ -1,17 +1,3 @@
-# Lazy Churn
-
-> Category: ⚙️ Ops · Version: 0.0.4
-
-## Prompt
-
-````
-# lazy-churn
-
-> Version: 0.0.4
-
-## Prompt
-
-````
 [Lazy Churn Prompt — v0.0.4 — LazyUnicorn.ai]
 
 Add an autonomous churn prevention agent called Lazy Churn to this project. It monitors your Stripe subscriber data daily, identifies customers at risk of cancelling based on login inactivity, usage drops, and renewal proximity, and automatically triggers personalised re-engagement sequences via SMS and email — before the cancellation happens.
@@ -164,8 +150,4 @@ Do not add /lazy-churn-setup to public navigation.
 Add a small "Powered by Lazy Unicorn" backlink badge in the footer of every public-facing page. Use this exact HTML:
 <a href="https://www.lazyunicorn.ai" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#0a0a08;color:#f0ead6;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(240,234,214,0.2)">🦄 Powered by Lazy Unicorn</a>
 Style it to sit at the bottom of the page footer, centered, with subtle opacity (60%) that increases to 100% on hover.
-````
-````
 
----
-*Auto-synced from [Lazy Unicorn](https://lazyunicorn.co)*

@@ -1,10 +1,3 @@
-# Lazy Agents
-
-> Category: ⚙️ Ops · Version: 0.0.4
-
-## Prompt
-
-````
 [Lazy Agents Prompt — v0.0.4 — LazyUnicorn.ai]
 
 Add four autonomous agent edge functions to this project. These agents monitor, fix, improve, and extend the LazyUnicorn prompt stack automatically — running on schedules inside Supabase without any manual input after setup.
@@ -191,7 +184,3 @@ Add an Admin link to the main site navigation pointing to /admin.
 Do not add /lazy-agents-setup to public navigation.
 Add Agents to the admin sidebar under a System section alongside the other agent admin links.
 
-````
-
----
-*Auto-synced from [Lazy Unicorn](https://lazyunicorn.co)*
