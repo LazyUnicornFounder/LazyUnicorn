@@ -1,6 +1,6 @@
 # Lazy Trend
 
-> Category: 🤖 Agents · Version: v0.0.2
+> Category: ⚙️ Ops · Version: 0.0.3
 
 ## Prompt
 
