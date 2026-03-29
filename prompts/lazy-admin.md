@@ -12,31 +12,31 @@ Dark background #0a0a08. Text #f0ead6 cream. Gold accent #c9a84c. Borders rgba(2
 
 ---
 
-## Sidebar
+## Top bar
 
-Top: LazyUnicorn logo.
+Fixed across all /admin pages.
 
-Below: master status dot. Green = all running. Red = [n] need attention. Gold = all paused.
+Left side: 🦄 LAZY UNICORN logo. Next to it: live agent count — query all settings tables for is_running true and show as "● [n] AGENTS RUNNING" in green. If zero agents running show in muted grey.
 
-Navigation — show only installed agents (detected by settings table existing):
+Right side: PAUSE ALL text button — on click sets is_running to false across all agent settings tables and updates the label to RESUME ALL. Next to it: ⚙ settings icon linking to /admin/settings. Next to it: gold pill link "LAZY CLOUD ↗" pointing to /lazy-cloud or https://lazyunicorn.ai/cloud.
 
-Overview (always)
+---
 
-Content — Blogger, SEO, GEO, Crawl, Perplexity, Contentful
+## Category tabs
 
-Commerce — Store, Drop, Print, Pay, SMS, Mail
+Shown on /admin only. Gold underline on active tab. Clicking a tab filters the agent grid to show only agents in that category. ALL is selected by default.
 
-Media — Voice, Stream, YouTube
+Tabs and their agents:
 
-Dev — GitHub, GitLab, Linear, Design, Auth, Granola
+ALL — every agent
+CONTENT — Blogger, SEO, GEO, Crawl, Perplexity, Repurpose, Trend
+COMMERCE — Store, Drop, Print, Pay, Mail, SMS, Churn
+MEDIA — Voice, Stream, YouTube
+DEV — Code, GitLab, Linear, Contentful, Design, Auth, Granola
+MONITOR — Alert, Telegram, Supabase, Security, Watch
+INTELLIGENCE — Fix, Build, Intel, Agents
 
-Ops — Admin, Alert, Telegram, Supabase, Security, Watch, Fix, Build, Intel, Repurpose, Trend, Churn, Agents
-
-System — Installs, Settings
-
-Each nav item: small status dot right side (green/red/grey). Active item: gold left border.
-
-Bottom of sidebar: Pause Everything / Resume Everything button. Updates master_running in run_settings if exists, otherwise toggles is_running across all agent settings tables.
+Platform tools (Run, Admin, Cloud, Waitlist) are not in the tab system.
 
 ---
 
