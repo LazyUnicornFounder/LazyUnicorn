@@ -31,10 +31,10 @@ Most engines work immediately with no setup. Some require external API keys or c
 
 > **Tip:** The prompt itself will walk you through setup — just paste it and follow the instructions.
 
-## 📦 Engines
+## 🤖 Agents
 
-| Engine | Category | Prompt |
-| ------ | -------- | ------ |
+| Agent | Category | Prompt |
+| ----- | -------- | ------ |
 | Lazy Run | 🚀 Unicorn | [View prompt](prompts/lazy-run.md) |
 | Lazy Blogger | ✍️ Content | [View prompt](prompts/lazy-blogger.md) |
 | Lazy SEO | ✍️ Content | [View prompt](prompts/lazy-seo.md) |
@@ -42,12 +42,15 @@ Most engines work immediately with no setup. Some require external API keys or c
 | Lazy Crawl | ✍️ Content | [View prompt](prompts/lazy-crawl.md) |
 | Lazy Perplexity | ✍️ Content | [View prompt](prompts/lazy-perplexity.md) |
 | Lazy Contentful | ✍️ Content | [View prompt](prompts/lazy-contentful.md) |
+| Lazy Repurpose | ✍️ Content | [View prompt](prompts/lazy-repurpose.md) |
+| Lazy Trend | ✍️ Content | [View prompt](prompts/lazy-trend.md) |
 | Lazy Store | 🛒 Commerce | [View prompt](prompts/lazy-store.md) |
 | Lazy Drop | 🛒 Commerce | [View prompt](prompts/lazy-drop.md) |
 | Lazy Print | 🛒 Commerce | [View prompt](prompts/lazy-print.md) |
 | Lazy Pay | 🛒 Commerce | [View prompt](prompts/lazy-pay.md) |
 | Lazy SMS | 🛒 Commerce | [View prompt](prompts/lazy-sms.md) |
 | Lazy Mail | 🛒 Commerce | [View prompt](prompts/lazy-mail.md) |
+| Lazy Churn | 🛒 Commerce | [View prompt](prompts/lazy-churn.md) |
 | Lazy Voice | 🎙️ Media | [View prompt](prompts/lazy-voice.md) |
 | Lazy Stream | 🎙️ Media | [View prompt](prompts/lazy-stream.md) |
 | Lazy YouTube | 🎙️ Media | [View prompt](prompts/lazy-youtube.md) |
@@ -57,26 +60,16 @@ Most engines work immediately with no setup. Some require external API keys or c
 | Lazy Design | 🛠️ Dev | [View prompt](prompts/lazy-design.md) |
 | Lazy Auth | 🛠️ Dev | [View prompt](prompts/lazy-auth.md) |
 | Lazy Granola | 🛠️ Dev | [View prompt](prompts/lazy-granola.md) |
+| Lazy Build | 🛠️ Dev | [View prompt](prompts/lazy-build.md) |
+| Lazy Fix | 🛠️ Dev | [View prompt](prompts/lazy-fix.md) |
 | Lazy Admin | ⚙️ Ops | [View prompt](prompts/lazy-admin.md) |
 | Lazy Alert | ⚙️ Ops | [View prompt](prompts/lazy-alert.md) |
 | Lazy Telegram | ⚙️ Ops | [View prompt](prompts/lazy-telegram.md) |
 | Lazy Supabase | ⚙️ Ops | [View prompt](prompts/lazy-supabase.md) |
 | Lazy Security | ⚙️ Ops | [View prompt](prompts/lazy-security.md) |
-| lazy-agents | Other | [View prompt](prompts/lazy-agents.md) |
-
-## 🤖 Agents
-
-Autonomous agents that monitor, fix, and improve your engine stack.
-
-| Agent | What it does | Prompt |
-| ----- | ------------ | ------ |
-| Lazy Watch | Monitors errors across all engines every hour | [View prompt](prompts/lazy-watch.md) |
-| Lazy Fix | Auto-fixes broken prompts and creates GitHub PRs | [View prompt](prompts/lazy-fix.md) |
-| Lazy Build | Generates new engine prompts from a brief | [View prompt](prompts/lazy-build.md) |
-| Lazy Intel | Weekly strategy reports and keyword fuelling | [View prompt](prompts/lazy-intel.md) |
-| Lazy Repurpose | Recycles top content into new formats | [View prompt](prompts/lazy-repurpose.md) |
-| Lazy Trend | Scans for trending topics every 6 hours | [View prompt](prompts/lazy-trend.md) |
-| Lazy Churn | Detects at-risk users and triggers retention flows | [View prompt](prompts/lazy-churn.md) |
+| Lazy Watch | ⚙️ Ops | [View prompt](prompts/lazy-watch.md) |
+| Lazy Intel | ⚙️ Ops | [View prompt](prompts/lazy-intel.md) |
+| Lazy Agents | ⚙️ Ops | [View prompt](prompts/lazy-agents.md) |
 
 ## 📄 License
 
