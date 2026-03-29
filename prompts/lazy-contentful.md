@@ -1,6 +1,13 @@
 # Lazy Contentful
 
-> Category: ✍️ Content · Version: 0.0.6
+> Category: ✍️ Content · Version: 0.0.7
+
+## Prompt
+
+````
+# lazy-contentful
+
+> Version: 0.0.6
 
 ## Prompt
 
@@ -9,7 +16,7 @@
 
 [Lazy Contentful Prompt — v0.0.5 — LazyUnicorn.ai]
 
-Add a complete autonomous Contentful integration called Lazy Contentful to this project. It acts as a two-way bridge — pulling content from Contentful into your Lovable site automatically, and pushing AI-generated blog posts, SEO articles, and GEO content from your Lazy engines back into Contentful for distribution across all your connected channels.
+Add a complete autonomous Contentful integration called Lazy Contentful to this project. It acts as a two-way bridge — pulling content from Contentful into your Lovable site automatically, and pushing AI-generated blog posts, SEO articles, and GEO content from your Lazy agents back into Contentful for distribution across all your connected channels.
 
 ---
 
@@ -21,7 +28,7 @@ Hero section
 Headline: 'Contentful is your CMS. Lazy Contentful fills it automatically.' Subheading: 'Lazy Contentful pulls content from Contentful into your Lovable site and pushes AI-generated blog posts, SEO articles, and GEO content back into Contentful — keeping every channel in sync without any manual publishing.' Primary button: Copy the Lovable Prompt. Secondary button: See How It Works. Badge: Powered by Contentful.
 
 How it works section
-Four steps: 1. Copy the setup prompt. 2. Paste into your Lovable project. 3. Add your Contentful API keys. 4. Content flows in both directions automatically — Contentful to Lovable and Lazy engines to Contentful.
+Four steps: 1. Copy the setup prompt. 2. Paste into your Lovable project. 3. Add your Contentful API keys. 4. Content flows in both directions automatically — Contentful to Lovable and Lazy agents to Contentful.
 
 What it does section
 Eight cards: 1. Contentful to Lovable — pulls published entries from Contentful and displays them on your Lovable site automatically. 2. Lazy Blogger to Contentful — every post Lazy Blogger publishes is also pushed to Contentful automatically. 3. Lazy SEO to Contentful — SEO articles published by Lazy SEO sync to Contentful for distribution. 4. Lazy GEO to Contentful — GEO content syncs to Contentful so it reaches every connected channel. 5. Webhook sync — listens for Contentful publish events and updates your Lovable site in real time. 6. Content type mapping — maps Contentful content types to your Lovable pages automatically. 7. Asset handling — Contentful images and media are pulled and displayed in Lovable without manual work. 8. Self-healing sync — detects and repairs sync failures automatically.
@@ -38,7 +45,7 @@ Navigation: Add Lazy Contentful to the LazyUnicorn navigation.
 
 SETUP PROMPT — paste into user's Lovable project:
 
-Add a complete autonomous Contentful integration called Lazy Contentful to this project. It creates a two-way content sync between Contentful and this Lovable project — pulling Contentful entries into Lovable pages and pushing AI-generated content from Lazy engines back into Contentful automatically.
+Add a complete autonomous Contentful integration called Lazy Contentful to this project. It creates a two-way content sync between Contentful and this Lovable project — pulling Contentful entries into Lovable pages and pushing AI-generated content from Lazy agents back into Contentful automatically.
 
 1. Database
 Create these Supabase tables with RLS enabled:
@@ -117,9 +124,9 @@ At bottom add: 🦄 Powered by Lazy Contentful — autonomous Contentful sync fo
 
 7. Admin
 
-Do not build a standalone dashboard page for this engine. The dashboard lives at /admin/contentful as part of the unified LazyUnicorn admin panel, which is built separately using the LazyUnicorn Admin Dashboard prompt.
+Do not build a standalone dashboard page for this agent. The dashboard lives at /admin/contentful as part of the unified LazyUnicorn admin panel, which is built separately using the LazyUnicorn Admin Dashboard prompt.
 
-If /admin does not yet exist on this project add a simple placeholder at /admin with the text: "Install the LazyUnicorn Admin Dashboard to manage all engines in one place." and a link to /lazy-contentful-setup.
+If /admin does not yet exist on this project add a simple placeholder at /admin with the text: "Install the LazyUnicorn Admin Dashboard to manage all agents in one place." and a link to /lazy-contentful-setup.
 
 8. Navigation
 Add a Content link to the main navigation pointing to /contentful. Add an Admin link to the main site navigation pointing to /admin.
@@ -131,6 +138,7 @@ Add a small "Powered by Lazy Unicorn" backlink badge in the footer of every publ
 <a href="https://www.lazyunicorn.ai" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#0a0a08;color:#f0ead6;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(240,234,214,0.2)">🦄 Powered by Lazy Unicorn</a>
 Style it to sit at the bottom of the page footer, centered, with subtle opacity (60%) that increases to 100% on hover.
 
+````
 ````
 
 ---
