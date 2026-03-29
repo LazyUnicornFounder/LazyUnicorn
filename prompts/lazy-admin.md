@@ -1,18 +1,18 @@
 # Lazy Admin
 
-> Category: ⚙️ Ops · Version: 0.0.3
+> Category: ⚙️ Ops · Version: 0.0.4
 
 ## Prompt
 
 ````
 # lazy-admin
 
-> Version: 0.0.2
+> Version: 0.0.4
 
 ## Prompt
 
 ````
-[LazyUnicorn Admin Dashboard Prompt — v0.0.2 — LazyUnicorn.ai]
+[LazyUnicorn Admin Dashboard Prompt — v0.0.4 — LazyUnicorn.ai]
 
 Rebuild the entire admin dashboard at /admin from scratch. Replace everything currently there with a unified control panel for the entire LazyUnicorn autonomous operations layer. This admin detects which agents are installed by checking which database tables exist and shows only the relevant panels. It works whether one agent or all twenty are installed.
 

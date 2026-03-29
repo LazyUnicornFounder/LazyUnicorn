@@ -1,20 +1,20 @@
 # Lazy Voice
 
-> Category: 🎙️ Media · Version: 0.0.7
+> Category: 🎙️ Media · Version: 0.0.8
 
 ## Prompt
 
 ````
 # lazy-voice
 
-> Version: 0.0.6
+> Version: 0.0.8
 
 ## Prompt
 
 ````
-# lazy-voice — v0.0.5
+# lazy-voice — v0.0.8
 
-[Lazy Voice Prompt — v0.0.4 — LazyUnicorn.ai]
+[Lazy Voice Prompt — v0.0.8 — LazyUnicorn.ai]
 
 Add an autonomous audio narration agent called Lazy Voice to this project. It monitors every new post published to blog_posts, seo_posts, and geo_posts, converts each to audio using the ElevenLabs API, stores the audio file, embeds an audio player on every blog post page, and publishes a podcast feed at /listen — all automatically with no manual input required after setup.
 

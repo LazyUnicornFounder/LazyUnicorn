@@ -1,20 +1,20 @@
 # Lazy Supabase
 
-> Category: ⚙️ Ops · Version: 0.0.8
+> Category: ⚙️ Ops · Version: 0.0.9
 
 ## Prompt
 
 ````
 # lazy-supabase
 
-> Version: 0.0.7
+> Version: 0.0.9
 
 ## Prompt
 
 ````
-# lazy-supabase — v0.0.6
+# lazy-supabase — v0.0.9
 
-[Lazy Supabase Prompt — v0.0.5 — LazyUnicorn.ai]
+[Lazy Supabase Prompt — v0.0.9 — LazyUnicorn.ai]
 
 Add a complete autonomous Supabase monitoring and content agent called Lazy Supabase to this project. It monitors your Supabase project for database events, user signups, edge function errors, and storage activity — turning database milestones, user growth, and system events into blog posts, product updates, and Slack alerts automatically.
 

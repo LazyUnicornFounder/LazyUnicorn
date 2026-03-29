@@ -1,20 +1,20 @@
 # Lazy Mail
 
-> Category: 🛒 Commerce · Version: 0.0.4
+> Category: 🛒 Commerce · Version: 0.0.5
 
 ## Prompt
 
 ````
 # lazy-mail
 
-> Version: 0.0.3
+> Version: 0.0.5
 
 ## Prompt
 
 ````
-# lazy-mail — v0.0.2
+# lazy-mail — v0.0.5
 
-[Lazy Mail Prompt — v0.0.1 — LazyUnicorn.ai]
+[Lazy Mail Prompt — v0.0.5 — LazyUnicorn.ai]
 
 Add a complete autonomous email agent called Lazy Mail to this project. It connects Resend to your Lovable site and handles subscriber capture, welcome sequences, automated newsletter broadcasts from your blog content, transactional emails, and self-improving open rates — without you writing or sending a single email manually.
 

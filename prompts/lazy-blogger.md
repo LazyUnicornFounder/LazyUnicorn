@@ -1,20 +1,20 @@
 # Lazy Blogger
 
-> Category: ✍️ Content · Version: 0.0.9
+> Category: ✍️ Content · Version: 0.0.10
 
 ## Prompt
 
 ````
 # lazy-blogger
 
-> Version: 0.0.8
+> Version: 0.0.10
 
 ## Prompt
 
 ````
-# lazy-blogger — v0.0.7
+# lazy-blogger — v0.0.10
 
-[Lazy Blogger Prompt — v0.0.7 — LazyUnicorn.ai]
+[Lazy Blogger Prompt — v0.0.10 — LazyUnicorn.ai]
 
 Add an autonomous blog publishing agent called Lazy Blogger to this project. Use the built-in Lovable AI for all AI calls. Every post is written about a specific Lazy product in round-robin rotation so every product gets equal blog coverage every day. When Lazy Crawl or Lazy Perplexity are installed their research feeds into the blog queue automatically.
 

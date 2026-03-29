@@ -1,20 +1,20 @@
 # Lazy Build
 
-> Category: ⚙️ Ops · Version: 0.0.4
+> Category: ⚙️ Ops · Version: 0.0.5
 
 ## Prompt
 
 ````
 # lazy-build
 
-> Version: 0.0.3
+> Version: 0.0.5
 
 ## Prompt
 
 ````
-# lazy-build — v0.0.2
+# lazy-build — v0.0.5
 
-[Lazy Build Prompt — v0.0.2 — LazyUnicorn.ai]
+[Lazy Build Prompt — v0.0.5 — LazyUnicorn.ai]
 
 Add an autonomous agent writer agent called Lazy Build to this project. Give it a name, integration, tagline, and one-paragraph brief — it reads three reference prompt files and your CLAUDE.md rules, writes a complete new Lazy agent prompt following your exact SPEC pattern, and opens a draft GitHub PR for your review. Your prompt stack grows without you writing a word.
 
@@ -53,7 +53,7 @@ Submit button: Activate Lazy Build
 
 On submit:
 1. Save to build_settings
-2. Set setup_complete to true and prompt_version to 'v0.0.2'
+2. Set setup_complete to true and prompt_version to 'v0.0.5'
 3. Redirect to /admin with message: 'Lazy Build is ready. Go to /admin/build and describe your first new agent.'
 
 ---

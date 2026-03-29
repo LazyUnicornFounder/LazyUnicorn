@@ -1,13 +1,11 @@
-# lazy-agents
+# Lazy Agents
 
-> Category: Other · Version: 0.0.3
+> Category: ⚙️ Ops · Version: 0.0.4
 
 ## Prompt
 
 ````
-# lazy-agents — vv0.0.1
-
-[Lazy Agents Prompt — v0.0.3 — LazyUnicorn.ai]
+[Lazy Agents Prompt — v0.0.4 — LazyUnicorn.ai]
 
 Add four autonomous agent edge functions to this project. These agents monitor, fix, improve, and extend the LazyUnicorn prompt stack automatically — running on schedules inside Supabase without any manual input after setup.
 
@@ -26,9 +24,9 @@ agent_settings: id (uuid, primary key, default gen_random_uuid()), error_monitor
 
 agent_runs: id (uuid, primary key, default gen_random_uuid()), agent_name (text — one of error-monitor, prompt-improver, agent-writer, performance-intel), status (text — one of running, completed, failed), summary (text), issues_opened (integer, default 0), prs_opened (integer, default 0), started_at (timestamptz, default now()), completed_at (timestamptz), created_at (timestamptz, default now())
 
-agent_issues: id (uuid, primary key, default gen_random_uuid()), agent_name (text), agent_name (text), issue_title (text), issue_url (text), severity (text), resolved (boolean, default false), created_at (timestamptz, default now())
+agent_issues: id (uuid, primary key, default gen_random_uuid()), agent_name (text), issue_title (text), issue_url (text), severity (text), resolved (boolean, default false), created_at (timestamptz, default now())
 
-agent_improvements: id (uuid, primary key, default gen_random_uuid()), agent_name (text), agent_name (text), improvement_type (text), description (text), pr_url (text), status (text, default 'opened' — one of opened, merged, rejected), created_at (timestamptz, default now())
+agent_improvements: id (uuid, primary key, default gen_random_uuid()), agent_name (text), improvement_type (text), description (text), pr_url (text), status (text, default 'opened' — one of opened, merged, rejected), created_at (timestamptz, default now())
 
 agent_errors: id (uuid, primary key, default gen_random_uuid()), function_name (text), error_message (text), created_at (timestamptz, default now())
 
@@ -55,7 +53,7 @@ Submit button: Activate Agents
 
 On submit:
 1. Save all values to agent_settings
-2. Set setup_complete to true and prompt_version to 'v0.0.1'
+2. Set setup_complete to true and prompt_version to 'v0.0.4'
 3. Immediately trigger agent-error-monitor to run once as a test
 4. Redirect to /admin with message: 'Agents are active. Error monitor just ran. Check /admin/agents for results.'
 

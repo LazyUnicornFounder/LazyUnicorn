@@ -1,20 +1,20 @@
 # Lazy Crawl
 
-> Category: ✍️ Content · Version: 0.0.8
+> Category: ✍️ Content · Version: 0.0.9
 
 ## Prompt
 
 ````
 # lazy-crawl
 
-> Version: 0.0.7
+> Version: 0.0.9
 
 ## Prompt
 
 ````
-# lazy-crawl — v0.0.6
+# lazy-crawl — v0.0.9
 
-[Lazy Crawl Prompt — v0.0.5 — LazyUnicorn.ai]
+[Lazy Crawl Prompt — v0.0.9 — LazyUnicorn.ai]
 
 Add a complete autonomous web intelligence agent called Lazy Crawl to this project. It uses the Firecrawl API to monitor competitors, track industry trends, extract leads, analyse ranking content, and automatically feed intelligence into Lazy Blogger, Lazy SEO, and Lazy Alert — all on a schedule with no manual research required after setup.
 

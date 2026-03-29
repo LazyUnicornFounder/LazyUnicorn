@@ -1,20 +1,20 @@
 # Lazy Linear
 
-> Category: 🛠️ Dev · Version: 0.0.8
+> Category: 🛠️ Dev · Version: 0.0.9
 
 ## Prompt
 
 ````
 # lazy-linear
 
-> Version: 0.0.7
+> Version: 0.0.9
 
 ## Prompt
 
 ````
-# lazy-linear — v0.0.6
+# lazy-linear — v0.0.9
 
-[Lazy Linear Prompt — v0.0.5 — LazyUnicorn.ai]
+[Lazy Linear Prompt — v0.0.9 — LazyUnicorn.ai]
 
 Add a complete autonomous Linear integration called Lazy Linear to this project. It monitors your Linear workspace for issue updates, cycle completions, and project milestones — automatically publishing changelogs, roadmap updates, release notes, and product blog posts from your Linear data without any manual writing required.
 

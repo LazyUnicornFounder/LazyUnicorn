@@ -1,20 +1,20 @@
 # Lazy YouTube
 
-> Category: 🎙️ Media · Version: 0.0.4
+> Category: 🎙️ Media · Version: 0.0.5
 
 ## Prompt
 
 ````
 # lazy-youtube
 
-> Version: 0.0.3
+> Version: 0.0.5
 
 ## Prompt
 
 ````
-# lazy-youtube — v0.0.2
+# lazy-youtube — v0.0.5
 
-[Lazy YouTube Prompt — v0.0.2 — LazyUnicorn.ai]
+[Lazy YouTube Prompt — v0.0.5 — LazyUnicorn.ai]
 
 Add a complete autonomous YouTube content agent called Lazy YouTube to this project. It monitors your YouTube channel, detects new video uploads, fetches transcripts, and automatically publishes four pieces of content — a transcript post, an SEO article, a GEO article, and a video summary — plus generates chapter markers for your video description, extracts comment intelligence, and uses performance data to inform your entire content strategy. All automatically, every time you upload.
 

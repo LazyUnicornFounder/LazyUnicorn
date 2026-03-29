@@ -1,20 +1,20 @@
 # Lazy Store
 
-> Category: 🛒 Commerce · Version: 0.0.7
+> Category: 🛒 Commerce · Version: 0.0.8
 
 ## Prompt
 
 ````
 # lazy-store
 
-> Version: 0.0.6
+> Version: 0.0.8
 
 ## Prompt
 
 ````
-# lazy-store — v0.0.5
+# lazy-store — v0.0.8
 
-[Lazy Store Prompt — v0.0.4 — LazyUnicorn.ai]
+[Lazy Store Prompt — v0.0.8 — LazyUnicorn.ai]
 
 Add an autonomous e-commerce agent called Lazy Store to this project. It automatically discovers products, writes listings, monitors pricing, runs promotions, optimises conversion, and publishes SEO content — with no manual input required after setup. Payments are handled by Stripe checkout. All management pages are admin-only.
 

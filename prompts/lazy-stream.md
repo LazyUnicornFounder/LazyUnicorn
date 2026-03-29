@@ -1,20 +1,20 @@
 # Lazy Stream
 
-> Category: 🎙️ Media · Version: 0.0.7
+> Category: 🎙️ Media · Version: 0.0.8
 
 ## Prompt
 
 ````
 # lazy-stream
 
-> Version: 0.0.6
+> Version: 0.0.8
 
 ## Prompt
 
 ````
-# lazy-stream — v0.0.5
+# lazy-stream — v0.0.8
 
-[Lazy Stream Prompt — v0.0.4 — LazyUnicorn.ai]
+[Lazy Stream Prompt — v0.0.8 — LazyUnicorn.ai]
 
 Add a complete autonomous Twitch content agent called Lazy Stream to this project. It monitors your Twitch channel, processes VODs, writes stream recaps, extracts clips, publishes SEO articles, tracks analytics, and improves its own content quality — all automatically with no manual input required after setup.
 

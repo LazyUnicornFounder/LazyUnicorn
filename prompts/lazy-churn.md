@@ -1,18 +1,18 @@
 # Lazy Churn
 
-> Category: ⚙️ Ops · Version: 0.0.3
+> Category: ⚙️ Ops · Version: 0.0.4
 
 ## Prompt
 
 ````
 # lazy-churn
 
-> Version: 0.0.2
+> Version: 0.0.4
 
 ## Prompt
 
 ````
-[Lazy Churn Prompt — v0.0.2 — LazyUnicorn.ai]
+[Lazy Churn Prompt — v0.0.4 — LazyUnicorn.ai]
 
 Add an autonomous churn prevention agent called Lazy Churn to this project. It monitors your Stripe subscriber data daily, identifies customers at risk of cancelling based on login inactivity, usage drops, and renewal proximity, and automatically triggers personalised re-engagement sequences via SMS and email — before the cancellation happens.
 

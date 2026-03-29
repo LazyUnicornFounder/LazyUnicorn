@@ -1,20 +1,20 @@
 # Lazy Pay
 
-> Category: 🛒 Commerce · Version: 0.0.7
+> Category: 🛒 Commerce · Version: 0.0.8
 
 ## Prompt
 
 ````
 # lazy-pay
 
-> Version: 0.0.6
+> Version: 0.0.8
 
 ## Prompt
 
 ````
-# lazy-pay — v0.0.5
+# lazy-pay — v0.0.8
 
-[Lazy Pay Prompt — v0.0.4 — LazyUnicorn.ai]
+[Lazy Pay Prompt — v0.0.8 — LazyUnicorn.ai]
 
 Add a complete self-improving Stripe payments agent called Lazy Pay to this project. It installs one-time payments, subscriptions, webhook handling, a customer portal, confirmation emails, a revenue dashboard, autonomous conversion optimisation, and abandoned checkout recovery — with no manual Stripe integration required after setup.
 

@@ -1,20 +1,11 @@
 # Lazy Intel
 
-> Category: ⚙️ Ops · Version: 0.0.4
+> Category: ⚙️ Ops · Version: 0.0.5
 
 ## Prompt
 
 ````
-# lazy-intel
-
-> Version: 0.0.3
-
-## Prompt
-
-````
-# lazy-intel — v0.0.2
-
-[Lazy Intel Prompt — v0.0.1 — LazyUnicorn.ai]
+[Lazy Intel Prompt — v0.0.5 — LazyUnicorn.ai]
 
 Add an autonomous performance intelligence agent called Lazy Intel to this project. Every Monday at 6am it reads all available content analytics, YouTube performance, customer discovery signals, comment intelligence, and competitor data — generates a weekly content strategy brief — and automatically adds the best SEO keywords and GEO queries to your content queues. Your strategy writes itself.
 
@@ -26,7 +17,9 @@ Note: Lazy Intel uses no external APIs. It reads your existing Supabase tables f
 
 Create these Supabase tables with RLS enabled:
 
-intel_settings: id (uuid, primary key, default gen_random_uuid()), brand_name (text), site_url (text), niche_description (text), slack_webhook_url (text), auto_add_keywords (boolean, default true), auto_add_geo_queries (boolean, default true), is_running (boolean, default true), setup_complete (boolean, default false), prompt_version (text, nullable), created_at (timestamptz, default now())
+intel_settings: id (uuid, primary key, default gen_random_uuid()), brand_name (text), site_url (text), niche_description (text), auto_add_keywords (boolean, default true), auto_add_geo_queries (boolean, default true), is_running (boolean, default true), setup_complete (boolean, default false), prompt_version (text, nullable), created_at (timestamptz, default now())
+
+Note: Store SLACK_WEBHOOK_URL as Supabase secret (optional). Never store in the database.
 
 intel_runs: id (uuid, primary key, default gen_random_uuid()), status (text — one of running, completed, failed), data_sources_read (integer, default 0), keywords_added (integer, default 0), geo_queries_added (integer, default 0), weekly_summary (text), top_performing_topic (text), started_at (timestamptz, default now()), completed_at (timestamptz), created_at (timestamptz, default now())
 
@@ -48,13 +41,14 @@ Form fields:
 - Niche description (text) — describe your audience and content focus e.g. 'Lovable site builders and no-code founders who want to automate their business'
 - Auto-add SEO keywords (toggle, default on) — automatically adds recommended keywords to seo_keywords table each week
 - Auto-add GEO queries (toggle, default on) — automatically adds recommended queries to geo_queries table each week
-- Slack webhook URL (text, optional)
+- Slack webhook URL (password, optional) — stored as SLACK_WEBHOOK_URL secret
 
 Submit button: Activate Lazy Intel
 
 On submit:
-1. Save all values to intel_settings
-2. Set setup_complete to true and prompt_version to 'v0.0.2'
+1. Store SLACK_WEBHOOK_URL as Supabase secret if provided
+2. Save all other values to intel_settings
+3. Set setup_complete to true and prompt_version to 'v0.0.5'
 3. Immediately trigger intel-analyse to run once with last 7 days of data
 4. Redirect to /admin with message: 'Lazy Intel is active. Your first strategy brief is being generated. Check /admin/intel in a few minutes.'
 
@@ -95,7 +89,7 @@ Perplexity research (if perplexity_research exists): fetch most recent 10 querie
 9. If auto_add_geo_queries is true and geo_queries table exists: for each query in recommended_geo_queries insert a row with query text, source set to lazy-intel, created_at now. Skip duplicates.
 10. If youtube_intelligence exists and any question-asked rows were used: update those rows setting actioned to true.
 11. If granola_intelligence exists and any rows were used: update those rows setting actioned to true.
-12. If slack_webhook_url is set: POST a formatted weekly brief to Slack:
+12. If SLACK_WEBHOOK_URL secret is set: POST a formatted weekly brief to Slack:
 '📊 *Lazy Intel Weekly Brief — [date]*
 🏆 Top topic: [top_performing_topic]
 🎯 Focus this week: [first underserved topic]

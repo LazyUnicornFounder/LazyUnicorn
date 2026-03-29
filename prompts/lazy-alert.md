@@ -1,20 +1,20 @@
 # Lazy Alert
 
-> Category: ⚙️ Ops · Version: 0.0.8
+> Category: ⚙️ Ops · Version: 0.0.9
 
 ## Prompt
 
 ````
 # lazy-alert
 
-> Version: 0.0.7
+> Version: 0.0.9
 
 ## Prompt
 
 ````
-# lazy-alert — v0.0.6
+# lazy-alert — v0.0.9
 
-[Lazy Alert Prompt — v0.0.6 — LazyUnicorn.ai]
+[Lazy Alert Prompt — v0.0.9 — LazyUnicorn.ai]
 
 Add a complete Slack integration called Lazy Alert to this project. It sends real-time Slack notifications for every significant event across every installed Lazy agent, delivers a daily morning briefing, installs slash commands for controlling agents from Slack, and alerts on errors — all automatically with no manual input required after setup.
 

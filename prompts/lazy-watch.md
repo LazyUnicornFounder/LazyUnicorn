@@ -1,20 +1,20 @@
 # Lazy Watch
 
-> Category: ⚙️ Ops · Version: 0.0.3
+> Category: ⚙️ Ops · Version: 0.0.4
 
 ## Prompt
 
 ````
 # lazy-watch
 
-> Version: 0.0.2
+> Version: 0.0.4
 
 ## Prompt
 
 ````
-# lazy-watch — v0.0.1
+# lazy-watch — v0.0.4
 
-[Lazy Watch Prompt — v0.0.1 — LazyUnicorn.ai]
+[Lazy Watch Prompt — v0.0.4 — LazyUnicorn.ai]
 
 Add an autonomous error monitoring agent called Lazy Watch to this project. It reads every Lazy agent error table in your Supabase project every hour, diagnoses issues using Lovable AI, opens GitHub issues with full diagnosis and fix recommendations, and pings Slack — all automatically with no manual input required after setup.
 

@@ -1,20 +1,20 @@
 # Lazy Design
 
-> Category: 🛠️ Dev · Version: 0.0.5
+> Category: 🛠️ Dev · Version: 0.0.6
 
 ## Prompt
 
 ````
 # lazy-design
 
-> Version: 0.0.3
+> Version: 0.0.6
 
 ## Prompt
 
 ````
-# lazy-design — v0.0.2
+# lazy-design — v0.0.6
 
-[Lazy Design Prompt — v0.0.2 — LazyUnicorn.ai]
+[Lazy Design Prompt — v0.0.6 — LazyUnicorn.ai]
 
 Add a design upgrade engine called Lazy Design to this project. It automatically improves the visual design of your Lovable site by fetching pre-built UI components from 21st.dev and upgrading your pages section by section — hero, navigation, testimonials, features, CTA, and footer — without you browsing component libraries or writing design prompts manually.
 

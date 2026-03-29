@@ -1,20 +1,20 @@
 # Lazy GitHub
 
-> Category: 🛠️ Dev · Version: 0.0.7
+> Category: 🛠️ Dev · Version: 0.0.8
 
 ## Prompt
 
 ````
 # lazy-code
 
-> Version: 0.0.6
+> Version: 0.0.8
 
 ## Prompt
 
 ````
-# lazy-code — v0.0.5
+# lazy-code — v0.0.8
 
-[Lazy Code Prompt — v0.0.4 — LazyUnicorn.ai]
+[Lazy Code Prompt — v0.0.8 — LazyUnicorn.ai]
 
 Add a complete autonomous GitHub content agent called Lazy Code to this project. It monitors a GitHub repository via webhooks, processes commits and releases, writes plain-English changelogs, release notes, developer blog posts, SEO articles, and maintains a public roadmap — all automatically with no manual input required after setup.
 

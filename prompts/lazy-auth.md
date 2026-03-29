@@ -1,18 +1,18 @@
 # Lazy Auth
 
-> Category: 🛠️ Dev · Version: 0.0.6
+> Category: 🛠️ Dev · Version: 0.0.7
 
 ## Prompt
 
 ````
 # lazy-auth
 
-> Version: 0.0.4
+> Version: 0.0.7
 
 ## Prompt
 
 ````
-[Lazy Auth Prompt — v0.0.2 — LazyUnicorn.ai]
+[Lazy Auth Prompt — v0.0.7 — LazyUnicorn.ai]
 
 Add a complete authentication system called Lazy Auth to this project. It installs Google Sign-In, email/password login, protected routes, user profiles, role-based access control, and a user management dashboard — in one prompt. Uses Lovable Cloud and Supabase Auth.
 

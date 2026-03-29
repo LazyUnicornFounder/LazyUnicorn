@@ -1,20 +1,11 @@
 # Lazy Run
 
-> Category: 🚀 Unicorn · Version: 0.0.9
+> Category: 🚀 Unicorn · Version: 0.0.10
 
 ## Prompt
 
 ````
-# lazy-run
-
-> Version: 0.0.7
-
-## Prompt
-
-````
-# lazy-run — v0.0.7
-
-[Lazy Run Prompt — v0.0.7 — LazyUnicorn.ai]
+[Lazy Run Prompt — v0.0.10 — LazyUnicorn.ai]
 
 Add a complete unified autonomous operations runtime called Lazy Run to this project. Lazy Run installs and manages all Lazy engines from a single setup prompt, a single dashboard, and a unified scheduling and monitoring system. Install only the engines the user activates during setup.
 

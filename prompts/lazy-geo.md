@@ -1,20 +1,20 @@
 # Lazy GEO
 
-> Category: ✍️ Content · Version: 0.0.8
+> Category: ✍️ Content · Version: 0.0.9
 
 ## Prompt
 
 ````
 # lazy-geo
 
-> Version: 0.0.7
+> Version: 0.0.9
 
 ## Prompt
 
 ````
-# lazy-geo — v0.0.6
+# lazy-geo — v0.0.9
 
-[Lazy GEO Prompt — v0.0.6 — LazyUnicorn.ai]
+[Lazy GEO Prompt — v0.0.9 — LazyUnicorn.ai]
 
 Add a Lazy GEO agent to this project. GEO means Generative Agent Optimisation — publishing content structured to be cited by AI agents like ChatGPT, Claude, Perplexity, and Gemini. Every query is tagged to a specific Lazy product so that Lazy Blogger maintains equal AI visibility across the entire product catalogue. Queries come from two sources: geo-discover (AI-generated) and Lazy Perplexity (real questions from live web research).
 

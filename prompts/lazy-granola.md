@@ -1,20 +1,11 @@
 # Lazy Granola
 
-> Category: 🛠️ Dev · Version: 0.0.4
+> Category: 🛠️ Dev · Version: 0.0.5
 
 ## Prompt
 
 ````
-# lazy-granola
-
-> Version: 0.0.3
-
-## Prompt
-
-````
-# lazy-granola — v0.0.2
-
-[Lazy Granola Prompt — v0.0.2 — LazyUnicorn.ai]
+[Lazy Granola Prompt — v0.0.5 — LazyUnicorn.ai]
 
 Add an autonomous meeting-to-content agent called Lazy Granola to this project. It connects to Granola via the Granola MCP server, detects new meetings, and automatically turns them into blog posts, product updates, Linear issues, customer intelligence, and Slack summaries — without you writing anything after the meeting ends.
 
@@ -26,7 +17,9 @@ Note: Lazy Granola uses the Granola MCP server as a personal connector in Lovabl
 
 Create these Supabase tables with RLS enabled:
 
-granola_settings: id (uuid, primary key, default gen_random_uuid()), brand_name (text), site_url (text), meeting_types_to_process (text, default 'all' — comma-separated list of meeting types to process e.g. customer-discovery, planning, product-review, standup, 1on1, pitch, all), publish_blog_posts (boolean, default true), create_linear_issues (boolean, default true), send_slack_summary (boolean, default true), publish_product_updates (boolean, default true), feed_customer_intelligence (boolean, default true), weekly_digest_enabled (boolean, default true), weekly_digest_day (text, default 'monday'), slack_webhook_url (text), is_running (boolean, default true), setup_complete (boolean, default false), prompt_version (text, nullable), created_at (timestamptz, default now())
+granola_settings: id (uuid, primary key, default gen_random_uuid()), brand_name (text), site_url (text), meeting_types_to_process (text, default 'all' — comma-separated list of meeting types to process e.g. customer-discovery, planning, product-review, standup, 1on1, pitch, all), publish_blog_posts (boolean, default true), create_linear_issues (boolean, default true), send_slack_summary (boolean, default true), publish_product_updates (boolean, default true), feed_customer_intelligence (boolean, default true), weekly_digest_enabled (boolean, default true), weekly_digest_day (text, default 'monday'), is_running (boolean, default true), setup_complete (boolean, default false), prompt_version (text, nullable), created_at (timestamptz, default now())
+
+Note: Store SLACK_WEBHOOK_URL as Supabase secret (optional). Never store in the database.
 
 granola_meetings: id (uuid, primary key, default gen_random_uuid()), granola_meeting_id (text, unique), title (text), meeting_type (text), participants (text), started_at (timestamptz), ended_at (timestamptz), duration_minutes (integer), raw_notes (text), enhanced_notes (text), action_items (text), decisions (text), key_insights (text), processed (boolean, default false), processing_status (text, default 'pending' — one of pending, processing, done, failed), created_at (timestamptz, default now())
 
@@ -57,13 +50,14 @@ Form fields:
 - Feed customer intelligence to content agents (toggle, default on) — customer calls feed insights into Lazy Blogger and Lazy Perplexity as research context.
 - Weekly digest (toggle, default on) — publishes a summary of the week's meetings every Monday.
 - Weekly digest day (select: Monday / Friday)
-- Slack webhook URL for meeting summaries (text, optional)
+- Slack webhook URL for meeting summaries (password, optional) — stored as SLACK_WEBHOOK_URL secret
 
 Submit button: Connect Granola
 
 On submit:
-1. Save all values to granola_settings
-2. Set setup_complete to true and prompt_version to 'v0.0.2'
+1. Store SLACK_WEBHOOK_URL as Supabase secret if provided
+2. Save all other values to granola_settings
+3. Set setup_complete to true and prompt_version to 'v0.0.5'
 3. Immediately call granola-sync to fetch recent meetings from Granola
 4. Show loading: 'Syncing your recent meetings from Granola...'
 5. Redirect to /admin with message: 'Lazy Granola is connected. Recent meetings are being processed. Check back in a few minutes to see your first outputs.'
@@ -91,7 +85,7 @@ Triggered by granola-sync. Accepts meeting_id.
 4. Run all enabled outputs in parallel:
    - If publish_blog_posts is true: call granola-write-post with meeting_id
    - If create_linear_issues is true and linear_settings table exists: call granola-create-issues with meeting_id
-   - If send_slack_summary is true and slack_webhook_url is set: call granola-slack-summary with meeting_id
+   - If send_slack_summary is true and SLACK_WEBHOOK_URL secret exists: call granola-slack-summary with meeting_id
    - If publish_product_updates is true and meeting_type is planning or product-review: call granola-write-update with meeting_id
    - If feed_customer_intelligence is true and meeting_type is customer-discovery: call granola-extract-intel with meeting_id
 5. Update processing_status to done.
@@ -160,7 +154,7 @@ Triggered by granola-process when send_slack_summary is true. Accepts meeting_id
 1. Read granola_settings and the granola_meetings row.
 2. Call the built-in Lovable AI:
 'Write a concise Slack summary of this meeting for a team that did not attend. Meeting: [title]. Participants: [participants]. Duration: [duration_minutes] minutes. Notes: [enhanced_notes]. Action items: [action_items]. Decisions: [decisions]. Format as: bold meeting title, one sentence about what the meeting was for, bullet points of key decisions (max 4), bullet points of action items with owner if known (max 5), one sentence on next steps. Keep it scannable. Under 300 words total. Return plain text formatted for Slack markdown. No JSON.'
-3. POST to slack_webhook_url with the summary as a Slack message.
+3. POST to SLACK_WEBHOOK_URL secret with the summary as a Slack message.
 4. Insert into granola_outputs with output_type slack-summary and content set to the message sent.
 5. Log errors to granola_errors with function_name granola-slack-summary.
 
@@ -172,7 +166,7 @@ Cron: Monday at 8am UTC (or Friday at 5pm if weekly_digest_day is friday) — 0 
 3. Call the built-in Lovable AI:
 'You are a writer creating a weekly digest for [brand_name]. Here is a summary of all meetings from the past week: [list each meeting with title, date, duration, key decisions, and action items]. Write a build-in-public weekly digest post covering: what the team worked on, what was decided, what was learned, and what is coming next. Be specific and honest. This is a genuine build-in-public post not a corporate summary. Tone: direct, founder-voice. Return only a valid JSON object: title (e.g. "Week [n]: [one-line theme of the week]"), slug (lowercase hyphenated), excerpt (under 160 chars), body (clean markdown — ## Day-by-day or ## Theme-by-theme structure, 600 to 1000 words, includes the most interesting insight from any customer call this week, ends with: Follow along at [site_url] and: Built using the Lazy Stack — autonomous tools for Lovable sites at https://lazyunicorn.ai). No preamble. No code fences.'
 4. Parse response. Insert into blog_posts if that table exists, or granola_outputs with output_type weekly-digest.
-5. If slack_webhook_url is set send a Slack message: 'Weekly digest published: [title] — [site_url]/blog/[slug]'
+5. If SLACK_WEBHOOK_URL secret is set send a Slack message: 'Weekly digest published: [title] — [site_url]/blog/[slug]'
 6. Log errors to granola_errors with function_name granola-weekly-digest.
 
 ---

@@ -1,20 +1,20 @@
 # Lazy Drop
 
-> Category: 🛒 Commerce · Version: 0.0.5
+> Category: 🛒 Commerce · Version: 0.0.6
 
 ## Prompt
 
 ````
 # lazy-drop
 
-> Version: 0.0.4
+> Version: 0.0.6
 
 ## Prompt
 
 ````
-# lazy-drop — v0.0.3
+# lazy-drop — v0.0.6
 
-[Lazy Drop Prompt — v0.0.3 — LazyUnicorn.ai]
+[Lazy Drop Prompt — v0.0.6 — LazyUnicorn.ai]
 
 Add a complete autonomous dropshipping agent called Lazy Drop to this project. It connects your Lovable site to AutoDS — giving you access to 800M+ products from 25+ global suppliers, automatic price and stock monitoring, one-click product import, and fully automated order fulfilment. Your store discovers trending products, writes their listings, monitors prices, and fulfils orders automatically. You do nothing after setup.
 

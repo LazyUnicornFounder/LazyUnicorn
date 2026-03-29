@@ -1,20 +1,20 @@
 # Lazy Security
 
-> Category: ⚙️ Ops · Version: 0.0.8
+> Category: ⚙️ Ops · Version: 0.0.9
 
 ## Prompt
 
 ````
 # lazy-security
 
-> Version: 0.0.7
+> Version: 0.0.9
 
 ## Prompt
 
 ````
-# lazy-security — v0.0.6
+# lazy-security — v0.0.9
 
-[Lazy Security Prompt — v0.0.6 — LazyUnicorn.ai]
+[Lazy Security Prompt — v0.0.9 — LazyUnicorn.ai]
 
 Add a complete autonomous security monitoring agent called Lazy Security to this project. It connects to Aikido to run automated pentests, tracks vulnerability history, monitors security score over time, generates audit-ready reports, and sends instant alerts for critical findings — all automatically with no manual security work required after setup.
 

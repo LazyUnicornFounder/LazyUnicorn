@@ -1,20 +1,20 @@
 # Lazy GitLab
 
-> Category: 🛠️ Dev · Version: 0.0.8
+> Category: 🛠️ Dev · Version: 0.0.9
 
 ## Prompt
 
 ````
 # lazy-gitlab
 
-> Version: 0.0.7
+> Version: 0.0.9
 
 ## Prompt
 
 ````
-# lazy-gitlab — v0.0.6
+# lazy-gitlab — v0.0.9
 
-[Lazy GitLab Prompt — v0.0.5 — LazyUnicorn.ai]
+[Lazy GitLab Prompt — v0.0.9 — LazyUnicorn.ai]
 
 Add a complete autonomous GitLab content agent called Lazy GitLab to this project. It monitors a GitLab repository via webhooks, processes commits and merge requests, writes plain-English changelogs, release notes, developer blog posts, SEO articles, and maintains a public roadmap — all automatically with no manual input required after setup. Mirrors the Lazy Code agent but for GitLab.
 

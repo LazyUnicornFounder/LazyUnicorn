@@ -1,20 +1,20 @@
 # Lazy Perplexity
 
-> Category: ✍️ Content · Version: 0.0.8
+> Category: ✍️ Content · Version: 0.0.9
 
 ## Prompt
 
 ````
 # lazy-perplexity
 
-> Version: 0.0.7
+> Version: 0.0.9
 
 ## Prompt
 
 ````
-# lazy-perplexity — v0.0.6
+# lazy-perplexity — v0.0.9
 
-[Lazy Perplexity Prompt — v0.0.5 — LazyUnicorn.ai]
+[Lazy Perplexity Prompt — v0.0.9 — LazyUnicorn.ai]
 
 Add a complete autonomous Perplexity integration called Lazy Perplexity to this project. It uses the Perplexity API to research current topics with real web citations, feed fresh intelligence into Lazy Blogger and Lazy SEO, test brand citation rates with real AI queries, and generate citation-rich content that is more likely to be referenced by AI agents — all automatically.
 

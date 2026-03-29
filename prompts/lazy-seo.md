@@ -1,20 +1,20 @@
 # Lazy SEO
 
-> Category: ✍️ Content · Version: 0.0.8
+> Category: ✍️ Content · Version: 0.0.9
 
 ## Prompt
 
 ````
 # lazy-seo
 
-> Version: 0.0.7
+> Version: 0.0.9
 
 ## Prompt
 
 ````
-# lazy-seo — v0.0.6
+# lazy-seo — v0.0.9
 
-[Lazy SEO Prompt — v0.0.6 — LazyUnicorn.ai]
+[Lazy SEO Prompt — v0.0.9 — LazyUnicorn.ai]
 
 Add a Lazy SEO agent to this project. It automatically discovers keyword opportunities tagged to specific Lazy products and fills a queue that Lazy Blogger publishes from. Keywords come from three sources: seo-discover (AI-generated), Lazy Crawl (competitor intelligence), and Lazy Perplexity (live web research). Every keyword is tagged to a specific product so Lazy Blogger can maintain equal coverage across the entire catalogue.
 

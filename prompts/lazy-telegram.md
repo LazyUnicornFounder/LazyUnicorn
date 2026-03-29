@@ -1,20 +1,20 @@
 # Lazy Telegram
 
-> Category: ⚙️ Ops · Version: 0.0.8
+> Category: ⚙️ Ops · Version: 0.0.9
 
 ## Prompt
 
 ````
 # lazy-telegram
 
-> Version: 0.0.7
+> Version: 0.0.9
 
 ## Prompt
 
 ````
-# lazy-telegram — v0.0.6
+# lazy-telegram — v0.0.9
 
-[Lazy Telegram Prompt — v0.0.5 — LazyUnicorn.ai]
+[Lazy Telegram Prompt — v0.0.9 — LazyUnicorn.ai]
 
 Add a complete autonomous Telegram integration called Lazy Telegram to this project. It mirrors Lazy Alert but for Telegram — sending real-time event notifications, a daily briefing, and accepting bot commands to control your agents directly from Telegram. Your autonomous business in your pocket, delivered through Telegram.
 

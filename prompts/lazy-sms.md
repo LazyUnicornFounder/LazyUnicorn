@@ -1,20 +1,20 @@
 # Lazy SMS
 
-> Category: 🛒 Commerce · Version: 0.0.7
+> Category: 🛒 Commerce · Version: 0.0.8
 
 ## Prompt
 
 ````
 # lazy-sms
 
-> Version: 0.0.6
+> Version: 0.0.8
 
 ## Prompt
 
 ````
-# lazy-sms — v0.0.5
+# lazy-sms — v0.0.8
 
-[Lazy SMS Prompt — v0.0.4 — LazyUnicorn.ai]
+[Lazy SMS Prompt — v0.0.8 — LazyUnicorn.ai]
 
 Add a complete self-improving Twilio SMS agent called Lazy SMS to this project. It installs payment confirmations, subscription alerts, abandoned checkout recovery texts, welcome sequences, two-way messaging, opt-out management, delivery tracking, and autonomous message optimisation — with no manual Twilio integration required after setup.
 

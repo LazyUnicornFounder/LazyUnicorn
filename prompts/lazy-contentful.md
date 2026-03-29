@@ -1,20 +1,20 @@
 # Lazy Contentful
 
-> Category: ✍️ Content · Version: 0.0.8
+> Category: ✍️ Content · Version: 0.0.9
 
 ## Prompt
 
 ````
 # lazy-contentful
 
-> Version: 0.0.7
+> Version: 0.0.9
 
 ## Prompt
 
 ````
-# lazy-contentful — v0.0.6
+# lazy-contentful — v0.0.9
 
-[Lazy Contentful Prompt — v0.0.5 — LazyUnicorn.ai]
+[Lazy Contentful Prompt — v0.0.9 — LazyUnicorn.ai]
 
 Add a complete autonomous Contentful integration called Lazy Contentful to this project. It acts as a two-way bridge — pulling content from Contentful into your Lovable site automatically, and pushing AI-generated blog posts, SEO articles, and GEO content from your Lazy agents back into Contentful for distribution across all your connected channels.
 

@@ -1,20 +1,20 @@
 # Lazy Fix
 
-> Category: ⚙️ Ops · Version: 0.0.3
+> Category: ⚙️ Ops · Version: 0.0.4
 
 ## Prompt
 
 ````
 # lazy-fix
 
-> Version: 0.0.2
+> Version: 0.0.4
 
 ## Prompt
 
 ````
-# lazy-fix — v0.0.1
+# lazy-fix — v0.0.4
 
-[Lazy Fix Prompt — v0.0.1 — LazyUnicorn.ai]
+[Lazy Fix Prompt — v0.0.4 — LazyUnicorn.ai]
 
 Add an autonomous prompt improvement agent called Lazy Fix to this project. Every Sunday night it reads your agent performance data, identifies the two weakest-performing Lazy agents, makes targeted improvements to their prompts, and opens GitHub PRs for you to review Monday morning — all automatically.
 
