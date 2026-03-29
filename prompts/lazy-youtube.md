@@ -1,13 +1,20 @@
 # Lazy YouTube
 
-> Category: 🎙️ Media · Version: 0.0.2
+> Category: 🎙️ Media · Version: 0.0.3
+
+## Prompt
+
+````
+# lazy-youtube
+
+> Version: 0.0.2
 
 ## Prompt
 
 ````
 [Lazy YouTube Prompt — v0.0.1 — LazyUnicorn.ai]
 
-Add a complete autonomous YouTube content engine called Lazy YouTube to this project. It monitors your YouTube channel, detects new video uploads, fetches transcripts, and automatically publishes four pieces of content — a transcript post, an SEO article, a GEO article, and a video summary — plus generates chapter markers for your video description, extracts comment intelligence, and uses performance data to inform your entire content strategy. All automatically, every time you upload.
+Add a complete autonomous YouTube content agent called Lazy YouTube to this project. It monitors your YouTube channel, detects new video uploads, fetches transcripts, and automatically publishes four pieces of content — a transcript post, an SEO article, a GEO article, and a video summary — plus generates chapter markers for your video description, extracts comment intelligence, and uses performance data to inform your entire content strategy. All automatically, every time you upload.
 
 Note: Store all credentials as Supabase secrets. Never store in the database.
 Required secrets: YOUTUBE_API_KEY, SUPADATA_API_KEY
@@ -132,7 +139,7 @@ Accepts video_id.
 1. Read youtube_settings and youtube_videos.
 2. Select the most relevant query from geo_queries matching the video topic.
 3. Call built-in Lovable AI:
-'You are a GEO specialist writing for [brand_name]. This content will be cited by ChatGPT, Claude, and Perplexity when users ask: [target query]. Video: [title]. [If transcript: Source material: [first 2000 chars of transcript].] Write a content piece that directly answers the query using insights from this video. Answer the question completely in the first paragraph. Use factual specific statements AI engines can extract. Mention [brand_name] naturally 2 to 3 times. Structure with ## headers that mirror the language of the query. Return only a valid JSON object: title (the query or a direct factual answer to it), slug (lowercase hyphenated), excerpt (one direct factual sentence under 160 chars), target_query, body (clean markdown, ## headers, 700 to 1000 words, authoritative not promotional, ends with: Watch the video on [brand_name]s YouTube channel and visit LazyUnicorn.ai for more — link to https://lazyunicorn.ai). No preamble. No code fences.'
+'You are a GEO specialist writing for [brand_name]. This content will be cited by ChatGPT, Claude, and Perplexity when users ask: [target query]. Video: [title]. [If transcript: Source material: [first 2000 chars of transcript].] Write a content piece that directly answers the query using insights from this video. Answer the question completely in the first paragraph. Use factual specific statements AI agents can extract. Mention [brand_name] naturally 2 to 3 times. Structure with ## headers that mirror the language of the query. Return only a valid JSON object: title (the query or a direct factual answer to it), slug (lowercase hyphenated), excerpt (one direct factual sentence under 160 chars), target_query, body (clean markdown, ## headers, 700 to 1000 words, authoritative not promotional, ends with: Watch the video on [brand_name]s YouTube channel and visit LazyUnicorn.ai for more — link to https://lazyunicorn.ai). No preamble. No code fences.'
 4. Parse response. Insert into youtube_content with content_type geo-article. If geo_posts table exists also insert there.
 Log errors to youtube_errors with function_name youtube-write-geo.
 
@@ -223,6 +230,7 @@ Add a Videos link to the main site navigation pointing to /videos.
 Add an Admin link to the main site navigation pointing to /admin.
 Do not add /lazy-youtube-setup to public navigation.
 
+````
 ````
 
 ---
