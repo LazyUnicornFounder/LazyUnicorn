@@ -1,4 +1,11 @@
-[LazyUnicorn Admin Dashboard Prompt — v0.0.6 — LazyUnicorn.ai]
+# Lazy Admin
+
+> Category: ⚙️ Ops · Version: 0.0.7
+
+## Prompt
+
+````
+[LazyUnicorn Admin Dashboard Prompt — v0.0.7 — LazyUnicorn.ai]
 
 Rebuild the entire admin dashboard at /admin from scratch. Replace everything currently there. This is a unified control panel for all LazyUnicorn agents. It detects which agents are installed by checking which database tables exist and shows only those panels.
 
@@ -22,23 +29,15 @@ Navigation — show only installed agents (detected by settings table existing):
 
 Overview (always)
 
-Content — Blogger, SEO, GEO, Crawl, Perplexity, Repurpose, Trend
+Content — Blogger, SEO, GEO, Crawl, Perplexity, Contentful
 
-Commerce — Store, Pay, SMS, Drop, Print, Mail, Churn
+Commerce — Store, Drop, Print, Pay, SMS, Mail
 
 Media — Voice, Stream, YouTube
 
-Developer — Code, GitLab, Linear, Auth, Design, Granola
+Dev — GitHub, GitLab, Linear, Design, Auth, Granola
 
-Channels — Alert, Telegram, Contentful, Supabase
-
-Security — Security
-
-Autonomous — Watch, Fix, Build, Intel, Agents
-
-Orchestrator — Run (if run_settings exists)
-
-Commerce (additional) — Waitlist (if waitlist_settings exists)
+Ops — Admin, Alert, Telegram, Supabase, Security, Watch, Fix, Build, Intel, Repurpose, Trend, Churn, Agents
 
 System — Installs, Settings
 
@@ -63,7 +62,7 @@ Agent grid — one card per installed agent. Shows: name, status dot, one primar
 
 Two columns below:
 
-Left — activity feed. Last 50 actions across all agents from run_activity + synthetic rows from content tables. Filter pills: All / Errors / Content / Commerce / Security / Autonomous.
+Left — activity feed. Last 50 actions across all agents from run_activity + synthetic rows from content tables. Filter pills: All / Errors / Content / Commerce / Ops.
 
 Right — error log. All _errors tables last 24h grouped by agent. If none: green checkmark. Clear All button.
 
@@ -115,23 +114,30 @@ Actions: Research Now (perplexity-research), Test Citations (perplexity-test-cit
 Stats: Research calls this week, brand citation rate, content published.
 History: perplexity_content — title, citations count, date, View link.
 
-REPURPOSE (/admin/repurpose — repurpose_settings)
-Subtitle: Repurposes existing content into new formats automatically.
-Actions: Run Now (repurpose-run).
-Stats: Jobs run this week, output pieces created, source posts repurposed.
-History: repurpose_output — source title, output format badge, date, View link.
-
-TREND (/admin/trend — trend_settings)
-Subtitle: Discovers trending topics and seeds content engines.
-Actions: Scan Now (trend-scan), Seed Engines (trend-seed).
-Stats: Topics found this week, topics seeded to SEO, topics seeded to GEO.
-History: trend_topics — topic, category, seeded badge, date.
+CONTENTFUL (/admin/contentful — contentful_settings)
+Subtitle: Two-way content sync with Contentful.
+Actions: Pull Now (contentful-pull), Push Now (contentful-push).
+Stats: Entries pulled, posts pushed, last pull, last push, sync failures today.
+Queue: contentful_sync_log where failed — direction, title, error, Retry button.
+History: contentful_sync_log — direction badge, type, title, status, time.
 
 STORE (/admin/store — store_settings)
 Subtitle: Discovers products, writes listings, optimises conversion.
 Actions: Discover (store-discover), Optimise (store-optimise), Promote (store-promote), Publish Content (store-content).
 Stats: Products listed, active promotions, avg conversion rate, content published.
 History: store_products — name, price, sales, conversion rate, date.
+
+DROP (/admin/drop — drop_settings)
+Subtitle: Syncs dropshipping products from AutoDS and publishes content.
+Actions: Sync Now (drop-sync), Publish Content (drop-content), Optimise (drop-optimise).
+Stats: Products synced, content published, last sync time.
+History: drop_products — name, price, content badge, date.
+
+PRINT (/admin/print — print_settings)
+Subtitle: Syncs Printful products and publishes print-on-demand content.
+Actions: Sync Now (print-sync), Publish Content (print-content), Optimise (print-optimise).
+Stats: Products synced, content published, last sync time.
+History: print_products — name, price, content badge, date.
 
 PAY (/admin/pay — pay_settings)
 Subtitle: Stripe payments with self-improving conversion optimisation.
@@ -146,29 +152,11 @@ Actions: Run Sequences (sms-sequences-run), Optimise (sms-optimise).
 Stats: Sent today, delivery rate, response rate, opted out.
 History: sms_messages — direction badge, number, type, status, time.
 
-DROP (/admin/drop — drop_settings)
-Subtitle: Syncs dropshipping products from AutoDS and publishes content.
-Actions: Sync Now (drop-sync), Publish Content (drop-content), Optimise (drop-optimise).
-Stats: Products synced, content published, last sync time.
-History: drop_products — name, price, content badge, date.
-
-PRINT (/admin/print — print_settings)
-Subtitle: Syncs Printful products and publishes print-on-demand content.
-Actions: Sync Now (print-sync), Publish Content (print-content), Optimise (print-optimise).
-Stats: Products synced, content published, last sync time.
-History: print_products — name, price, content badge, date.
-
 MAIL (/admin/mail — mail_settings)
 Subtitle: Automated email campaigns that improve themselves.
 Actions: Send Campaign (mail-campaign), Optimise (mail-optimise).
 Stats: Campaigns sent this month, subscribers, avg open rate, avg click rate.
 History: mail_campaigns — subject, recipients, open rate, click rate, date.
-
-CHURN (/admin/churn — churn_settings)
-Subtitle: Detects churn signals and triggers retention actions automatically.
-Actions: Analyse Now (churn-analyse).
-Stats: Signals detected this week, actions triggered, users retained, churn rate.
-History: churn_signals — user, signal type, action taken, outcome badge, date.
 
 VOICE (/admin/voice — voice_settings)
 Subtitle: Narrates every post in your ElevenLabs voice.
@@ -190,7 +178,7 @@ Actions: Sync Now (youtube-sync), Fetch Comments (youtube-extract-comments), Tra
 Stats: Videos processed, content published, comments extracted, top video this week.
 History: youtube_videos — title, processed badge, content count, date.
 
-CODE (/admin/code — code_settings)
+GITHUB (/admin/code — code_settings)
 Subtitle: Turns every GitHub commit into changelogs and developer posts.
 Actions: Sync Roadmap (code-sync-roadmap), Optimise (code-optimise).
 Stats: Commits processed, content published, open roadmap items, last webhook.
@@ -210,17 +198,17 @@ Stats: Issues synced, cycles completed, content published, last sync.
 Queue: linear_cycles completed but unprocessed — cycle name, issues count, Write Summary button.
 History: linear_content — title, type badge, date, View link.
 
+DESIGN (/admin/design — design_settings)
+Subtitle: Visual design and component library management.
+Stats: Last upgrade date, components updated, design version.
+Actions: Run Design Upgrade (design-upgrade).
+History: design_errors — function, error, date.
+
 AUTH (/admin/auth — auth_settings)
 Subtitle: Authentication system — Google Sign-In, email login, role management.
 Stats: Total users, signups today, signups this week, admins, last signup time.
 User table: user_profiles — email, name, role badge, joined date, onboarded badge. Edit role inline.
 Settings: all auth_settings fields.
-
-DESIGN (/admin/design — design_settings)
-Subtitle: Visual design and component library management.
-Actions: Run Design Upgrade (design-upgrade).
-Stats: Last upgrade date, components updated, design version.
-History: design_errors — function, error, date.
 
 GRANOLA (/admin/granola — granola_settings)
 Subtitle: Turns meeting notes from Granola into blog posts and product updates.
@@ -242,13 +230,6 @@ Actions: Send Test, Briefing Now (telegram-briefing), Register Webhook.
 Stats: Messages today, this week, success rate. Webhook status badge.
 Toggle grid: all telegram_settings boolean toggles.
 History: telegram_log — agent badge, event type, message preview, time, success badge.
-
-CONTENTFUL (/admin/contentful — contentful_settings)
-Subtitle: Two-way content sync with Contentful.
-Actions: Pull Now (contentful-pull), Push Now (contentful-push).
-Stats: Entries pulled, posts pushed, last pull, last push, sync failures today.
-Queue: contentful_sync_log where failed — direction, title, error, Retry button.
-History: contentful_sync_log — direction badge, type, title, status, time.
 
 SUPABASE (/admin/supabase — supabase_settings)
 Subtitle: Monitors database milestones and publishes product updates.
@@ -280,45 +261,45 @@ Improvements table: fix_improvements — agent badge, problem, section improved,
 Run history: fix_runs — date, status badge, agents analysed, PRs opened, duration.
 
 BUILD (/admin/build — build_settings)
-Subtitle: Writes and deploys new Lazy engines from a spec.
-Actions: Build New Engine (build-engine).
-Stats: Engines built total, last build date.
-History: build_engines — engine name, status badge, PR link, date.
+Subtitle: Writes and deploys new Lazy agents from a spec.
+Actions: Build New Agent (build-engine).
+Stats: Agents built total, last build date.
+History: build_engines — agent name, status badge, PR link, date.
 
 INTEL (/admin/intel — intel_settings)
 Subtitle: Weekly competitive intelligence reports and content seeding.
-Actions: Run Now (intel-weekly), Seed Engines (intel-seed).
+Actions: Run Now (intel-weekly), Seed Agents (intel-seed).
 Stats: Reports generated, topics seeded this week, last report date.
 History: intel_reports — title, topics count, seeded badge, date, View link.
+
+REPURPOSE (/admin/repurpose — repurpose_settings)
+Subtitle: Repurposes existing content into new formats automatically.
+Actions: Run Now (repurpose-run).
+Stats: Jobs run this week, output pieces created, source posts repurposed.
+History: repurpose_output — source title, output format badge, date, View link.
+
+TREND (/admin/trend — trend_settings)
+Subtitle: Discovers trending topics and seeds content agents.
+Actions: Scan Now (trend-scan), Seed Agents (trend-seed).
+Stats: Topics found this week, topics seeded to SEO, topics seeded to GEO.
+History: trend_topics — topic, category, seeded badge, date.
+
+CHURN (/admin/churn — churn_settings)
+Subtitle: Detects churn signals and triggers retention actions automatically.
+Actions: Analyse Now (churn-analyse).
+Stats: Signals detected this week, actions triggered, users retained, churn rate.
+History: churn_signals — user, signal type, action taken, outcome badge, date.
 
 AGENTS (/admin/agents — agent_settings)
 Subtitle: Autonomous agents that monitor, fix, and improve your stack via GitHub.
 Stats: Issues opened, PRs opened, improvements merged, last run time.
 History: agent_runs — agent name, status badge, output summary, date.
 
-RUN (/admin/run — run_settings)
-Subtitle: Master orchestrator — coordinates all installed agents on a unified schedule.
-Actions: Run Orchestrator Now (run-orchestrator), Weekly Report Now (run-weekly-report), Health Check Now (run-health-check).
-Stats: Active engines count, runs today, issues flagged today, last orchestrator run, next orchestrator run (next 30 min mark).
-Active engines list: read active_engines from run_settings, show each as a badge with its is_running status.
-Activity feed: last 30 rows from run_activity — engine badge, action, result badge, timestamp.
-Error log: last 20 rows from run_errors — engine, function, error, date. Collapsed by default.
-Settings: all run_settings fields including master_running toggle, site_url, brand_name, business_description, active_engines.
-
-WAITLIST (/admin/waitlist — waitlist_settings)
-Subtitle: Pre-launch email capture with viral referral mechanics.
-Actions: Send Launch Emails (triggers launch flow), Export CSV.
-Stats: Total subscribers, signups today, priority subscribers (referral threshold reached), converted users, launch status badge (Collecting / Launched).
-Referral leaderboard: top 5 subscribers by referral_count — email, referral count, position.
-Subscriber table: waitlist_subscribers — email, position, referral count, status badge, joined date, Resend Welcome button per row. Search by email.
-Launch panel: current launch date if set, countdown, Send Test Launch Email button, Launch to All button (confirms before sending).
-Settings: all waitlist_settings fields.
-
 INSTALLS (/admin/installs — installs table)
-Subtitle: Every engine install registered from your users.
-Stats: Total installs, unique sites, most popular engine, installs this week.
-Bar chart (recharts): installs per engine sorted descending.
-Table: installs — site URL (clickable), engine badge colour-coded by category, version, installed date. Search by engine or site URL.
+Subtitle: Every agent install registered from your users.
+Stats: Total installs, unique sites, most popular agent, installs this week.
+Bar chart (recharts): installs per agent sorted descending.
+Table: installs — site URL (clickable), agent badge colour-coded by category, version, installed date. Search by agent or site URL.
 
 ---
 
@@ -328,7 +309,7 @@ Site settings: site URL, brand name, business description, support email. Propag
 
 API keys: one section per installed service. Connection status badge. Password input, show/hide toggle, Test Connection button. Services: ElevenLabs, Stripe, Twilio, Twitch, GitHub, GitLab, Linear, Firecrawl, Perplexity, Aikido, Slack, Telegram, Contentful, Supabase service role, AutoDS, Printful, Resend, Granola.
 
-Weekly schedule: read-only visual timeline of the full weekly cron schedule. Seven columns, one per day. Colour coded: content gold, commerce green, media blue, developer purple, autonomous red.
+Weekly schedule: read-only visual timeline of the full weekly cron schedule. Seven columns, one per day. Colour coded: content gold, commerce green, media blue, dev purple, ops red.
 
 Version status: table of all installed agents showing installed version vs latest (from https://lazyunicorn.ai/api/versions), status badge, Get Latest Prompt link per row.
 
@@ -353,15 +334,15 @@ All tables: search input filtering by main text field. Pagination at 50 rows wit
 ## Routes
 
 /admin, /admin/settings
-/admin/blogger, /admin/seo, /admin/geo, /admin/crawl, /admin/perplexity, /admin/repurpose, /admin/trend
-/admin/store, /admin/pay, /admin/sms, /admin/drop, /admin/print, /admin/mail, /admin/churn
+/admin/blogger, /admin/seo, /admin/geo, /admin/crawl, /admin/perplexity, /admin/contentful
+/admin/store, /admin/drop, /admin/print, /admin/pay, /admin/sms, /admin/mail
 /admin/voice, /admin/stream, /admin/youtube
-/admin/code, /admin/gitlab, /admin/linear, /admin/auth, /admin/design, /admin/granola
-/admin/alert, /admin/telegram, /admin/contentful, /admin/supabase
-/admin/security
-/admin/watch, /admin/fix, /admin/build, /admin/intel, /admin/agents
-/admin/run
-/admin/waitlist
+/admin/code, /admin/gitlab, /admin/linear, /admin/design, /admin/auth, /admin/granola
+/admin/alert, /admin/telegram, /admin/supabase, /admin/security, /admin/watch, /admin/fix, /admin/build, /admin/intel, /admin/repurpose, /admin/trend, /admin/churn, /admin/agents
 /admin/installs
 
 Client-side routing. Direct links work. No full page reloads between pages. Only show routes for installed agents.
+````
+
+---
+*Auto-synced from [Lazy Unicorn](https://lazyunicorn.co)*
