@@ -285,12 +285,10 @@ Never show an indefinite spinner. All data fetches must have a 10 second timeout
 
 ## Routes
 
-/admin, /admin/settings
-/admin/blogger, /admin/seo, /admin/geo, /admin/crawl, /admin/perplexity, /admin/contentful
-/admin/store, /admin/drop, /admin/print, /admin/pay, /admin/sms, /admin/mail
-/admin/voice, /admin/stream, /admin/youtube
-/admin/code, /admin/gitlab, /admin/linear, /admin/design, /admin/auth, /admin/granola
-/admin/alert, /admin/telegram, /admin/supabase, /admin/security, /admin/watch, /admin/fix, /admin/build, /admin/intel, /admin/repurpose, /admin/trend, /admin/churn, /admin/agents
-/admin/installs
+/admin — overview (tabs + stats + agent grid)
+/admin/settings — site settings, API keys, weekly schedule, version status
+/admin/[agent-slug] — agent detail page for any installed agent
 
-Client-side routing. Direct links work. No full page reloads between pages. Only show routes for installed agents.
+Agent slugs: blogger, seo, geo, crawl, perplexity, contentful, store, drop, print, pay, sms, mail, voice, stream, youtube, code, gitlab, linear, design, auth, granola, alert, telegram, supabase, security, watch, fix, build, intel, repurpose, trend, churn, agents
+
+Client-side routing. Direct links work. No full page reloads between pages. /admin/[slug] only accessible if that agent's settings table exists and setup_complete is true — otherwise redirect to /lazy-[agent]-setup.
