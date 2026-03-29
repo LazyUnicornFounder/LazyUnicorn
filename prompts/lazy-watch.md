@@ -1,6 +1,13 @@
 # Lazy Watch
 
-> Category: 🤖 Agents · Version: 0.0.1
+> Category: ⚙️ Ops · Version: 0.0.2
+
+## Prompt
+
+````
+# lazy-watch
+
+> Version: 0.0.1
 
 ## Prompt
 
@@ -107,6 +114,7 @@ Error log: all watch_errors ordered by created_at descending, last 20 rows. Coll
 Add an Admin link to the main site navigation pointing to /admin.
 Do not add /lazy-watch-setup to public navigation.
 
+````
 ````
 
 ---
