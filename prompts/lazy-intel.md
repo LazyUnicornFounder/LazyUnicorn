@@ -50,7 +50,8 @@ On submit:
 2. Save all other values to intel_settings
 3. Set setup_complete to true and prompt_version to 'v0.0.5'
 3. Immediately trigger intel-analyse to run once with last 7 days of data
-4. Redirect to /admin with message: 'Lazy Intel is active. Your first strategy brief is being generated. Check /admin/intel in a few minutes.'
+4. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Intel', version: '0.0.5', site_url: site_url }) }) } catch(e) {}
+5. Redirect to /admin with message: 'Lazy Intel is active. Your first strategy brief is being generated. Check /admin/intel in a few minutes.'
 
 ---
 

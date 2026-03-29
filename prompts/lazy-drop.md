@@ -73,7 +73,8 @@ On submit:
 4. Immediately call drop-test-connection to verify credentials
 5. If connection succeeds immediately call drop-discover to find first products
 6. Show loading: 'Connecting to AutoDS and finding your first products...'
-7. Redirect to /admin with message: 'Lazy Drop is connected. Your first products are being discovered. Check back in a few minutes.'
+7. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Drop', version: '0.0.6', site_url: site_url }) }) } catch(e) {}
+8. Redirect to /admin with message: 'Lazy Drop is connected. Your first products are being discovered. Check back in a few minutes.'
 
 ---
 

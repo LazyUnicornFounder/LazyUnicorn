@@ -119,7 +119,8 @@ On submit:
 3. Set setup_complete to true and prompt_version to 'v0.0.5'
 4. Immediately call store-discover once
 5. Show loading: "Discovering products for your store..."
-6. Redirect to /admin with message: "Your store is live. Products are being discovered and listed automatically."
+6. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Store', version: '0.0.8', site_url: site_url }) }) } catch(e) {}
+7. Redirect to /admin with message: "Your store is live. Products are being discovered and listed automatically."
 
 ---
 

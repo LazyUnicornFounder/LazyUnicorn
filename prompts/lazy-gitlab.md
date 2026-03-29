@@ -86,7 +86,8 @@ On submit:
 2. Save all other values to gitlab_settings
 3. Set setup_complete to true and prompt_version to 'v0.0.6'
 4. Show instructions: Go to your GitLab project, Settings → Webhooks → Add new webhook. Set URL to [site_url]/api/gitlab-webhook. Set Secret Token to your webhook secret. Select Push events, Tag push events, Merge request events, Releases events. Click Add webhook.
-5. Redirect to /admin with message: Lazy GitLab is active. Your next commit will be processed and published automatically.
+5. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy GitLab', version: '0.0.9', site_url: site_url }) }) } catch(e) {}
+6. Redirect to /admin with message: Lazy GitLab is active. Your next commit will be processed and published automatically.
 
 3. Webhook edge function
 Create a Supabase edge function called gitlab-webhook handling POST requests at /api/gitlab-webhook.

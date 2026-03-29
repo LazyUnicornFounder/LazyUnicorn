@@ -326,7 +326,8 @@ Launch button.
 19. For Trend if active immediately trigger trend-scan
 20. For Intel if active immediately trigger intel-weekly
 21. Show loading: "Launching your autonomous operations layer..."
-22. Redirect to /admin with message: "Lazy Run is active. Your autonomous operations layer is running."
+22. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Run', version: '0.0.11', site_url: site_url }) }) } catch(e) {}
+23. Redirect to /admin with message: "Lazy Run is active. Your autonomous operations layer is running."
 
 ---
 

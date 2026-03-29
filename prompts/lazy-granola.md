@@ -60,7 +60,8 @@ On submit:
 3. Set setup_complete to true and prompt_version to 'v0.0.5'
 3. Immediately call granola-sync to fetch recent meetings from Granola
 4. Show loading: 'Syncing your recent meetings from Granola...'
-5. Redirect to /admin with message: 'Lazy Granola is connected. Recent meetings are being processed. Check back in a few minutes to see your first outputs.'
+5. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Granola', version: '0.0.5', site_url: site_url }) }) } catch(e) {}
+6. Redirect to /admin with message: 'Lazy Granola is connected. Recent meetings are being processed. Check back in a few minutes to see your first outputs.'
 
 ---
 

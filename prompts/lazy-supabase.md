@@ -82,7 +82,8 @@ On submit:
 2. Save all values to supabase_settings
 3. Set setup_complete to true and prompt_version to 'v0.0.6'
 4. Immediately call supabase-monitor once
-5. Redirect to /admin with message: Lazy Supabase is running. Monitoring your database for milestones and events.
+5. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Supabase', version: '0.0.9', site_url: site_url }) }) } catch(e) {}
+6. Redirect to /admin with message: Lazy Supabase is running. Monitoring your database for milestones and events.
 
 3. Core monitoring edge function
 Create a Supabase edge function called supabase-monitor. Cron: every hour — 0 * * * *

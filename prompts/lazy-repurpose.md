@@ -53,7 +53,8 @@ Submit button: Activate Lazy Repurpose
 On submit:
 1. Save all values to repurpose_settings
 2. Set setup_complete to true and prompt_version to 'v0.0.4'
-3. Redirect to /admin with message: 'Lazy Repurpose is active. It will run this Sunday and queue repurposed content for your review.'
+3. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Repurpose', version: '0.0.4', site_url: site_url }) }) } catch(e) {}
+4. Redirect to /admin with message: 'Lazy Repurpose is active. It will run this Sunday and queue repurposed content for your review.'
 
 ---
 

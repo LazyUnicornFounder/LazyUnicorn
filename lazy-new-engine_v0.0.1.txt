@@ -320,7 +320,8 @@ Follow-up Delay (days)
 #### On Submit:
 1. Validate Resend API key by making test API call
 2. Insert settings row with `setup_complete = true`
-3. Redirect to `/admin/waitlist`
+3. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Waitlist', version: '0.0.1', site_url: site_url }) }) } catch(e) {}
+4. Redirect to `/admin/waitlist`
 4. Show success toast: "Waitlist engine configured successfully!"
 
 ---

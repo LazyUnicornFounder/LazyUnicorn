@@ -125,7 +125,8 @@ On submit:
 1. Store Stripe keys as Supabase secrets
 2. Save business_name, support_email, site_url, currency to pay_settings
 3. Set setup_complete to true and prompt_version to 'v0.0.5'
-4. Redirect to /admin with message: "Lazy Pay is active. Add your first product to start taking payments."
+4. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Pay', version: '0.0.8', site_url: site_url }) }) } catch(e) {}
+5. Redirect to /admin with message: "Lazy Pay is active. Add your first product to start taking payments."
 
 ---
 

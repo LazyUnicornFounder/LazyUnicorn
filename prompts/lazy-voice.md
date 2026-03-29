@@ -80,7 +80,8 @@ On submit:
 1. Store ElevenLabs API key as Supabase secret ELEVENLABS_API_KEY
 2. Save all other values to voice_settings
 3. Set setup_complete to true and prompt_version to 'v0.0.5'
-4. Redirect to /admin with message: "Lazy Voice is running. Every new blog post will be narrated automatically within 30 minutes of publishing."
+4. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Voice', version: '0.0.8', site_url: site_url }) }) } catch(e) {}
+5. Redirect to /admin with message: "Lazy Voice is running. Every new blog post will be narrated automatically within 30 minutes of publishing."
 
 ---
 

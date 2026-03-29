@@ -71,7 +71,8 @@ On submit:
 4. Store the printful_store_id in print_settings
 5. Set setup_complete to true and prompt_version to 'v0.0.3'
 6. Call print-sync-catalogue to fetch available products from Printful
-7. Redirect to /admin with message: 'Lazy Print is connected. Browse the product catalogue from your admin and upload your designs to start selling.'
+7. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Print', version: '0.0.6', site_url: site_url }) }) } catch(e) {}
+8. Redirect to /admin with message: 'Lazy Print is connected. Browse the product catalogue from your admin and upload your designs to start selling.'
 
 ---
 

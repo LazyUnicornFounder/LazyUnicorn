@@ -119,7 +119,8 @@ On submit:
    - trigger: payment-success, step: 1, delay: 0, template: "Payment confirmed. Thank you for your purchase from [business_name]. Reply STOP to opt out."
    - trigger: subscription-renewal, step: 1, delay: 72, template: "Your [business_name] subscription renews in 3 days. Manage it here: [site_url]/manage-subscription. Reply STOP to opt out."
    - trigger: checkout-abandoned, step: 1, delay: 1, template: "You left something at [business_name]. Complete your purchase here: [checkout_url]. Reply STOP to opt out."
-5. Redirect to /admin with message: "Lazy SMS is active. Your site will now text customers automatically."
+5. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy SMS', version: '0.0.8', site_url: site_url }) }) } catch(e) {}
+6. Redirect to /admin with message: "Lazy SMS is active. Your site will now text customers automatically."
 
 ---
 

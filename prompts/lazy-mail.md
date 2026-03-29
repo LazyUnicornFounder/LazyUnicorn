@@ -68,7 +68,8 @@ On submit:
 4. Insert the default welcome sequence into mail_sequences:
    - name: Welcome, trigger: confirmed, delay_days: 0, subject: 'Welcome to [brand_name]', body: A warm plain-text welcome email written by the built-in Lovable AI for this brand. Call the AI: 'Write a warm, genuine welcome email for a new subscriber to [brand_name] described as [site description]. 150 words maximum. Plain text. No salutation. Start with: Welcome — you are in. End with the sender name. No marketing language.'
 5. Immediately call mail-send-test to verify the Resend connection by sending a test email to the from_email address
-6. Redirect to /admin with message: 'Lazy Mail is active. Test email sent to [from_email] to confirm everything is working.'
+6. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Mail', version: '0.0.5', site_url: site_url }) }) } catch(e) {}
+7. Redirect to /admin with message: 'Lazy Mail is active. Test email sent to [from_email] to confirm everything is working.'
 
 ---
 

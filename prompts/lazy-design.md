@@ -59,7 +59,8 @@ On submit:
 2. Set setup_complete to true and prompt_version to 'v0.0.2'
 3. For each checked page insert a row into design_pages
 4. Immediately call design-audit for each checked page
-5. Redirect to /admin with message: 'Lazy Design is running. Your site is being audited. Upgrade suggestions will appear in your dashboard.'
+5. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Design', version: '0.0.6', site_url: site_url }) }) } catch(e) {}
+6. Redirect to /admin with message: 'Lazy Design is running. Your site is being audited. Upgrade suggestions will appear in your dashboard.'
 
 ---
 

@@ -61,7 +61,8 @@ On submit:
 1. Save all values to auth_settings
 2. Set setup_complete to true and prompt_version to 'v0.0.2'
 3. Build all auth pages and components (see section 3)
-4. Redirect to /admin with message: 'Lazy Auth is installed. Visit Cloud → Users → Auth → Google in Lovable to enable Google Sign-In.'
+4. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Auth', version: '0.0.7', site_url: site_url }) }) } catch(e) {}
+5. Redirect to /admin with message: 'Lazy Auth is installed. Visit Cloud → Users → Auth → Google in Lovable to enable Google Sign-In.'
 
 ---
 

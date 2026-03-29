@@ -57,7 +57,8 @@ On submit:
 1. Save all values to churn_settings
 2. Set setup_complete to true and prompt_version to 'v0.0.2'
 3. Immediately trigger churn-sync to import current subscriber data from Stripe
-4. Redirect to /admin with message: 'Lazy Churn is active. Syncing your subscribers now. At-risk customers will appear in /admin/churn within a few minutes.'
+4. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Churn', version: '0.0.4', site_url: site_url }) }) } catch(e) {}
+5. Redirect to /admin with message: 'Lazy Churn is active. Syncing your subscribers now. At-risk customers will appear in /admin/churn within a few minutes.'
 
 ---
 

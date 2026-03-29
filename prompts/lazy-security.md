@@ -119,7 +119,8 @@ On submit:
 3. Set setup_complete to true and prompt_version to 'v0.0.6'
 4. Set next_pentest_at to now plus 5 minutes
 5. Immediately call security-scan
-6. Redirect to /admin with message: "Lazy Security is active. Your first pentest is queued. Results will appear here within the next hour."
+6. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Security', version: '0.0.9', site_url: site_url }) }) } catch(e) {}
+7. Redirect to /admin with message: "Lazy Security is active. Your first pentest is queued. Results will appear here within the next hour."
 
 ---
 

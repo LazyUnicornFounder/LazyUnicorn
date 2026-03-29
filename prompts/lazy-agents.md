@@ -55,7 +55,8 @@ On submit:
 1. Save all values to agent_settings
 2. Set setup_complete to true and prompt_version to 'v0.0.4'
 3. Immediately trigger agent-error-monitor to run once as a test
-4. Redirect to /admin with message: 'Agents are active. Error monitor just ran. Check /admin/agents for results.'
+4. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Agents', version: '0.0.4', site_url: site_url }) }) } catch(e) {}
+5. Redirect to /admin with message: 'Agents are active. Error monitor just ran. Check /admin/agents for results.'
 
 ---
 

@@ -83,7 +83,8 @@ On submit:
 3. Set setup_complete to true and prompt_version to 'v0.0.6'
 4. Show instructions: Go to your Contentful space, Settings → Webhooks → Add webhook. Set URL to [site_url]/api/contentful-webhook. Add a secret header: X-Contentful-Secret with your webhook secret. Select triggers: Entry Published, Entry Unpublished.
 5. Immediately call contentful-pull to do first sync.
-6. Redirect to /admin with message: Lazy Contentful is active. Pulling your Contentful content now.
+6. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Contentful', version: '0.0.9', site_url: site_url }) }) } catch(e) {}
+7. Redirect to /admin with message: Lazy Contentful is active. Pulling your Contentful content now.
 
 3. Pull edge function (Contentful to Lovable)
 Create a Supabase edge function called contentful-pull. Cron: every hour — 0 * * * *

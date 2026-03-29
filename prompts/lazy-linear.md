@@ -81,7 +81,8 @@ On submit:
 2. Save all other values to linear_settings
 3. Set setup_complete to true and prompt_version to 'v0.0.6'
 4. Immediately call linear-sync-all to do a first full sync
-5. Redirect to /admin with message: Lazy Linear is active. Syncing your Linear workspace now.
+5. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Linear', version: '0.0.9', site_url: site_url }) }) } catch(e) {}
+6. Redirect to /admin with message: Lazy Linear is active. Syncing your Linear workspace now.
 
 3. Sync edge functions
 Create a Supabase edge function called linear-sync-all. Cron: every hour — 0 * * * *

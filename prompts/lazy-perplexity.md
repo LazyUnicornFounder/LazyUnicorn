@@ -80,7 +80,8 @@ On submit:
 2. Save all other values to perplexity_settings
 3. Set setup_complete to true and prompt_version to 'v0.0.6'
 4. Immediately trigger perplexity-research once
-5. Redirect to /admin with message: Lazy Perplexity is active. Researching your niche now.
+5. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Perplexity', version: '0.0.9', site_url: site_url }) }) } catch(e) {}
+6. Redirect to /admin with message: Lazy Perplexity is active. Researching your niche now.
 
 3. Core research edge function
 Create a Supabase edge function called perplexity-research. Cron: daily at 5am UTC — 0 5 * * *

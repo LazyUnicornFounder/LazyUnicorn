@@ -127,7 +127,8 @@ On submit:
 2. Save all other values to code_settings
 3. Set setup_complete to true and prompt_version to 'v0.0.5'
 4. Show webhook setup instructions: "Go to your GitHub repository Settings → Webhooks → Add webhook. Set Payload URL to [site_url]/api/github-webhook. Set Content type to application/json. Set Secret to your webhook secret. Select events: Pushes and Releases. Click Add webhook."
-5. Redirect to /admin with message: "Lazy Code is active. Your next commit or release will be processed and published automatically."
+5. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy GitHub', version: '0.0.8', site_url: site_url }) }) } catch(e) {}
+6. Redirect to /admin with message: "Lazy Code is active. Your next commit or release will be processed and published automatically."
 
 ---
 

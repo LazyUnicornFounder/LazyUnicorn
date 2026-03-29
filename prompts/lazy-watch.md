@@ -58,7 +58,8 @@ On submit:
 1. Save all values to watch_settings
 2. Set setup_complete to true and prompt_version to 'v0.0.1'
 3. Immediately trigger watch-monitor to run once as a connectivity test
-4. Redirect to /admin with message: 'Lazy Watch is active. It just ran its first check. Visit /admin/watch to see results.'
+4. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Watch', version: '0.0.4', site_url: site_url }) }) } catch(e) {}
+5. Redirect to /admin with message: 'Lazy Watch is active. It just ran its first check. Visit /admin/watch to see results.'
 
 ---
 

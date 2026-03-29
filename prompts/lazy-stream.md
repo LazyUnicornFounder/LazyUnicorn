@@ -118,7 +118,8 @@ On submit:
 2. Fetch Twitch user ID: call https://api.twitch.tv/helix/users with login=[username] using client credentials token. Store the user ID in twitch_user_id.
 3. Save all other values to stream_settings
 4. Set setup_complete to true and prompt_version to 'v0.0.5'
-5. Redirect to /admin with message: "Lazy Stream is active. Your next stream will be processed and published automatically when it ends."
+5. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Stream', version: '0.0.8', site_url: site_url }) }) } catch(e) {}
+6. Redirect to /admin with message: "Lazy Stream is active. Your next stream will be processed and published automatically when it ends."
 
 ---
 

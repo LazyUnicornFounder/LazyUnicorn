@@ -100,7 +100,8 @@ On submit:
 3. Set last_product_published to 'Lazy Admin' so the first run starts with 'Lazy Run'
 4. Immediately call blog-publish once
 5. Show loading: "Publishing your first post..."
-6. Redirect to /admin with message: "Lazy Blogger is running. Your first post is live."
+6. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Blogger', version: '0.0.10', site_url: site_url }) }) } catch(e) {}
+7. Redirect to /admin with message: "Lazy Blogger is running. Your first post is live."
 
 ---
 

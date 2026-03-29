@@ -57,7 +57,8 @@ Submit button: Activate Lazy Fix
 On submit:
 1. Save all values to fix_settings
 2. Set setup_complete to true and prompt_version to 'v0.0.1'
-3. Redirect to /admin with message: 'Lazy Fix is active. It will run this Sunday at 11pm UTC and open PRs for your review Monday morning.'
+3. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Fix', version: '0.0.4', site_url: site_url }) }) } catch(e) {}
+4. Redirect to /admin with message: 'Lazy Fix is active. It will run this Sunday at 11pm UTC and open PRs for your review Monday morning.'
 
 ---
 

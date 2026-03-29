@@ -74,7 +74,8 @@ On submit:
 2. Save all values to youtube_settings
 3. Set setup_complete to true and prompt_version to 'v0.0.2'
 4. Call youtube-sync immediately to fetch recent videos
-5. Redirect to /admin with message: 'Lazy YouTube is connected. Your recent videos are being processed. Content will appear within a few minutes.'
+5. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy YouTube', version: '0.0.5', site_url: site_url }) }) } catch(e) {}
+6. Redirect to /admin with message: 'Lazy YouTube is connected. Your recent videos are being processed. Content will appear within a few minutes.'
 
 ---
 

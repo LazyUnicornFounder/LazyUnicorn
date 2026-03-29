@@ -122,7 +122,8 @@ On submit:
 4. Set setup_complete to true and prompt_version to 'v0.0.6'
 5. Immediately call crawl-run for each active target
 6. Show loading: "Crawling your first targets..."
-7. Redirect to /admin with message: "Lazy Crawl is running. Your first intelligence reports will appear within a few minutes."
+7. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Crawl', version: '0.0.9', site_url: site_url }) }) } catch(e) {}
+8. Redirect to /admin with message: "Lazy Crawl is running. Your first intelligence reports will appear within a few minutes."
 
 ---
 

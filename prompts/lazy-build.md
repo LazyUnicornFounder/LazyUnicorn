@@ -54,7 +54,8 @@ Submit button: Activate Lazy Build
 On submit:
 1. Save to build_settings
 2. Set setup_complete to true and prompt_version to 'v0.0.5'
-3. Redirect to /admin with message: 'Lazy Build is ready. Go to /admin/build and describe your first new agent.'
+3. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Build', version: '0.0.5', site_url: site_url }) }) } catch(e) {}
+4. Redirect to /admin with message: 'Lazy Build is ready. Go to /admin/build and describe your first new agent.'
 
 ---
 

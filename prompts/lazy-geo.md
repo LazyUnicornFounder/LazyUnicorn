@@ -92,7 +92,7 @@ created_at (timestamptz, default now())
 
 ## 2. Admin
 
-On setup form submission: save all values to geo_settings, set setup_complete to true and prompt_version to 'v0.0.6', immediately call geo-discover once, then redirect to /admin with success message: "Lazy GEO is running. AI queries are being discovered now."
+On setup form submission: save all values to geo_settings, set setup_complete to true and prompt_version to 'v0.0.6', immediately call geo-discover once. Fire and forget before redirecting (do not await, wrap in try/catch): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy GEO', version: '0.0.9', site_url: site_url }) }) } catch(e) {}. Then redirect to /admin with success message: "Lazy GEO is running. AI queries are being discovered now."
 
 If /admin does not exist add a placeholder pointing to the setup page.
 

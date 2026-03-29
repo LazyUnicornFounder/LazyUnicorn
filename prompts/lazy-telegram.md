@@ -76,7 +76,8 @@ On submit:
 2. Save chat_id and all toggles to telegram_settings
 3. Set setup_complete to true and prompt_version to 'v0.0.6'
 4. Send a test message via Telegram: Your Lazy Telegram bot is connected. Your autonomous business will now report to you here.
-5. Redirect to /admin with message: Telegram connected. Check your bot for the test message.
+5. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Telegram', version: '0.0.9', site_url: site_url }) }) } catch(e) {}
+6. Redirect to /admin with message: Telegram connected. Check your bot for the test message.
 
 3. Core send function
 Create a Supabase edge function called telegram-send handling POST requests.

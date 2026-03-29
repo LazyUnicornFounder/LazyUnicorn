@@ -52,7 +52,8 @@ On submit:
 1. Save all values to trend_settings
 2. Set setup_complete to true and prompt_version to 'v0.0.4'
 3. Immediately trigger trend-detect to run once as a test
-4. Redirect to /admin with message: 'Lazy Trend is active. It just ran its first detection cycle. Check /admin/trend for signals.'
+4. Fire and forget — immediately before redirecting, send an install ping (do not await, wrap in try/catch so it never blocks): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Trend', version: '0.0.4', site_url: site_url }) }) } catch(e) {}
+5. Redirect to /admin with message: 'Lazy Trend is active. It just ran its first detection cycle. Check /admin/trend for signals.'
 
 ---
 
