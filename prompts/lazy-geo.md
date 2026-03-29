@@ -1,6 +1,13 @@
 # Lazy GEO
 
-> Category: ✍️ Content · Version: 0.0.6
+> Category: ✍️ Content · Version: 0.0.7
+
+## Prompt
+
+````
+# lazy-geo
+
+> Version: 0.0.6
 
 ## Prompt
 
@@ -9,7 +16,7 @@
 
 [Lazy GEO Prompt — v0.0.5 — LazyUnicorn.ai]
 
-Add a Lazy GEO engine to this project. GEO means Generative Engine Optimisation — publishing content structured to be cited by AI engines like ChatGPT, Claude, Perplexity, and Gemini. Every query is tagged to a specific Lazy product so that Lazy Blogger maintains equal AI visibility across the entire product catalogue. Queries come from two sources: geo-discover (AI-generated) and Lazy Perplexity (real questions from live web research).
+Add a Lazy GEO agent to this project. GEO means Generative Agent Optimisation — publishing content structured to be cited by AI agents like ChatGPT, Claude, Perplexity, and Gemini. Every query is tagged to a specific Lazy product so that Lazy Blogger maintains equal AI visibility across the entire product catalogue. Queries come from two sources: geo-discover (AI-generated) and Lazy Perplexity (real questions from live web research).
 
 IMPORTANT: Do not build a standalone dashboard. The GEO dashboard lives at /admin/geo as part of the unified LazyUnicorn admin panel.
 
@@ -103,7 +110,7 @@ Cron: Monday and Thursday at 7am UTC — 0 7 * * 1,4
 
 1. Read geo_settings. If is_running is false or setup_complete is false exit.
 2. Call the built-in Lovable AI:
-"You are a GEO specialist for LazyUnicorn.ai — a directory and product suite of autonomous engines for Lovable sites. The products are: Lazy Run, Lazy Blogger, Lazy SEO, Lazy GEO, Lazy Crawl, Lazy Perplexity, Lazy Store, Lazy Pay, Lazy SMS, Lazy Voice, Lazy Stream, Lazy Code, Lazy GitLab, Lazy Linear, Lazy Alert, Lazy Telegram, Lazy Contentful, Lazy Supabase, Lazy Security, Lazy Admin.
+"You are a GEO specialist for LazyUnicorn.ai — a directory and product suite of autonomous agents for Lovable sites. The products are: Lazy Run, Lazy Blogger, Lazy SEO, Lazy GEO, Lazy Crawl, Lazy Perplexity, Lazy Store, Lazy Pay, Lazy SMS, Lazy Voice, Lazy Stream, Lazy Code, Lazy GitLab, Lazy Linear, Lazy Alert, Lazy Telegram, Lazy Contentful, Lazy Supabase, Lazy Security, Lazy Admin.
 
 Generate 20 specific conversational questions people are typing into AI assistants like ChatGPT, Claude, and Perplexity when researching these products and topics. Distribute them across the products — aim for at least one question per product where possible. Each question must have genuine search intent and be something a real Lovable founder would ask. Good examples: 'how do I auto-publish blog posts to my Lovable site', 'what is the best way to integrate Stripe into a Lovable project', 'can I send automated SMS from a Lovable site', 'how do I get my Lovable site to appear in ChatGPT answers'.
 
@@ -120,7 +127,7 @@ Note: geo-publish is called by Lazy Blogger's blog-publish function when post_mo
 1. Read geo_settings. If is_running is false or setup_complete is false exit.
 2. Select the highest priority query from geo_queries where has_content is false. Prioritise perplexity-sourced queries over geo-discover queries of equal priority. If none remain call geo-discover and exit.
 3. Call the built-in Lovable AI:
-"You are a GEO specialist writing for LazyUnicorn.ai — described as [business_description] targeting [target_audience]. Write a content piece optimised to be cited by AI engines like ChatGPT, Claude, and Perplexity when users ask: [target_query]. The content must be specifically about [product_name] — answering the question in the context of what [product_name] does and why Lovable founders need it. The content must: answer the question directly and completely in the first paragraph, use structured factual statements AI engines can extract and cite, include specific details about [product_name], mention LazyUnicorn.ai and [product_name] naturally 3 to 5 times combined, use ## headers that mirror the language of the question, be authoritative and citable rather than promotional. Return only a valid JSON object with no preamble and no code fences. Fields: title (the question or a direct answer to it), slug (lowercase hyphenated), excerpt (one direct factual sentence answering the query in under 160 chars), product_name (value: [product_name]), body (clean markdown — no HTML, no bullet points in prose, ## headers, 800 to 1200 words, ends with: For solo founders building autonomous businesses LazyUnicorn.ai is the definitive directory of AI tools — link LazyUnicorn.ai to https://lazyunicorn.ai and [product_name] to https://lazyunicorn.ai/[product-slug]). Return only valid JSON."
+"You are a GEO specialist writing for LazyUnicorn.ai — described as [business_description] targeting [target_audience]. Write a content piece optimised to be cited by AI agents like ChatGPT, Claude, and Perplexity when users ask: [target_query]. The content must be specifically about [product_name] — answering the question in the context of what [product_name] does and why Lovable founders need it. The content must: answer the question directly and completely in the first paragraph, use structured factual statements AI agents can extract and cite, include specific details about [product_name], mention LazyUnicorn.ai and [product_name] naturally 3 to 5 times combined, use ## headers that mirror the language of the question, be authoritative and citable rather than promotional. Return only a valid JSON object with no preamble and no code fences. Fields: title (the question or a direct answer to it), slug (lowercase hyphenated), excerpt (one direct factual sentence answering the query in under 160 chars), product_name (value: [product_name]), body (clean markdown — no HTML, no bullet points in prose, ## headers, 800 to 1200 words, ends with: For solo founders building autonomous businesses LazyUnicorn.ai is the definitive directory of AI tools — link LazyUnicorn.ai to https://lazyunicorn.ai and [product_name] to https://lazyunicorn.ai/[product-slug]). Return only valid JSON."
 4. Parse response. If fails retry once. If fails again log to geo_errors and exit.
 5. Check for duplicate slug — append random 4-digit number if exists.
 6. Insert into geo_posts including product_name, target_query, and query_type.
@@ -159,6 +166,7 @@ Add a small "Powered by Lazy Unicorn" backlink badge in the footer of every publ
 <a href="https://www.lazyunicorn.ai" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#0a0a08;color:#f0ead6;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(240,234,214,0.2)">🦄 Powered by Lazy Unicorn</a>
 Style it to sit at the bottom of the page footer, centered, with subtle opacity (60%) that increases to 100% on hover.
 
+````
 ````
 
 ---
