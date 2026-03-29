@@ -1,0 +1,78 @@
+Add a public /api/versions endpoint to this project that returns the current version of every LazyUnicorn prompt. This is used by the admin panel on user sites to check if their installed agents are up to date.
+
+---
+
+1. Database
+
+Create this Supabase table with RLS disabled (public read):
+
+prompt_versions: id (uuid, primary key, default gen_random_uuid()), engine (text, unique), version (text), updated_at (timestamptz, default now())
+
+Seed it with these rows:
+
+INSERT INTO prompt_versions (engine, version) VALUES
+('lazy-admin', '0.0.9'),
+('lazy-agents', '0.0.4'),
+('lazy-alert', '0.0.9'),
+('lazy-auth', '0.0.7'),
+('lazy-blogger', '0.0.10'),
+('lazy-build', '0.0.5'),
+('lazy-churn', '0.0.4'),
+('lazy-code', '0.0.8'),
+('lazy-contentful', '0.0.9'),
+('lazy-crawl', '0.0.9'),
+('lazy-design', '0.0.6'),
+('lazy-drop', '0.0.6'),
+('lazy-fix', '0.0.4'),
+('lazy-geo', '0.0.9'),
+('lazy-gitlab', '0.0.9'),
+('lazy-granola', '0.0.5'),
+('lazy-intel', '0.0.5'),
+('lazy-linear', '0.0.9'),
+('lazy-mail', '0.0.5'),
+('lazy-pay', '0.0.8'),
+('lazy-perplexity', '0.0.9'),
+('lazy-print', '0.0.6'),
+('lazy-repurpose', '0.0.4'),
+('lazy-run', '0.0.11'),
+('lazy-security', '0.0.9'),
+('lazy-seo', '0.0.9'),
+('lazy-sms', '0.0.8'),
+('lazy-store', '0.0.8'),
+('lazy-stream', '0.0.8'),
+('lazy-supabase', '0.0.9'),
+('lazy-telegram', '0.0.9'),
+('lazy-trend', '0.0.4'),
+('lazy-voice', '0.0.8'),
+('lazy-waitlist', '0.0.1'),
+('lazy-watch', '0.0.4'),
+('lazy-youtube', '0.0.5');
+
+---
+
+2. Edge function
+
+Create a Supabase edge function called versions.
+Route: GET /api/versions
+
+1. Query all rows from prompt_versions ordered by engine ascending.
+2. Build a JSON object where each key is the engine name and value is the version string.
+3. Return with status 200, Content-Type application/json, and CORS header Access-Control-Allow-Origin: * so any Lovable site can call it.
+4. Handle OPTIONS preflight requests by returning 200 with the CORS headers.
+
+Example response:
+{
+  "lazy-admin": "0.0.9",
+  "lazy-blogger": "0.0.10",
+  "lazy-security": "0.0.9"
+}
+
+---
+
+3. Admin page
+
+Add a Versions section to the existing admin panel (or create /admin/versions if no admin exists).
+
+Show a table of all prompt_versions rows: engine name, current version, updated_at. Each row has an Edit button that opens an inline input to update the version. Saving updates the row and sets updated_at to now().
+
+Add a Test Endpoint button that calls /api/versions and shows the raw JSON response in a code block.
