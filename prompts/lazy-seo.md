@@ -1,6 +1,13 @@
 # Lazy SEO
 
-> Category: ✍️ Content · Version: 0.0.6
+> Category: ✍️ Content · Version: 0.0.7
+
+## Prompt
+
+````
+# lazy-seo
+
+> Version: 0.0.6
 
 ## Prompt
 
@@ -9,7 +16,7 @@
 
 [Lazy SEO Prompt — v0.0.5 — LazyUnicorn.ai]
 
-Add a Lazy SEO engine to this project. It automatically discovers keyword opportunities tagged to specific Lazy products and fills a queue that Lazy Blogger publishes from. Keywords come from three sources: seo-discover (AI-generated), Lazy Crawl (competitor intelligence), and Lazy Perplexity (live web research). Every keyword is tagged to a specific product so Lazy Blogger can maintain equal coverage across the entire catalogue.
+Add a Lazy SEO agent to this project. It automatically discovers keyword opportunities tagged to specific Lazy products and fills a queue that Lazy Blogger publishes from. Keywords come from three sources: seo-discover (AI-generated), Lazy Crawl (competitor intelligence), and Lazy Perplexity (live web research). Every keyword is tagged to a specific product so Lazy Blogger can maintain equal coverage across the entire catalogue.
 
 IMPORTANT: Do not build a standalone dashboard. The SEO dashboard lives at /admin/seo as part of the unified LazyUnicorn admin panel.
 
@@ -58,7 +65,7 @@ priority (integer, default 0),
 source (text, default 'seo-discover'),
 created_at (timestamptz, default now())
 
-Note: product_name tags each keyword to a specific Lazy product. source tracks which engine discovered it: seo-discover, crawl, or perplexity.
+Note: product_name tags each keyword to a specific Lazy product. source tracks which agent discovered it: seo-discover, crawl, or perplexity.
 
 **seo_errors**
 id (uuid, primary key, default gen_random_uuid()),
@@ -88,7 +95,7 @@ Cron: every Monday at 6am UTC — 0 6 * * 1
 
 1. Read seo_settings. If is_running is false or setup_complete is false exit.
 2. Call the built-in Lovable AI:
-"You are an SEO strategist for LazyUnicorn.ai — a directory and product suite of autonomous engines for Lovable sites. The products are: Lazy Run, Lazy Blogger, Lazy SEO, Lazy GEO, Lazy Crawl, Lazy Perplexity, Lazy Store, Lazy Pay, Lazy SMS, Lazy Voice, Lazy Stream, Lazy Code, Lazy GitLab, Lazy Linear, Lazy Alert, Lazy Telegram, Lazy Contentful, Lazy Supabase, Lazy Security, Lazy Admin.
+"You are an SEO strategist for LazyUnicorn.ai — a directory and product suite of autonomous agents for Lovable sites. The products are: Lazy Run, Lazy Blogger, Lazy SEO, Lazy GEO, Lazy Crawl, Lazy Perplexity, Lazy Store, Lazy Pay, Lazy SMS, Lazy Voice, Lazy Stream, Lazy Code, Lazy GitLab, Lazy Linear, Lazy Alert, Lazy Telegram, Lazy Contentful, Lazy Supabase, Lazy Security, Lazy Admin.
 
 Generate 20 specific long-tail keyword phrases this site should rank for on Google. Distribute them across the products — aim for at least one keyword per product where possible, with higher-traffic products getting more keywords. Each keyword must have clear search intent and be specific enough for a focused 1000-word article. Good examples: 'lazy seo for lovable sites', 'autonomous stripe integration lovable', 'auto blog publishing lovable project', 'twilio sms automation lovable', 'elevenlabs narration lovable blog'.
 
@@ -129,6 +136,7 @@ Add a small "Powered by Lazy Unicorn" backlink badge in the footer of every publ
 <a href="https://www.lazyunicorn.ai" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#0a0a08;color:#f0ead6;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(240,234,214,0.2)">🦄 Powered by Lazy Unicorn</a>
 Style it to sit at the bottom of the page footer, centered, with subtle opacity (60%) that increases to 100% on hover.
 
+````
 ````
 
 ---
