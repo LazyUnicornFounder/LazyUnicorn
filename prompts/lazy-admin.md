@@ -58,6 +58,75 @@ Security Score — latest score from security_scans. Green if 80+, amber if 60�
 
 ---
 
+## Agent grid
+
+Show all 36 known agents in a responsive grid (4 columns desktop, 2 tablet, 1 mobile). Installed agents appear first. Not installed agents appear below in a visually muted section labelled "NOT INSTALLED — [n] AGENTS". The two sections are separated by a subtle divider with the label "INSTALLED — [n] AGENTS" above the first section.
+
+When a category tab is active, only show agents belonging to that category. Apply the same installed/not-installed split within the filtered view.
+
+Each agent maps to a known settings table. Use this mapping to determine state:
+
+Blogger → blog_settings, SEO → seo_settings, GEO → geo_settings, Crawl → crawl_settings, Perplexity → perplexity_settings, Store → store_settings, Drop → drop_settings, Print → print_settings, Pay → pay_settings, SMS → sms_settings, Mail → mail_settings, Voice → voice_settings, Stream → stream_settings, YouTube → youtube_settings, Code → code_settings, GitLab → gitlab_settings, Linear → linear_settings, Contentful → contentful_settings, Design → design_settings, Auth → auth_settings, Granola → granola_settings, Alert → alert_settings, Telegram → telegram_settings, Supabase → supabase_settings, Security → security_settings, Watch → watch_settings, Fix → fix_settings, Build → build_settings, Intel → intel_settings, Repurpose → repurpose_settings, Trend → trend_settings, Churn → churn_settings, Agents → agent_settings, Run → run_settings, Waitlist → waitlist_settings
+
+---
+
+### Card: Not installed
+
+Border: 1px solid rgba(240,234,214,0.06). Opacity: 0.6. No status dot.
+
+Show: agent name in muted cream, one-line description, "+ INSTALL" ghost button (border rgba(240,234,214,0.1), text rgba(240,234,214,0.3)). Clicking INSTALL links to /lazy-[agent]-setup.
+
+---
+
+### Card: Needs setup (settings table exists, setup_complete is false)
+
+Border: 1px solid rgba(201,168,76,0.25). Status dot: amber #c9a84c.
+
+Show: agent name, a gold left-border callout that lists exactly what is missing (e.g. "Add AIKIDO_API_KEY to Supabase secrets"). Never show a generic "setup required" message without specifying what is needed. Gold fill button "COMPLETE SETUP →" linking to /lazy-[agent]-setup.
+
+Required secrets per agent:
+- Security: AIKIDO_API_KEY and aikido_project_id in security_settings
+- Watch: GITHUB_TOKEN and GITHUB_REPO in watch_settings
+- Agents: GITHUB_TOKEN and GITHUB_REPO in agent_settings
+- Fix: GITHUB_TOKEN and GITHUB_REPO in fix_settings
+- Build: GITHUB_TOKEN and GITHUB_REPO in build_settings
+- YouTube: youtube_channel_id in youtube_settings
+- GitLab: gitlab_url and gitlab_token in gitlab_settings
+- Linear: linear_api_key in linear_settings
+- Contentful: contentful_space_id in contentful_settings
+- Pay: stripe_secret_key in pay_settings
+- SMS: twilio_account_sid in sms_settings
+- Voice: elevenlabs_api_key in voice_settings
+- Stream: twitch_channel in stream_settings
+- Mail: resend_api_key in mail_settings
+- Granola: granola_api_key in granola_settings
+
+---
+
+### Card: Running (setup_complete true, is_running true, no errors in last hour)
+
+Border: 1px solid rgba(240,234,214,0.12). Status dot: green #4ade80.
+
+Show: agent name, 2 key metrics in a 2-column mini-stat grid (use the most meaningful metrics for each agent — posts for content agents, revenue for commerce agents, issues for monitoring agents). Last run time in muted text. "MANAGE →" ghost button.
+
+---
+
+### Card: Error (setup_complete true, is_running true, errors exist in last hour above threshold)
+
+Border: 1px solid rgba(248,113,113,0.2). Status dot: red #f87171.
+
+Show: agent name, red left-border callout with the most recent error message (truncated to 60 chars), gold "How to fix →" inline link. "MANAGE →" ghost button.
+
+---
+
+### Card: Paused (is_running false)
+
+Border: 1px solid rgba(240,234,214,0.08). Opacity: 0.6. Status dot: grey rgba(240,234,214,0.2).
+
+Show: agent name, last known stats in muted style. "RESUME →" ghost button — on click sets is_running to true in that agent's settings table.
+
+---
+
 ## Agent pages
 
 All follow the same layout:
