@@ -1,6 +1,13 @@
 # Lazy Crawl
 
-> Category: ✍️ Content · Version: 0.0.6
+> Category: ✍️ Content · Version: 0.0.7
+
+## Prompt
+
+````
+# lazy-crawl
+
+> Version: 0.0.6
 
 ## Prompt
 
@@ -9,7 +16,7 @@
 
 [Lazy Crawl Prompt — v0.0.5 — LazyUnicorn.ai]
 
-Add a complete autonomous web intelligence engine called Lazy Crawl to this project. It uses the Firecrawl API to monitor competitors, track industry trends, extract leads, analyse ranking content, and automatically feed intelligence into Lazy Blogger, Lazy SEO, and Lazy Alert — all on a schedule with no manual research required after setup.
+Add a complete autonomous web intelligence agent called Lazy Crawl to this project. It uses the Firecrawl API to monitor competitors, track industry trends, extract leads, analyse ranking content, and automatically feed intelligence into Lazy Blogger, Lazy SEO, and Lazy Alert — all on a schedule with no manual research required after setup.
 
 Note: Store the Firecrawl API key as Supabase secret FIRECRAWL_API_KEY. Never store in the database.
 
@@ -88,7 +95,7 @@ created_at (timestamptz, default now())
 
 Create a page at /lazy-crawl-setup.
 
-Show a welcome message: "In the next 3 minutes you will set up an autonomous web intelligence engine. After setup Lazy Crawl will monitor competitors, track trends, and feed real intelligence into your blog and SEO engines — automatically."
+Show a welcome message: "In the next 3 minutes you will set up an autonomous web intelligence agent. After setup Lazy Crawl will monitor competitors, track trends, and feed real intelligence into your blog and SEO agents — automatically."
 
 Form fields:
 - Brand name
@@ -170,8 +177,8 @@ For brand-monitor targets:
 6. For leads targets insert each lead into crawl_leads.
 7. For news targets with blog_angle: insert into seo_keywords if table exists with source set to crawl and priority 8.
 8. For ranking targets: insert target_keyword into seo_keywords with source crawl and priority 9. Insert secondary_keywords with priority 7.
-9. For price-change intel: if alert_settings table exists call alert-send with engine Lazy Crawl, event_type price-change.
-10. For brand-mention intel: if alert_settings table exists call alert-send with engine Lazy Crawl, event_type brand-mention.
+9. For price-change intel: if alert_settings table exists call alert-send with agent Lazy Crawl, event_type price-change.
+10. For brand-mention intel: if alert_settings table exists call alert-send with agent Lazy Crawl, event_type brand-mention.
 11. Mark crawl_results as processed.
 Log all errors to crawl_errors with function_name crawl-extract.
 
@@ -203,9 +210,9 @@ At the bottom add: "🦄 Powered by Lazy Crawl — autonomous web intelligence f
 
 ## 7. Admin
 
-Do not build a standalone dashboard page for this engine. The dashboard lives at /admin/crawl as part of the unified LazyUnicorn admin panel, which is built separately using the LazyUnicorn Admin Dashboard prompt. This engine only needs its setup page, database tables, edge functions, and public pages.
+Do not build a standalone dashboard page for this agent. The dashboard lives at /admin/crawl as part of the unified LazyUnicorn admin panel, which is built separately using the LazyUnicorn Admin Dashboard prompt. This agent only needs its setup page, database tables, edge functions, and public pages.
 
-If /admin does not yet exist on this project add a simple placeholder at /admin with the text: "Install the LazyUnicorn Admin Dashboard to manage all engines in one place." and a link to /lazy-crawl-setup.
+If /admin does not yet exist on this project add a simple placeholder at /admin with the text: "Install the LazyUnicorn Admin Dashboard to manage all agents in one place." and a link to /lazy-crawl-setup.
 
 ## 8. Navigation
 
@@ -219,6 +226,7 @@ Add a small "Powered by Lazy Unicorn" backlink badge in the footer of every publ
 <a href="https://www.lazyunicorn.ai" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#0a0a08;color:#f0ead6;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(240,234,214,0.2)">🦄 Powered by Lazy Unicorn</a>
 Style it to sit at the bottom of the page footer, centered, with subtle opacity (60%) that increases to 100% on hover.
 
+````
 ````
 
 ---
