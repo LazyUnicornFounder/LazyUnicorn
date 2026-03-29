@@ -1,6 +1,13 @@
 # Lazy GitLab
 
-> Category: 🛠️ Dev · Version: 0.0.6
+> Category: 🛠️ Dev · Version: 0.0.7
+
+## Prompt
+
+````
+# lazy-gitlab
+
+> Version: 0.0.6
 
 ## Prompt
 
@@ -9,13 +16,13 @@
 
 [Lazy GitLab Prompt — v0.0.5 — LazyUnicorn.ai]
 
-Add a complete autonomous GitLab content engine called Lazy GitLab to this project. It monitors a GitLab repository via webhooks, processes commits and merge requests, writes plain-English changelogs, release notes, developer blog posts, SEO articles, and maintains a public roadmap — all automatically with no manual input required after setup. Mirrors the Lazy Code engine but for GitLab.
+Add a complete autonomous GitLab content agent called Lazy GitLab to this project. It monitors a GitLab repository via webhooks, processes commits and merge requests, writes plain-English changelogs, release notes, developer blog posts, SEO articles, and maintains a public roadmap — all automatically with no manual input required after setup. Mirrors the Lazy Code agent but for GitLab.
 
 ---
 
 MARKETING PAGE PROMPT — paste into LazyUnicorn project:
 
-Add a new page at /lazy-gitlab. It is a marketing and landing page for a product called Lazy GitLab — an autonomous GitLab content engine that installs into any existing Lovable project with one prompt.
+Add a new page at /lazy-gitlab. It is a marketing and landing page for a product called Lazy GitLab — an autonomous GitLab content agent that installs into any existing Lovable project with one prompt.
 
 Hero section
 Headline: 'One prompt turns every GitLab commit into a changelog, release notes, and a developer blog post — automatically.' Subheading: 'Lazy GitLab monitors your GitLab repository, reads your commits and merge requests, and publishes plain-English changelogs, release notes, SEO developer posts, and a public roadmap to your Lovable site — every time you push.' Primary button: Copy the Lovable Prompt. Secondary button: See How It Works. Badge: Powered by GitLab.
@@ -38,7 +45,7 @@ Navigation: Add Lazy GitLab to the LazyUnicorn navigation.
 
 SETUP PROMPT — paste into user's Lovable project:
 
-Add a complete autonomous GitLab content engine called Lazy GitLab to this project. It monitors a GitLab repository via webhooks, processes commits, merge requests, and releases, writes plain-English changelogs, release notes, developer blog posts, and SEO articles, and maintains a public roadmap — all automatically.
+Add a complete autonomous GitLab content agent called Lazy GitLab to this project. It monitors a GitLab repository via webhooks, processes commits, merge requests, and releases, writes plain-English changelogs, release notes, developer blog posts, and SEO articles, and maintains a public roadmap — all automatically.
 
 1. Database
 Create these Supabase tables with RLS enabled:
@@ -124,9 +131,9 @@ At the bottom of every page add: 🦄 Powered by Lazy GitLab — autonomous GitL
 
 7. Admin
 
-Do not build a standalone dashboard page for this engine. The dashboard lives at /admin/gitlab as part of the unified LazyUnicorn admin panel, which is built separately using the LazyUnicorn Admin Dashboard prompt.
+Do not build a standalone dashboard page for this agent. The dashboard lives at /admin/gitlab as part of the unified LazyUnicorn admin panel, which is built separately using the LazyUnicorn Admin Dashboard prompt.
 
-If /admin does not yet exist on this project add a simple placeholder at /admin with the text: "Install the LazyUnicorn Admin Dashboard to manage all engines in one place." and a link to /lazy-gitlab-setup.
+If /admin does not yet exist on this project add a simple placeholder at /admin with the text: "Install the LazyUnicorn Admin Dashboard to manage all agents in one place." and a link to /lazy-gitlab-setup.
 
 8. Navigation
 Add Changelog link to /gitlab-changelog. Add Roadmap link to /gitlab-roadmap. Add an Admin link to the main site navigation pointing to /admin.
@@ -138,6 +145,7 @@ Add a small "Powered by Lazy Unicorn" backlink badge in the footer of every publ
 <a href="https://www.lazyunicorn.ai" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#0a0a08;color:#f0ead6;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(240,234,214,0.2)">🦄 Powered by Lazy Unicorn</a>
 Style it to sit at the bottom of the page footer, centered, with subtle opacity (60%) that increases to 100% on hover.
 
+````
 ````
 
 ---
