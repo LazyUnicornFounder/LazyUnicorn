@@ -1,10 +1,3 @@
-# Lazy Admin
-
-> Category: ⚙️ Ops · Version: 0.0.7
-
-## Prompt
-
-````
 [LazyUnicorn Admin Dashboard Prompt — v0.0.7 — LazyUnicorn.ai]
 
 Rebuild the entire admin dashboard at /admin from scratch. Replace everything currently there. This is a unified control panel for all LazyUnicorn agents. It detects which agents are installed by checking which database tables exist and shows only those panels.
@@ -342,7 +335,4 @@ All tables: search input filtering by main text field. Pagination at 50 rows wit
 /admin/installs
 
 Client-side routing. Direct links work. No full page reloads between pages. Only show routes for installed agents.
-````
 
----
-*Auto-synced from [Lazy Unicorn](https://lazyunicorn.co)*
