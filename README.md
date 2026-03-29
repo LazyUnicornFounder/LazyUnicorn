@@ -69,6 +69,7 @@ Most agents work immediately with no setup. Some require external API keys or cr
 | Lazy Repurpose | ⚙️ Ops | [View prompt](prompts/lazy-repurpose.md) |
 | Lazy Trend | ⚙️ Ops | [View prompt](prompts/lazy-trend.md) |
 | Lazy Churn | ⚙️ Ops | [View prompt](prompts/lazy-churn.md) |
+| lazy-agents | Other | [View prompt](prompts/lazy-agents.md) |
 
 ## 📄 License
 
