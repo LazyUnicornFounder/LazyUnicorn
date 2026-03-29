@@ -24,7 +24,7 @@ CREATE TABLE public.waitlist_settings (
   
   -- Referral Settings
   referral_enabled BOOLEAN DEFAULT true,
-  referral_reward_threshold INTEGER DEFAULT 3, -- signups needed for reward
+  referral_reward_threshold INTEGER DEFAULT 3,
   referral_reward_description TEXT DEFAULT 'Get early access',
   
   -- Welcome Email Settings
@@ -37,6 +37,10 @@ CREATE TABLE public.waitlist_settings (
   followup_delay_days INTEGER DEFAULT 3,
   followup_subject TEXT DEFAULT 'Still excited? We are too!',
   followup_body TEXT DEFAULT 'Just a quick update - we''re working hard to launch soon.',
+  
+  -- Launch Email
+  launch_email_subject TEXT DEFAULT 'We''re Live! 🚀',
+  launch_email_body TEXT DEFAULT 'The wait is over! Click below to create your account.',
   
   -- Slack Notifications
   slack_enabled BOOLEAN DEFAULT false,
@@ -53,6 +57,7 @@ CREATE TABLE public.waitlist_settings (
   
   -- Social Sharing
   share_twitter_text TEXT DEFAULT 'I just joined the waitlist for something amazing! Join me:',
+  share_linkedin_text TEXT DEFAULT 'Excited to be on this waitlist!',
   share_enabled BOOLEAN DEFAULT true,
   
   created_at TIMESTAMPTZ DEFAULT now(),
@@ -69,6 +74,9 @@ CREATE POLICY "Allow authenticated update" ON public.waitlist_settings
 
 CREATE POLICY "Allow authenticated insert" ON public.waitlist_settings
   FOR INSERT TO authenticated WITH CHECK (true);
+
+CREATE POLICY "Allow anon read for public page" ON public.waitlist_settings
+  FOR SELECT TO anon USING (true);
 ```
 
 ### Table: waitlist_subscribers
@@ -81,7 +89,7 @@ CREATE TABLE public.waitlist_subscribers (
   referred_by UUID REFERENCES public.waitlist_subscribers(id),
   referral_count INTEGER DEFAULT 0,
   position INTEGER,
-  priority_score INTEGER DEFAULT 0, -- higher = earlier access
+  priority_score INTEGER DEFAULT 0,
   
   -- Status
   status TEXT DEFAULT 'waiting' CHECK (status IN ('waiting', 'priority', 'converted', 'unsubscribed')),
@@ -93,6 +101,8 @@ CREATE TABLE public.waitlist_subscribers (
   welcome_email_sent_at TIMESTAMPTZ,
   followup_email_sent BOOLEAN DEFAULT false,
   followup_email_sent_at TIMESTAMPTZ,
+  launch_email_sent BOOLEAN DEFAULT false,
+  launch_email_sent_at TIMESTAMPTZ,
   
   -- Metadata
   ip_address TEXT,
@@ -107,47 +117,88 @@ CREATE TABLE public.waitlist_subscribers (
 
 ALTER TABLE public.waitlist_subscribers ENABLE ROW LEVEL SECURITY;
 
--- Public can insert (signup)
 CREATE POLICY "Allow public insert" ON public.waitlist_subscribers
   FOR INSERT TO anon, authenticated WITH CHECK (true);
 
--- Public can read their own by referral code
 CREATE POLICY "Allow public read by referral code" ON public.waitlist_subscribers
   FOR SELECT TO anon USING (true);
 
--- Authenticated can read all
-CREATE POLICY "Allow authenticated read all" ON public.waitlist_subscribers
-  FOR SELECT TO authenticated USING (true);
+CREATE POLICY "Allow authenticated full access" ON public.waitlist_subscribers
+  FOR ALL TO authenticated USING (true);
 
-CREATE POLICY "Allow authenticated update" ON public.waitlist_subscribers
-  FOR UPDATE TO authenticated USING (true);
+-- Function to auto-assign position
+CREATE OR REPLACE FUNCTION assign_waitlist_position()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.position := COALESCE(
+    (SELECT MAX(position) + 1 FROM public.waitlist_subscribers),
+    1
+  );
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
 
-CREATE POLICY "Allow authenticated delete" ON public.waitlist_subscribers
-  FOR DELETE TO authenticated USING (true);
+CREATE TRIGGER set_waitlist_position
+  BEFORE INSERT ON public.waitlist_subscribers
+  FOR EACH ROW
+  EXECUTE FUNCTION assign_waitlist_position();
 
--- Index for referral lookups
-CREATE INDEX idx_waitlist_referral_code ON public.waitlist_subscribers(referral_code);
-CREATE INDEX idx_waitlist_referred_by ON public.waitlist_subscribers(referred_by);
-CREATE INDEX idx_waitlist_status ON public.waitlist_subscribers(status);
-CREATE INDEX idx_waitlist_position ON public.waitlist_subscribers(position);
+-- Function to generate referral code
+CREATE OR REPLACE FUNCTION generate_referral_code()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.referral_code := UPPER(SUBSTRING(MD5(NEW.email || NOW()::TEXT) FROM 1 FOR 8));
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER set_referral_code
+  BEFORE INSERT ON public.waitlist_subscribers
+  FOR EACH ROW
+  EXECUTE FUNCTION generate_referral_code();
+
+-- Function to increment referral count
+CREATE OR REPLACE FUNCTION increment_referral_count()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.referred_by IS NOT NULL THEN
+    UPDATE public.waitlist_subscribers
+    SET referral_count = referral_count + 1,
+        priority_score = priority_score + 10,
+        status = CASE 
+          WHEN referral_count + 1 >= (SELECT referral_reward_threshold FROM public.waitlist_settings LIMIT 1)
+          THEN 'priority'
+          ELSE status
+        END,
+        updated_at = NOW()
+    WHERE id = NEW.referred_by;
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_referrer_count
+  AFTER INSERT ON public.waitlist_subscribers
+  FOR EACH ROW
+  EXECUTE FUNCTION increment_referral_count();
 ```
 
-### Table: waitlist_referral_rewards
+### Table: waitlist_errors
 ```sql
-CREATE TABLE public.waitlist_referral_rewards (
+CREATE TABLE public.waitlist_errors (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  subscriber_id UUID REFERENCES public.waitlist_subscribers(id) ON DELETE CASCADE,
-  reward_tier INTEGER NOT NULL, -- 1, 2, 3, etc.
-  reward_type TEXT NOT NULL, -- 'priority_access', 'discount', 'swag', etc.
-  reward_description TEXT,
-  earned_at TIMESTAMPTZ DEFAULT now(),
-  claimed BOOLEAN DEFAULT false,
-  claimed_at TIMESTAMPTZ
+  error_type TEXT NOT NULL,
+  error_message TEXT NOT NULL,
+  error_details JSONB,
+  subscriber_id UUID REFERENCES public.waitlist_subscribers(id),
+  function_name TEXT,
+  resolved BOOLEAN DEFAULT false,
+  created_at TIMESTAMPTZ DEFAULT now()
 );
 
-ALTER TABLE public.waitlist_referral_rewards ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.waitlist_errors ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Allow authenticated full access" ON public.waitlist_referral_rewards
+CREATE POLICY "Allow authenticated access" ON public.waitlist_errors
   FOR ALL TO authenticated USING (true);
 ```
 
@@ -155,506 +206,423 @@ CREATE POLICY "Allow authenticated full access" ON public.waitlist_referral_rewa
 ```sql
 CREATE TABLE public.waitlist_stats (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  date DATE UNIQUE NOT NULL DEFAULT CURRENT_DATE,
-  total_signups INTEGER DEFAULT 0,
-  new_signups INTEGER DEFAULT 0,
-  referral_signups INTEGER DEFAULT 0,
-  conversions INTEGER DEFAULT 0,
-  unsubscribes INTEGER DEFAULT 0,
-  emails_sent INTEGER DEFAULT 0,
+  date DATE UNIQUE DEFAULT CURRENT_DATE,
+  signups_count INTEGER DEFAULT 0,
+  referrals_count INTEGER DEFAULT 0,
+  conversions_count INTEGER DEFAULT 0,
+  unsubscribes_count INTEGER DEFAULT 0,
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
 ALTER TABLE public.waitlist_stats ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Allow authenticated read" ON public.waitlist_stats
-  FOR SELECT TO authenticated USING (true);
+CREATE POLICY "Allow authenticated access" ON public.waitlist_stats
+  FOR ALL TO authenticated USING (true);
 
-CREATE POLICY "Allow service role full access" ON public.waitlist_stats
-  FOR ALL TO service_role USING (true);
-```
-
-### Table: waitlist_errors
-```sql
-CREATE TABLE public.waitlist_errors (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  function_name TEXT NOT NULL,
-  error_message TEXT NOT NULL,
-  error_details JSONB,
-  subscriber_id UUID REFERENCES public.waitlist_subscribers(id),
-  created_at TIMESTAMPTZ DEFAULT now()
-);
-
-ALTER TABLE public.waitlist_errors ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Allow authenticated read" ON public.waitlist_errors
-  FOR SELECT TO authenticated USING (true);
-
-CREATE POLICY "Allow service role insert" ON public.waitlist_errors
-  FOR INSERT TO service_role WITH CHECK (true);
-```
-
-### Functions
-
-```sql
--- Generate unique referral code
-CREATE OR REPLACE FUNCTION generate_referral_code()
-RETURNS TEXT AS $$
-DECLARE
-  chars TEXT := 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  result TEXT := '';
-  i INTEGER;
-BEGIN
-  FOR i IN 1..8 LOOP
-    result := result || substr(chars, floor(random() * length(chars) + 1)::integer, 1);
-  END LOOP;
-  RETURN result;
-END;
-$$ LANGUAGE plpgsql;
-
--- Assign position on signup
-CREATE OR REPLACE FUNCTION assign_waitlist_position()
-RETURNS TRIGGER AS $$
-BEGIN
-  NEW.position := (SELECT COALESCE(MAX(position), 0) + 1 FROM public.waitlist_subscribers);
-  IF NEW.referral_code IS NULL THEN
-    NEW.referral_code := generate_referral_code();
-  END IF;
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER waitlist_assign_position
-  BEFORE INSERT ON public.waitlist_subscribers
-  FOR EACH ROW
-  EXECUTE FUNCTION assign_waitlist_position();
-
--- Update referral count when someone signs up with referral
-CREATE OR REPLACE FUNCTION update_referral_count()
-RETURNS TRIGGER AS $$
-BEGIN
-  IF NEW.referred_by IS NOT NULL THEN
-    UPDATE public.waitlist_subscribers
-    SET 
-      referral_count = referral_count + 1,
-      priority_score = priority_score + 10,
-      updated_at = now()
-    WHERE id = NEW.referred_by;
-  END IF;
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER waitlist_update_referral
-  AFTER INSERT ON public.waitlist_subscribers
-  FOR EACH ROW
-  EXECUTE FUNCTION update_referral_count();
-
--- Get waitlist stats for public counter
-CREATE OR REPLACE FUNCTION get_waitlist_count()
-RETURNS INTEGER AS $$
-BEGIN
-  RETURN (SELECT COUNT(*) FROM public.waitlist_subscribers WHERE status != 'unsubscribed');
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+CREATE POLICY "Allow anon read for counter" ON public.waitlist_stats
+  FOR SELECT TO anon USING (true);
 ```
 
 ---
 
-## Setup Page: /waitlist/setup
+## Setup Page
 
-### Required Secrets (store in Supabase secrets, never in database)
-- `RESEND_API_KEY` — For sending welcome and follow-up emails
-- `SLACK_WEBHOOK_URL` — For posting new signup notifications (optional)
+### Route: /admin/waitlist/setup
 
-### Setup Form Fields
+Display a setup wizard with the following steps:
 
-```typescript
-interface WaitlistSetupForm {
-  // API Configuration
-  resend_api_key: string; // Required - stored as Supabase secret
-  slack_webhook_url?: string; // Optional - stored as Supabase secret
-  
-  // Basic Settings
-  waitlist_name: string;
-  waitlist_description: string;
-  launch_date?: Date;
-  
-  // Page Customization
-  page_headline: string;
-  page_subheadline: string;
-  page_cta_text: string;
-  page_accent_color: string;
-  page_show_counter: boolean;
-  page_show_position: boolean;
-  
-  // Referral Settings
-  referral_enabled: boolean;
-  referral_reward_threshold: number;
-  referral_reward_description: string;
-  
-  // Email Settings
-  welcome_email_enabled: boolean;
-  welcome_email_subject: string;
-  welcome_email_body: string;
-  
-  // Slack Settings
-  slack_enabled: boolean;
-  slack_channel: string;
-}
+#### Step 1: API Keys
+```
+Resend API Key (required for emails)
+- Input: password field
+- Store as Supabase secret: RESEND_API_KEY
+- Help text: "Get your API key from resend.com/api-keys"
+
+Resend From Email (required)
+- Input: email field
+- Store as Supabase secret: RESEND_FROM_EMAIL
+- Help text: "Verified sender email in Resend (e.g., hello@yourdomain.com)"
+
+Slack Webhook URL (optional)
+- Input: password field
+- Store as Supabase secret: WAITLIST_SLACK_WEBHOOK
+- Help text: "Create an incoming webhook at api.slack.com/apps"
 ```
 
-### Setup Page Behavior
-1. Display form with all configuration options
-2. Validate Resend API key by making test API call
-3. Validate Slack webhook if provided
-4. Store API keys as Supabase secrets
-5. Create/update waitlist_settings row
-6. Set setup_complete = true
-7. **Redirect to /admin/waitlist on successful submission**
+#### Step 2: Waitlist Configuration
+```
+Waitlist Name
+- Input: text field
+- Default: "Join Our Waitlist"
+
+Launch Date (optional)
+- Input: datetime picker
+- Help text: "Set a target launch date to display a countdown"
+
+Enable Referral System
+- Input: toggle
+- Default: true
+
+Referrals Needed for Reward
+- Input: number field
+- Default: 3
+- Help text: "How many referrals needed to get priority access"
+```
+
+#### Step 3: Page Customization
+```
+Headline
+- Input: text field
+- Default: "Something Amazing is Coming"
+
+Subheadline
+- Input: textarea
+- Default: "Join the waitlist and be the first to know."
+
+Call to Action Button Text
+- Input: text field
+- Default: "Join Waitlist"
+
+Accent Color
+- Input: color picker
+- Default: #6366f1
+
+Show Live Counter
+- Input: toggle
+- Default: true
+
+Show Position After Signup
+- Input: toggle
+- Default: true
+```
+
+#### Step 4: Email Templates
+```
+Welcome Email Subject
+- Input: text field
+- Default: "You're on the list! 🎉"
+
+Welcome Email Body
+- Input: rich text editor
+- Default: "Thanks for joining our waitlist. We'll notify you as soon as we launch."
+- Help text: "Available variables: {{name}}, {{position}}, {{referral_link}}"
+
+Enable Follow-up Email
+- Input: toggle
+- Default: false
+
+Follow-up Delay (days)
+- Input: number field
+- Default: 3
+- Show only if follow-up enabled
+```
+
+#### On Submit:
+1. Validate Resend API key by making test API call
+2. Insert settings row with `setup_complete = true`
+3. Redirect to `/admin/waitlist`
+4. Show success toast: "Waitlist engine configured successfully!"
 
 ---
 
-## Public Waitlist Page: /waitlist
+## Public Waitlist Page
 
-### Page Components
+### Route: /waitlist
 
-```typescript
-// Main waitlist signup page
-interface WaitlistPage {
-  // Header Section
-  headline: string; // from settings
-  subheadline: string; // from settings
-  
-  // Live Counter (if enabled)
-  showCounter: boolean;
-  currentCount: number; // real-time from database
-  
-  // Signup Form
-  form: {
-    email: string; // required
-    name?: string; // optional
-  };
-  ctaButton: string; // from settings
-  
-  // Referral Code Detection
-  // If URL has ?ref=CODE, store for attribution
-  referralCode?: string;
-  
-  // Footer
-  backlink: "Powered by LazyUnicorn.ai"; // Required backlink
-}
+A beautiful, conversion-optimized landing page for capturing emails.
 
-// Success state after signup
-interface WaitlistSuccessState {
-  position: number;
-  referralCode: string;
-  referralLink: string; // Full URL with ref code
-  referralCount: number;
-  
-  // Social sharing buttons (if enabled)
-  shareButtons: {
-    twitter: string;
-    linkedin: string;
-    copyLink: boolean;
-  };
-  
-  // Referral progress
-  referralProgress: {
-    current: number;
-    threshold: number;
-    reward: string;
-  };
-}
+#### Layout:
+```
+┌─────────────────────────────────────────────────────────────┐
+│                                                             │
+│                    [HEADLINE]                               │
+│                   [Subheadline]                             │
+│                                                             │
+│              ┌─────────────────────────┐                    │
+│              │  📧 Enter your email    │                    │
+│              └─────────────────────────┘                    │
+│              ┌─────────────────────────┐                    │
+│              │  👤 Your name (optional)│                    │
+│              └─────────────────────────┘                    │
+│              ┌─────────────────────────┐                    │
+│              │    [JOIN WAITLIST]      │                    │
+│              └─────────────────────────┘                    │
+│                                                             │
+│                 🔥 1,234 people waiting                     │
+│                                                             │
+│         [Countdown to launch if date set]                   │
+│                                                             │
+│  ─────────────────────────────────────────────────────────  │
+│                                                             │
+│           Powered by LazyUnicorn.ai                         │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-### Page Behavior
-
-1. **On Load:**
-   - Fetch waitlist_settings for page customization
-   - Check for `?ref=` query parameter
-   - Display live signup counter (subscribes to real-time updates)
-
-2. **On Submit:**
-   - Validate email format
-   - Call `waitlist-signup` edge function
-   - Show success state with position and referral link
-   - Display social sharing options
-
-3. **Real-time Counter:**
-   - Subscribe to waitlist_subscribers table changes
-   - Update counter on new signups
-
-### Page Design
-
-```tsx
-<div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: settings.page_background_color }}>
-  <div className="max-w-md w-full p-8">
-    {/* Live Counter */}
-    {settings.page_show_counter && (
-      <div className="text-center mb-6">
-        <span className="text-4xl font-bold" style={{ color: settings.page_accent_color }}>
-          {count.toLocaleString()}
-        </span>
-        <p className="text-gray-600">people on the waitlist</p>
-      </div>
-    )}
-    
-    {/* Headlines */}
-    <h1 className="text-3xl font-bold text-center mb-2">{settings.page_headline}</h1>
-    <p className="text-gray-600 text-center mb-8">{settings.page_subheadline}</p>
-    
-    {/* Signup Form */}
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <input
-        type="email"
-        placeholder="Enter your email"
-        required
-        className="w-full px-4 py-3 border rounded-lg"
-      />
-      <button
-        type="submit"
-        className="w-full py-3 rounded-lg text-white font-medium"
-        style={{ backgroundColor: settings.page_accent_color }}
-      >
-        {settings.page_cta_text}
-      </button>
-    </form>
-    
-    {/* Backlink - Required */}
-    <p className="text-center text-xs text-gray-400 mt-8">
-      Powered by <a href="https://lazyunicorn.ai" target="_blank" rel="noopener" className="underline">LazyUnicorn.ai</a>
-    </p>
-  </div>
-</div>
+#### After Signup (Success State):
+```
+┌─────────────────────────────────────────────────────────────┐
+│                                                             │
+│                    🎉 You're In!                            │
+│                                                             │
+│              You're #42 on the waitlist                     │
+│                                                             │
+│         ───────────────────────────────────                 │
+│                                                             │
+│            Move up the list by sharing:                     │
+│                                                             │
+│         ┌─────────────────────────────────┐                 │
+│         │ https://site.com/waitlist?ref=ABC123 │ [Copy]     │
+│         └─────────────────────────────────┘                 │
+│                                                             │
+│            [Twitter] [LinkedIn] [Email]                     │
+│                                                             │
+│           Your referrals: 0 / 3 for priority               │
+│           ░░░░░░░░░░░░░░░░░░░░░░░░ 0%                       │
+│                                                             │
+│  ─────────────────────────────────────────────────────────  │
+│                                                             │
+│           Powered by LazyUnicorn.ai                         │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-### Success State Design
+#### Features:
+- Read `?ref=XXXXXXXX` query param to track referrals
+- Live signup counter (refreshes every 30 seconds)
+- Countdown timer if launch_date is set
+- Social share buttons with pre-filled text
+- Copy referral link button
+- Mobile-responsive design
+- Animated confetti on successful signup
+- Backlink to LazyUnicorn.ai in footer
 
-```tsx
-<div className="text-center">
-  <div className="text-5xl mb-4">🎉</div>
-  <h2 className="text-2xl font-bold mb-2">You're on the list!</h2>
-  
-  {settings.page_show_position && (
-    <p className="text-gray-600 mb-6">
-      You're <span className="font-bold">#{position}</span> on the waitlist
-    </p>
-  )}
-  
-  {settings.referral_enabled && (
-    <div className="bg-gray-50 p-6 rounded-lg mb-6">
-      <h3 className="font-medium mb-2">Move up the list!</h3>
-      <p className="text-sm text-gray-600 mb-4">
-        Refer {settings.referral_reward_threshold} friends to {settings.referral_reward_description}
-      </p>
-      
-      {/* Referral Progress */}
-      <div className="mb-4">
-        <div className="flex justify-between text-sm mb-1">
-          <span>{referralCount} referrals</span>
-          <span>{settings.referral_reward_threshold} needed</span>
-        </div>
-        <div className="h-2 bg-gray-200 rounded-full">
-          <div 
-            className="h-full rounded-full"
-            style={{ 
-              width: `${Math.min(100, (referralCount / settings.referral_reward_threshold) * 100)}%`,
-              backgroundColor: settings.page_accent_color 
-            }}
-          />
-        </div>
-      </div>
-      
-      {/* Referral Link */}
-      <div className="flex gap-2">
-        <input
-          type="text"
-          value={referralLink}
-          readOnly
-          className="flex-1 px-3 py-2 border rounded text-sm"
-        />
-        <button onClick={copyLink} className="px-4 py-2 bg-gray-800 text-white rounded">
-          Copy
-        </button>
-      </div>
-      
-      {/* Social Share */}
-      {settings.share_enabled && (
-        <div className="flex justify-center gap-4 mt-4">
-          <button onClick={shareTwitter}>Twitter</button>
-          <button onClick={shareLinkedIn}>LinkedIn</button>
-        </div>
-      )}
-    </div>
-  )}
-  
-  {/* Backlink - Required */}
-  <p className="text-xs text-gray-400 mt-8">
-    Powered by <a href="https://lazyunicorn.ai" target="_blank" rel="noopener" className="underline">LazyUnicorn.ai</a>
-  </p>
-</div>
-```
+#### Form Submission:
+1. Validate email format
+2. Check for existing email (show friendly message if duplicate)
+3. Call `waitlist-signup` edge function
+4. Show success state with position and referral link
 
 ---
 
-## Admin Dashboard: /admin/waitlist
+## Admin Dashboard
 
-### Dashboard Components
+### Route: /admin/waitlist
 
-```typescript
-interface WaitlistAdminDashboard {
-  // Header with controls
-  header: {
-    title: "Waitlist";
-    toggleRunning: boolean; // Start/Stop engine
-    launchButton: boolean; // Convert waitlist to users
-    exportButton: boolean; // Export CSV
-  };
-  
-  // Stats Overview
-  stats: {
-    totalSignups: number;
-    todaySignups: number;
-    referralSignups: number;
-    conversionRate: number;
-    topReferrers: Subscriber[];
-  };
-  
-  // Signup Chart
-  chart: {
-    type: 'line';
-    data: DailySignups[];
-    timeRange: '7d' | '30d' | '90d';
-  };
-  
-  // Subscriber Table
-  table: {
-    columns: ['email', 'name', 'position', 'referrals', 'status', 'joined', 'actions'];
-    pagination: boolean;
-    search: boolean;
-    filters: ['all', 'waiting', 'priority', 'converted'];
-  };
-  
-  // Quick Actions
-  actions: {
-    sendBulkEmail: boolean;
-    exportList: boolean;
-    launchConvert: boolean;
-  };
-}
+#### Header Section:
+```
+┌─────────────────────────────────────────────────────────────┐
+│  Lazy Waitlist                              [⚙️ Settings]   │
+│                                                             │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐    │
+│  │  1,234   │  │   156    │  │    42    │  │    12    │    │
+│  │  Total   │  │  Today   │  │ Priority │  │Converted │    │
+│  │ Signups  │  │ Signups  │  │  Access  │  │  Users   │    │
+│  └──────────┘  └──────────┘  └──────────┘  └──────────┘    │
+│                                                             │
+│  Engine Status: [🟢 Running] [Toggle]                       │
+│  Waitlist Status: [📋 Collecting] / [🚀 Launched]           │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-### Dashboard Tabs
+#### Tabs:
 
-1. **Overview** - Stats, charts, recent signups
-2. **Subscribers** - Full subscriber table with search/filter
-3. **Referrals** - Leaderboard and referral analytics
-4. **Emails** - Email sequence status and templates
-5. **Settings** - Engine configuration
-6. **Errors** - Error log from waitlist_errors table
+**Tab 1: Subscribers**
+```
+┌─────────────────────────────────────────────────────────────┐
+│  [Search by email...]        [Filter: All ▼] [Export CSV]   │
+│                                                             │
+│  ┌─────────────────────────────────────────────────────────┐│
+│  │ Email          │ Position │ Referrals │ Status │ Actions││
+│  ├─────────────────────────────────────────────────────────┤│
+│  │ john@email.com │    #1    │     5     │Priority│ [👁️][✉️]││
+│  │ jane@email.com │    #2    │     3     │Priority│ [👁️][✉️]││
+│  │ bob@email.com  │    #3    │     1     │Waiting │ [👁️][✉️]││
+│  └─────────────────────────────────────────────────────────┘│
+│                                                             │
+│  Showing 1-50 of 1,234          [< Prev] [1] [2] [3] [Next >]│
+└─────────────────────────────────────────────────────────────┘
+```
 
-### Subscriber Table Actions
-- View subscriber details
-- Change status (waiting → priority)
-- Resend welcome email
-- Copy referral link
-- Delete subscriber
+Subscriber Detail Modal:
+- Email, Name, Position
+- Referral code and link
+- Referral count and who they referred
+- Who referred them (if any)
+- Email history (welcome sent, follow-up sent)
+- UTM parameters
+- Signup date and IP
+- Actions: Resend welcome email, Mark as priority, Remove from list
 
-### Launch Day Feature
+**Tab 2: Analytics**
+```
+┌─────────────────────────────────────────────────────────────┐
+│  Signups Over Time                    [Last 7 days ▼]       │
+│  ┌─────────────────────────────────────────────────────────┐│
+│  │ 📈 [Line chart showing daily signups]                   ││
+│  └─────────────────────────────────────────────────────────┘│
+│                                                             │
+│  Traffic Sources                    Referral Leaderboard    │
+│  ┌─────────────────────┐           ┌─────────────────────┐  │
+│  │ 🥧 [Pie chart]      │           │ 1. john@... - 12 refs│  │
+│  │ Direct: 45%         │           │ 2. jane@... - 8 refs │  │
+│  │ Twitter: 30%        │           │ 3. bob@...  - 5 refs │  │
+│  │ LinkedIn: 15%       │           │ 4. alice@.. - 4 refs │  │
+│  │ Other: 10%          │           │ 5. mark@... - 3 refs │  │
+│  └─────────────────────┘           └─────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
+```
 
-```typescript
-interface LaunchConversion {
-  // Triggered from admin dashboard
-  steps: [
-    'Confirm launch',
-    'Create auth accounts for all subscribers',
-    'Send launch announcement email',
-    'Update subscriber status to converted',
-    'Set is_launched = true'
-  ];
-  
-  // Options
-  options: {
-    sendLaunchEmail: boolean;
-    launchEmailSubject: string;
-    launchEmailBody: string;
-    priorityFirst: boolean; // Convert priority subscribers first
-    batchSize: number; // Process in batches
-  };
-}
+**Tab 3: Emails**
+```
+┌─────────────────────────────────────────────────────────────┐
+│  Email Performance                                          │
+│                                                             │
+│  Welcome Emails                                             │
+│  ├─ Sent: 1,234                                            │
+│  ├─ Opened: 892 (72.3%)                                    │
+│  └─ Clicked: 456 (37.0%)                                   │
+│                                                             │
+│  Follow-up Emails                                          │
+│  ├─ Sent: 456                                              │
+│  ├─ Opened: 234 (51.3%)                                    │
+│  └─ Clicked: 89 (19.5%)                                    │
+│                                                             │
+│  [Edit Welcome Email] [Edit Follow-up Email]               │
+│  [Send Test Email]                                          │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Tab 4: Launch**
+```
+┌─────────────────────────────────────────────────────────────┐
+│  🚀 Launch Day Controls                                     │
+│                                                             │
+│  Current Status: Collecting Signups                         │
+│  Target Launch Date: January 15, 2025 (in 30 days)         │
+│                                                             │
+│  ─────────────────────────────────────────────────────────  │
+│                                                             │
+│  Launch Checklist:                                          │
+│  ✅ Waitlist page active                                    │
+│  ✅ Welcome emails configured                               │
+│  ⬜ Launch email template ready                             │
+│  ⬜ User registration flow ready                            │
+│                                                             │
+│  ─────────────────────────────────────────────────────────  │
+│                                                             │
+│  Launch Email Preview:                                      │
+│  Subject: We're Live! 🚀                                    │
+│  Body: [Edit template...]                                   │
+│                                                             │
+│  [Send Test Launch Email]                                   │
+│                                                             │
+│  ─────────────────────────────────────────────────────────  │
+│                                                             │
+│  Launch Options:                                            │
+│  ○ Launch to all subscribers at once                       │
+│  ○ Launch to priority subscribers first (42 people)        │
+│  ○ Launch in batches of [100] per [hour]                   │
+│                                                             │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │        🚀 LAUNCH WAITLIST                             │  │
+│  │     This will send launch emails and enable           │  │
+│  │     account creation for all subscribers              │  │
+│  └──────────────────────────────────────────────────────┘  │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Tab 5: Errors**
+```
+┌─────────────────────────────────────────────────────────────┐
+│  Recent Errors                          [Clear Resolved]    │
+│                                                             │
+│  ┌─────────────────────────────────────────────────────────┐│
+│  │ Time        │ Type      │ Message           │ Status    ││
+│  ├─────────────────────────────────────────────────────────┤│
+│  │ 2 mins ago  │ EMAIL     │ Resend rate limit │ ⚠️ Active ││
+│  │ 1 hour ago  │ SLACK     │ Webhook failed    │ ✅ Resolved││
+│  └─────────────────────────────────────────────────────────┘│
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
 ## Edge Functions
 
-### waitlist-signup
-Handles new waitlist signups from public page.
+### Function: waitlist-signup
+Handles new waitlist signups from the public form.
 
 ```typescript
-// POST /functions/v1/waitlist-signup
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
 serve(async (req) => {
-  if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders });
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
   }
 
   try {
     const supabase = createClient(
-      Deno.env.get('SUPABASE_URL')!,
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    const { email, name, referral_code, utm_source, utm_medium, utm_campaign } = await req.json();
+    const { email, name, referralCode, utmSource, utmMedium, utmCampaign } = await req.json();
 
     // Check if engine is running
     const { data: settings } = await supabase
-      .from('waitlist_settings')
-      .select('*')
+      .from("waitlist_settings")
+      .select("*")
       .single();
 
     if (!settings?.is_running) {
       return new Response(
-        JSON.stringify({ error: 'Waitlist is not currently accepting signups' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        JSON.stringify({ error: "Waitlist is not currently active" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Check if already registered
+    if (settings?.is_launched) {
+      return new Response(
+        JSON.stringify({ error: "Waitlist is closed. Please sign up directly!" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Check for existing subscriber
     const { data: existing } = await supabase
-      .from('waitlist_subscribers')
-      .select('id, position, referral_code, referral_count')
-      .eq('email', email.toLowerCase())
+      .from("waitlist_subscribers")
+      .select("id, referral_code, position")
+      .eq("email", email.toLowerCase())
       .single();
 
     if (existing) {
       return new Response(
         JSON.stringify({
           success: true,
-          existing: true,
+          alreadyExists: true,
           position: existing.position,
-          referral_code: existing.referral_code,
-          referral_count: existing.referral_count,
+          referralCode: existing.referral_code,
         }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Find referrer if code provided
+    // Find referrer if referral code provided
     let referrerId = null;
-    if (referral_code) {
+    if (referralCode) {
       const { data: referrer } = await supabase
-        .from('waitlist_subscribers')
-        .select('id')
-        .eq('referral_code', referral_code.toUpperCase())
+        .from("waitlist_subscribers")
+        .select("id")
+        .eq("referral_code", referralCode.toUpperCase())
         .single();
       
       if (referrer) {
@@ -662,18 +630,24 @@ serve(async (req) => {
       }
     }
 
-    // Create subscriber
+    // Get IP and user agent from headers
+    const ipAddress = req.headers.get("x-forwarded-for")?.split(",")[0] || 
+                      req.headers.get("x-real-ip") || 
+                      "unknown";
+    const userAgent = req.headers.get("user-agent") || "unknown";
+
+    // Insert new subscriber
     const { data: subscriber, error: insertError } = await supabase
-      .from('waitlist_subscribers')
+      .from("waitlist_subscribers")
       .insert({
         email: email.toLowerCase(),
-        name,
+        name: name || null,
         referred_by: referrerId,
-        utm_source,
-        utm_medium,
-        utm_campaign,
-        ip_address: req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip'),
-        user_agent: req.headers.get('user-agent'),
+        ip_address: ipAddress,
+        user_agent: userAgent,
+        utm_source: utmSource || null,
+        utm_medium: utmMedium || null,
+        utm_campaign: utmCampaign || null,
       })
       .select()
       .single();
@@ -681,28 +655,19 @@ serve(async (req) => {
     if (insertError) throw insertError;
 
     // Update daily stats
-    await supabase.rpc('increment_waitlist_stats', {
-      is_referral: referrerId !== null,
-    });
+    await supabase.rpc("increment_daily_signups");
 
     // Trigger welcome email
     if (settings.welcome_email_enabled) {
-      await supabase.functions.invoke('waitlist-send-email', {
-        body: { subscriber_id: subscriber.id, email_type: 'welcome' },
+      await supabase.functions.invoke("waitlist-send-email", {
+        body: { subscriberId: subscriber.id, emailType: "welcome" },
       });
     }
 
     // Trigger Slack notification
     if (settings.slack_enabled) {
-      await supabase.functions.invoke('waitlist-slack-notify', {
-        body: { subscriber_id: subscriber.id },
-      });
-    }
-
-    // Check referrer rewards
-    if (referrerId) {
-      await supabase.functions.invoke('waitlist-check-rewards', {
-        body: { subscriber_id: referrerId },
+      await supabase.functions.invoke("waitlist-notify-slack", {
+        body: { subscriberId: subscriber.id },
       });
     }
 
@@ -710,186 +675,126 @@ serve(async (req) => {
       JSON.stringify({
         success: true,
         position: subscriber.position,
-        referral_code: subscriber.referral_code,
-        referral_count: 0,
+        referralCode: subscriber.referral_code,
       }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
 
   } catch (error) {
     // Log error
     const supabase = createClient(
-      Deno.env.get('SUPABASE_URL')!,
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    await supabase.from('waitlist_errors').insert({
-      function_name: 'waitlist-signup',
+    await supabase.from("waitlist_errors").insert({
+      error_type: "SIGNUP",
       error_message: error.message,
       error_details: { stack: error.stack },
+      function_name: "waitlist-signup",
     });
 
     return new Response(
-      JSON.stringify({ error: 'Failed to join waitlist' }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      JSON.stringify({ error: "Failed to join waitlist. Please try again." }),
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
 });
 ```
 
-### waitlist-send-email
-Sends emails via Resend API.
+### Function: waitlist-send-email
+Sends emails via Resend (welcome, follow-up, or launch).
 
 ```typescript
-// POST /functions/v1/waitlist-send-email
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+};
 
 serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
+  }
+
   try {
     const supabase = createClient(
-      Deno.env.get('SUPABASE_URL')!,
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    const { subscriber_id, email_type } = await req.json();
+    const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+    const RESEND_FROM_EMAIL = Deno.env.get("RESEND_FROM_EMAIL");
+
+    if (!RESEND_API_KEY || !RESEND_FROM_EMAIL) {
+      throw new Error("Resend API credentials not configured");
+    }
+
+    const { subscriberId, emailType } = await req.json();
 
     // Get subscriber
-    const { data: subscriber } = await supabase
-      .from('waitlist_subscribers')
-      .select('*')
-      .eq('id', subscriber_id)
+    const { data: subscriber, error: subError } = await supabase
+      .from("waitlist_subscribers")
+      .select("*")
+      .eq("id", subscriberId)
       .single();
 
-    if (!subscriber) throw new Error('Subscriber not found');
+    if (subError || !subscriber) throw new Error("Subscriber not found");
 
     // Get settings
     const { data: settings } = await supabase
-      .from('waitlist_settings')
-      .select('*')
+      .from("waitlist_settings")
+      .select("*")
       .single();
 
-    // Get Resend API key from secrets
-    const resendApiKey = Deno.env.get('RESEND_API_KEY');
-    if (!resendApiKey) throw new Error('RESEND_API_KEY not configured');
+    if (!settings) throw new Error("Settings not found");
 
+    // Determine email content
     let subject: string;
     let body: string;
+    let sentField: string;
+    let sentAtField: string;
 
-    if (email_type === 'welcome') {
-      subject = settings.welcome_email_subject;
-      body = settings.welcome_email_body;
-    } else if (email_type === 'followup') {
-      subject = settings.followup_subject;
-      body = settings.followup_body;
-    } else {
-      throw new Error('Invalid email type');
+    const siteUrl = Deno.env.get("SITE_URL") || "https://yoursite.com";
+    const referralLink = `${siteUrl}/waitlist?ref=${subscriber.referral_code}`;
+
+    const replaceVariables = (text: string) => {
+      return text
+        .replace(/{{name}}/g, subscriber.name || "there")
+        .replace(/{{position}}/g, subscriber.position?.toString() || "")
+        .replace(/{{referral_link}}/g, referralLink)
+        .replace(/{{referral_code}}/g, subscriber.referral_code);
+    };
+
+    switch (emailType) {
+      case "welcome":
+        subject = replaceVariables(settings.welcome_email_subject);
+        body = replaceVariables(settings.welcome_email_body);
+        sentField = "welcome_email_sent";
+        sentAtField = "welcome_email_sent_at";
+        break;
+      case "followup":
+        subject = replaceVariables(settings.followup_subject);
+        body = replaceVariables(settings.followup_body);
+        sentField = "followup_email_sent";
+        sentAtField = "followup_email_sent_at";
+        break;
+      case "launch":
+        subject = replaceVariables(settings.launch_email_subject);
+        body = replaceVariables(settings.launch_email_body);
+        sentField = "launch_email_sent";
+        sentAtField = "launch_email_sent_at";
+        break;
+      default:
+        throw new Error("Invalid email type");
     }
 
-    // Personalize email
-    const referralLink = `${Deno.env.get('SUPABASE_URL')?.replace('.supabase.co', '')}/waitlist?ref=${subscriber.referral_code}`;
-    
-    body = body
-      .replace('{{name}}', subscriber.name || 'there')
-      .replace('{{position}}', subscriber.position.toString())
-      .replace('{{referral_link}}', referralLink)
-      .replace('{{referral_code}}', subscriber.referral_code);
-
-    // Add backlink to email footer
-    const emailHtml = `
-      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-        <div style="padding: 20px;">
-          ${body.split('\n').map(p => `<p>${p}</p>`).join('')}
-          
-          <div style="margin-top: 30px; padding: 20px; background: #f5f5f5; border-radius: 8px;">
-            <p style="margin: 0 0 10px; font-weight: bold;">Share and move up the list:</p>
-            <p style="margin: 0; word-break: break-all;">
-              <a href="${referralLink}">${referralLink}</a>
-            </p>
-          </div>
-        </div>
-        
-        <div style="padding: 20px; text-align: center; color: #999; font-size: 12px;">
-          <p>Powered by <a href="https://lazyunicorn.ai" style="color: #999;">LazyUnicorn.ai</a></p>
-        </div>
-      </div>
-    `;
-
-    // Send via Resend
-    const response = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${resendApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: 'waitlist@resend.dev', // Update with verified domain
-        to: subscriber.email,
-        subject: subject,
-        html: emailHtml,
-      }),
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(`Resend API error: ${JSON.stringify(error)}`);
-    }
-
-    // Update subscriber record
-    const updateField = email_type === 'welcome' 
-      ? { welcome_email_sent: true, welcome_email_sent_at: new Date().toISOString() }
-      : { followup_email_sent: true, followup_email_sent_at: new Date().toISOString() };
-
-    await supabase
-      .from('waitlist_subscribers')
-      .update(updateField)
-      .eq('id', subscriber_id);
-
-    // Update daily stats
-    await supabase.rpc('increment_emails_sent');
-
-    return new Response(JSON.stringify({ success: true }), {
-      headers: { 'Content-Type': 'application/json' },
-    });
-
-  } catch (error) {
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL')!,
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-    );
-
-    await supabase.from('waitlist_errors').insert({
-      function_name: 'waitlist-send-email',
-      error_message: error.message,
-      error_details: { stack: error.stack },
-    });
-
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
-    );
-  }
-});
-```
-
-### waitlist-slack-notify
-Posts new signup notifications to Slack.
-
-```typescript
-// POST /functions/v1/waitlist-slack-notify
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-
-serve(async (req) => {
-  try {
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL')!,
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-    );
-
-    const { subscriber_id } = await req.json();
-
-    // Get subscriber
-    const { data: subscriber } = await supabase
-      .from('waitlist_subscribers')
-      .select('*, referrer:referred_
+    // Build HTML email
+    const htmlBody = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-
