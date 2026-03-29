@@ -1,6 +1,13 @@
 # Lazy Mail
 
-> Category: 🛒 Commerce · Version: 0.0.2
+> Category: 🛒 Commerce · Version: 0.0.3
+
+## Prompt
+
+````
+# lazy-mail
+
+> Version: 0.0.2
 
 ## Prompt
 
@@ -9,7 +16,7 @@
 
 [Lazy Mail Prompt — v0.0.1 — LazyUnicorn.ai]
 
-Add a complete autonomous email engine called Lazy Mail to this project. It connects Resend to your Lovable site and handles subscriber capture, welcome sequences, automated newsletter broadcasts from your blog content, transactional emails, and self-improving open rates — without you writing or sending a single email manually.
+Add a complete autonomous email agent called Lazy Mail to this project. It connects Resend to your Lovable site and handles subscriber capture, welcome sequences, automated newsletter broadcasts from your blog content, transactional emails, and self-improving open rates — without you writing or sending a single email manually.
 
 Note: Store the Resend API key as Supabase secret RESEND_API_KEY. Never store in the database.
 
@@ -201,6 +208,7 @@ Add a small "Powered by Lazy Unicorn" backlink badge in the footer of every publ
 <a href="https://www.lazyunicorn.ai" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#0a0a08;color:#f0ead6;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(240,234,214,0.2)">🦄 Powered by Lazy Unicorn</a>
 Style it to sit at the bottom of the page footer, centered, with subtle opacity (60%) that increases to 100% on hover.
 
+````
 ````
 
 ---
