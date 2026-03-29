@@ -1,4 +1,4 @@
-[LazyUnicorn Admin Dashboard Prompt — v0.0.7 — LazyUnicorn.ai]
+[LazyUnicorn Admin Dashboard Prompt — v0.0.8 — LazyUnicorn.ai]
 
 Rebuild the entire admin dashboard at /admin from scratch. Replace everything currently there. This is a unified control panel for all LazyUnicorn agents. It detects which agents are installed by checking which database tables exist and shows only those panels.
 
@@ -318,9 +318,35 @@ Compare each installed agent's prompt_version against the API response. If any a
 
 ## Interaction rules
 
-All edge function calls: loading spinner on button, success toast + green checkmark for 2 seconds, error toast on failure. Never reload the page. Tables refresh after function completes. Status dots poll every 60 seconds.
+All edge function calls: loading spinner on button, success toast + green checkmark for 2 seconds. Never reload the page. Tables refresh after function completes. Status dots poll every 60 seconds.
 
 All tables: search input filtering by main text field. Pagination at 50 rows with Previous/Next.
+
+---
+
+## Error handling — global rules
+
+Never show a generic "failed" message anywhere in admin. Every failure must show what went wrong and exactly what to do next.
+
+**Agent not configured**
+Before rendering any agent panel, check if its settings table exists and setup_complete is true. If not, replace the entire panel with a setup card:
+- Title: "[Agent Name] is not configured"
+- Message: "Complete setup to activate this agent."
+- Button: "Set Up [Agent Name]" linking to /lazy-[agent]-setup
+- Do not show action buttons, stats, or history
+
+**Edge function call fails**
+When a button triggers an edge function and it returns an error, show a red callout with the actual error message. Below it show a "How to fix" section:
+- If the error contains "secret", "api key", or "unauthorized": "Add the required API key to your Supabase secrets — Project Settings → Edge Functions → Secrets"
+- If the error contains "not found" or "does not exist": "Check that all database tables were created. Re-run the setup page."
+- If the error contains "setup_complete": "Complete the setup page first."
+- For all other errors: show the raw error and a "View Error Log" button that scrolls to the agent's error log section
+
+**Missing secrets**
+Each agent panel that requires external API keys shows a Requirements section at the top. For each required secret: green checkmark if the last function call succeeded, red warning with the secret name and setup instructions if it failed due to that secret being missing.
+
+**Empty states**
+If an agent is configured but has never run: "No data yet — click [primary action button] to run your first check."
 
 ---
 
