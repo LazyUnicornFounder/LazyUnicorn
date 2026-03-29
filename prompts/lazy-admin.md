@@ -1,4 +1,4 @@
-[LazyUnicorn Admin Dashboard Prompt — v0.0.9 — LazyUnicorn.ai]
+[LazyUnicorn Admin Dashboard Prompt — v0.0.10 — LazyUnicorn.ai]
 
 Rebuild the entire admin dashboard at /admin from scratch. Replace everything currently there. This is a unified control panel for all LazyUnicorn agents. It detects which agents are installed by checking which database tables exist and shows only those panels.
 
@@ -16,18 +16,23 @@ Dark background #0a0a08. Text #f0ead6 cream. Gold accent #c9a84c. Borders rgba(2
 
 Fixed across all /admin pages.
 
-Left side: 🦄 LAZY UNICORN logo. Next to it: live agent count — query all settings tables for is_running true and show as "● [n] AGENTS RUNNING" in green. If zero agents running show in muted grey.
+Left side: 🦄 LAZY UNICORN logo. Next to it: live agent count — query all settings tables for is_running true and show as "● [n] AGENTS RUNNING" in green. If zero agents running show in muted grey. The top bar does not include category navigation — that lives in the left sidebar of the overview page.
 
 Right side: PAUSE ALL text button — on click sets is_running to false across all agent settings tables and updates the label to RESUME ALL. Next to it: ⚙ settings icon linking to /admin/settings. Next to it: gold pill link "LAZY CLOUD ↗" pointing to /lazy-cloud or https://lazyunicorn.ai/cloud.
 
 ---
 
-## Category tabs
+## Overview (/admin)
 
-Shown on /admin only. Gold underline on active tab. Clicking a tab filters the agent grid to show only agents in that category. ALL is selected by default.
+The overview uses a two-panel layout: a narrow left sidebar for category navigation and a full-width scrollable table on the right. No top tabs.
 
-Tabs and their agents:
+### Left sidebar
 
+Fixed 150px wide. Shows:
+- 🦄 Lazy logo + "[n] of 36 running" count in muted text
+- Category nav list: All (active by default), Content, Commerce, Media, Dev, Monitor, Intelligence. Big bold text (14px bold). Active item has gold left border and subtle gold background tint. Clicking a category filters the table to show only agents in that category.
+
+Categories and their agents:
 ALL — every agent
 CONTENT — Blogger, SEO, GEO, Crawl, Perplexity, Repurpose, Trend
 COMMERCE — Store, Drop, Print, Pay, Mail, SMS, Churn
@@ -36,15 +41,55 @@ DEV — Code, GitLab, Linear, Contentful, Design, Auth, Granola
 MONITOR — Alert, Telegram, Supabase, Security, Watch
 INTELLIGENCE — Fix, Build, Intel, Agents
 
-Platform tools (Run, Admin, Cloud, Waitlist) are not in the tab system.
+Platform tools (Run, Admin, Cloud, Waitlist) are not shown in the table.
 
----
+### Agent table
 
-## Overview (/admin)
+7 columns: AGENT · STATUS · CATEGORY · ACTIVITY · LAST RUN · NEXT RUN · VERSION
 
-Only show the stats row when at least one agent settings table exists and setup_complete is true. If no agents are installed, skip the stats row entirely and go straight to the agent grid.
+Column widths are proportional using flex fractions — fill the full available width with no empty space: Agent 2fr, Status 1.2fr, Category 1fr, Activity 1.8fr, Last Run 1fr, Next Run 1fr, Version 1.4fr.
 
-Stats row — 5 stats in equal-width columns:
+**AGENT column** — agent name in 14px bold cream. Inline action button immediately after the name (same row, tight). Button style depends on row state:
+- Error row: gold "FIX →" button (red fill, white text, small pill)
+- Running row: ghost "MANAGE" button (subtle border, muted text)
+- Needs setup row: gold fill "SET UP" button (#c9a84c background, dark text)
+- Not set up row: ghost "SET UP" button (gold fill)
+
+**STATUS column** — colored badge with dot:
+- Error: "● ERROR" red badge (rgba(248,113,113,0.15) bg, #f87171 text)
+- Running: "● RUNNING" green badge (rgba(74,222,128,0.1) bg, #4ade80 text)
+- Needs setup: "● NEEDS SETUP" amber badge (rgba(201,168,76,0.15) bg, #c9a84c text)
+- Not set up: "NOT SET UP" muted badge (rgba(240,234,214,0.05) bg, rgba(240,234,214,0.25) text)
+
+**CATEGORY column** — category name in 12px muted text.
+
+**ACTIVITY column** — for running agents: most meaningful recent activity (e.g. "4 posts today", "12 keywords this week", "0 issues this week"). For error agents: the error message in red (e.g. "Missing AIKIDO_API_KEY"). For not set up agents: one-line description of what the agent does.
+
+**LAST RUN column** — relative time (e.g. "12 mins ago", "1 hr ago"). "Never" if has never run.
+
+**NEXT RUN column** — relative time (e.g. "in 3 mins", "in 59 mins"). "—" if not scheduled.
+
+**VERSION column** — version string (e.g. "v0.0.9"). If prompt_version is behind the latest from https://lazyunicorn.ai/api/versions, append a small gold UPDATE badge next to the version.
+
+### Row sections
+
+Rows are grouped into three sections in this order:
+
+1. **Error rows** — agents with errors in the last hour. Row background: rgba(248,113,113,0.03). Shown without a section label.
+
+2. **Running rows** — agents where setup_complete is true and is_running is true and no recent errors. No section label.
+
+3. **NOT SET UP YET** divider — subtle separator row with the label "NOT SET UP YET" in 10px muted caps. Below it: all agents where the settings table does not exist or setup_complete is false. These rows are dimmed (opacity 0.45).
+
+Within the "not set up" section, agents where the settings table exists but setup_complete is false (needs setup) appear before agents where the settings table does not exist (not installed).
+
+Below the last not-set-up row, if more than 5 not-set-up agents exist: show "+ [n] more agents not set up" in muted text.
+
+### Stats row
+
+Show above the table only when at least one agent settings table exists and setup_complete is true. If no agents are installed, skip it entirely.
+
+5 stats in equal-width columns:
 
 Posts Today — sum of blog_posts + seo_posts + geo_posts published today where each table exists.
 
@@ -56,35 +101,14 @@ Errors Today — count of all rows across all _errors tables where created_at is
 
 Security Score — latest score from security_scans. Green if 80+, amber if 60–79, red if below 60. Only show if security_settings exists.
 
----
-
-## Agent grid
-
-Show all 36 known agents in a responsive grid (4 columns desktop, 2 tablet, 1 mobile). Installed agents appear first. Not installed agents appear below in a visually muted section labelled "NOT INSTALLED — [n] AGENTS". The two sections are separated by a subtle divider with the label "INSTALLED — [n] AGENTS" above the first section.
-
-When a category tab is active, only show agents belonging to that category. Apply the same installed/not-installed split within the filtered view.
+### Agent state mapping
 
 Each agent maps to a known settings table. Use this mapping to determine state:
 
 Blogger → blog_settings, SEO → seo_settings, GEO → geo_settings, Crawl → crawl_settings, Perplexity → perplexity_settings, Store → store_settings, Drop → drop_settings, Print → print_settings, Pay → pay_settings, SMS → sms_settings, Mail → mail_settings, Voice → voice_settings, Stream → stream_settings, YouTube → youtube_settings, Code → code_settings, GitLab → gitlab_settings, Linear → linear_settings, Contentful → contentful_settings, Design → design_settings, Auth → auth_settings, Granola → granola_settings, Alert → alert_settings, Telegram → telegram_settings, Supabase → supabase_settings, Security → security_settings, Watch → watch_settings, Fix → fix_settings, Build → build_settings, Intel → intel_settings, Repurpose → repurpose_settings, Trend → trend_settings, Churn → churn_settings, Agents → agent_settings, Run → run_settings, Waitlist → waitlist_settings
 
----
+### Required secrets per agent (for ACTIVITY column error text)
 
-### Card: Not installed
-
-Border: 1px solid rgba(240,234,214,0.06). Opacity: 0.6. No status dot.
-
-Show: agent name in muted cream, one-line description, "+ INSTALL" ghost button (border rgba(240,234,214,0.1), text rgba(240,234,214,0.3)). Clicking INSTALL links to /lazy-[agent]-setup.
-
----
-
-### Card: Needs setup (settings table exists, setup_complete is false)
-
-Border: 1px solid rgba(201,168,76,0.25). Status dot: amber #c9a84c.
-
-Show: agent name, a gold left-border callout that lists exactly what is missing (e.g. "Add AIKIDO_API_KEY to Supabase secrets"). Never show a generic "setup required" message without specifying what is needed. Gold fill button "COMPLETE SETUP →" linking to /lazy-[agent]-setup.
-
-Required secrets per agent:
 - Security: AIKIDO_API_KEY and aikido_project_id in security_settings
 - Watch: GITHUB_TOKEN and GITHUB_REPO in watch_settings
 - Agents: GITHUB_TOKEN and GITHUB_REPO in agent_settings
@@ -100,30 +124,6 @@ Required secrets per agent:
 - Stream: twitch_channel in stream_settings
 - Mail: resend_api_key in mail_settings
 - Granola: granola_api_key in granola_settings
-
----
-
-### Card: Running (setup_complete true, is_running true, no errors in last hour)
-
-Border: 1px solid rgba(240,234,214,0.12). Status dot: green #4ade80.
-
-Show: agent name, 2 key metrics in a 2-column mini-stat grid (use the most meaningful metrics for each agent — posts for content agents, revenue for commerce agents, issues for monitoring agents). Last run time in muted text. "MANAGE →" ghost button.
-
----
-
-### Card: Error (setup_complete true, is_running true, errors exist in last hour above threshold)
-
-Border: 1px solid rgba(248,113,113,0.2). Status dot: red #f87171.
-
-Show: agent name, red left-border callout with the most recent error message (truncated to 60 chars), gold "How to fix →" inline link. "MANAGE →" ghost button.
-
----
-
-### Card: Paused (is_running false)
-
-Border: 1px solid rgba(240,234,214,0.08). Opacity: 0.6. Status dot: grey rgba(240,234,214,0.2).
-
-Show: agent name, last known stats in muted style. "RESUME →" ghost button — on click sets is_running to true in that agent's settings table.
 
 ---
 
