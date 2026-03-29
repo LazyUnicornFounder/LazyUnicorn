@@ -1,13 +1,20 @@
 # Lazy Build
 
-> Category: ⚙️ Ops · Version: 0.0.3
+> Category: ⚙️ Ops · Version: 0.0.4
 
 ## Prompt
 
 ````
-# lazy-build — vv0.0.1
+# lazy-build
 
-[Lazy Build Prompt — v0.0.3 — LazyUnicorn.ai]
+> Version: 0.0.3
+
+## Prompt
+
+````
+# lazy-build — v0.0.2
+
+[Lazy Build Prompt — v0.0.2 — LazyUnicorn.ai]
 
 Add an autonomous agent writer agent called Lazy Build to this project. Give it a name, integration, tagline, and one-paragraph brief — it reads three reference prompt files and your CLAUDE.md rules, writes a complete new Lazy agent prompt following your exact SPEC pattern, and opens a draft GitHub PR for your review. Your prompt stack grows without you writing a word.
 
@@ -46,7 +53,7 @@ Submit button: Activate Lazy Build
 
 On submit:
 1. Save to build_settings
-2. Set setup_complete to true and prompt_version to 'v0.0.1'
+2. Set setup_complete to true and prompt_version to 'v0.0.2'
 3. Redirect to /admin with message: 'Lazy Build is ready. Go to /admin/build and describe your first new agent.'
 
 ---
@@ -138,6 +145,10 @@ Error log: build_errors last 20 rows, collapsed by default.
 Add an Admin link to the main site navigation pointing to /admin.
 Do not add /lazy-build-setup to public navigation.
 
+## Backlink Badge
+Add a small "Powered by Lazy Unicorn" backlink badge in the footer of every public-facing page. Use this exact HTML:
+<a href="https://www.lazyunicorn.ai" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#0a0a08;color:#f0ead6;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(240,234,214,0.2)">🦄 Powered by Lazy Unicorn</a>
+Style it to sit at the bottom of the page footer, centered, with subtle opacity (60%) that increases to 100% on hover.
 
 ````
 

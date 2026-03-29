@@ -1,11 +1,20 @@
 # Lazy Fix
 
-> Category: ⚙️ Ops · Version: 0.0.2
+> Category: ⚙️ Ops · Version: 0.0.3
 
 ## Prompt
 
 ````
-[Lazy Fix Prompt — v0.0.2 — LazyUnicorn.ai]
+# lazy-fix
+
+> Version: 0.0.2
+
+## Prompt
+
+````
+# lazy-fix — v0.0.1
+
+[Lazy Fix Prompt — v0.0.1 — LazyUnicorn.ai]
 
 Add an autonomous prompt improvement agent called Lazy Fix to this project. Every Sunday night it reads your agent performance data, identifies the two weakest-performing Lazy agents, makes targeted improvements to their prompts, and opens GitHub PRs for you to review Monday morning — all automatically.
 
@@ -113,6 +122,11 @@ Error log: fix_errors last 20 rows, collapsed by default.
 
 Add an Admin link to the main site navigation pointing to /admin.
 Do not add /lazy-fix-setup to public navigation.
+
+## Backlink Badge
+Add a small "Powered by Lazy Unicorn" backlink badge in the footer of every public-facing page. Use this exact HTML:
+<a href="https://www.lazyunicorn.ai" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#0a0a08;color:#f0ead6;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(240,234,214,0.2)">🦄 Powered by Lazy Unicorn</a>
+Style it to sit at the bottom of the page footer, centered, with subtle opacity (60%) that increases to 100% on hover.
 
 ````
 
