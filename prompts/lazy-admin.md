@@ -1,302 +1,343 @@
-[LazyUnicorn Admin Dashboard Prompt — v0.0.4 — LazyUnicorn.ai]
+[LazyUnicorn Admin Dashboard Prompt — v0.0.5 — LazyUnicorn.ai]
 
-Rebuild the entire admin dashboard at /admin from scratch. Replace everything currently there with a unified control panel for the entire LazyUnicorn autonomous operations layer. This admin detects which agents are installed by checking which database tables exist and shows only the relevant panels. It works whether one agent or all twenty are installed.
+Rebuild the entire admin dashboard at /admin from scratch. Replace everything currently there. This is a unified control panel for all LazyUnicorn agents. It detects which agents are installed by checking which database tables exist and shows only those panels.
 
-IMPORTANT: Do not change anything outside /admin. All public pages, product pages, blog posts, and the main site navigation remain exactly as they are.
-
----
-
-## Design philosophy
-
-Mission control, not a settings page. Every number is live. Every button does something immediately. Every error is visible before you have to look for it. The founder checks this for 60 seconds in the morning and knows at a glance whether everything is running, what it produced overnight, and whether anything needs attention.
-
-Dark background matching the existing site. All text high contrast. Numbers large and readable. Status indicators immediate and unambiguous — green means running, red means broken, never any ambiguity. No unnecessary decoration. Everything earns its place.
+IMPORTANT: Do not change anything outside /admin.
 
 ---
 
-## Layout
+## Design
 
-Fixed left sidebar navigation. Main content area on the right. Sidebar never scrolls away. Content area scrolls. On mobile sidebar collapses to a bottom tab bar showing only icons.
-
----
-
-## Left sidebar
-
-At the top: LazyUnicorn logo and wordmark.
-
-Below it: master status indicator — a single large dot and label. Green dot: All systems running. Red dot: [n] agents need attention. Gold dot: Everything paused. This is the first thing the eye goes to.
-
-Below that: vertical navigation list. Each item is an agent name with its icon. Only show agents whose settings table exists in the database — do not show uninstalled agents. Active item has a gold left border and gold text. Each item shows a small coloured dot on the right — green if running with no errors, red if errors in last 24 hours, grey if paused. Navigation order:
-
-Overview (always show)
-Category label: Content Agents — Blogger (if blog_settings exists), SEO (if seo_settings exists), GEO (if geo_settings exists), Crawl (if crawl_settings exists), Perplexity (if perplexity_settings exists)
-Category label: Commerce Agents — Store (if store_settings exists), Pay (if pay_settings exists), SMS (if sms_settings exists)
-Category label: Media Agents — Voice (if voice_settings exists), Stream (if stream_settings exists)
-Category label: Developer Agents — Code (if code_settings exists), GitLab (if gitlab_settings exists), Linear (if linear_settings exists)
-Category label: Channels — Alert (if alert_settings exists), Telegram (if telegram_settings exists), Contentful (if contentful_settings exists), Supabase (if supabase_settings exists)
-Category label: Security — Security (if security_settings exists)
-Settings (always show)
-
-Below navigation: master pause button. Full sidebar width. When everything is running: Pause Everything in muted style. When paused: Resume Everything in gold. One click updates master_running in run_settings if that table exists. If run_settings does not exist toggle is_running individually across all detected agent settings tables.
+Dark background. High contrast text. Numbers large. Status indicators immediate — green running, red broken, grey paused. No decoration. Fixed left sidebar, scrollable main area. Mobile: sidebar collapses to bottom icon bar.
 
 ---
 
-## Overview page — loads by default at /admin
+## Sidebar
 
-The morning dashboard. 60-second check.
+Top: LazyUnicorn logo.
 
-Row 1 — stat cards in a horizontal row. Only show cards for data that exists. Detect and show from these sources:
+Below: master status dot. Green = all running. Red = [n] need attention. Gold = all paused.
 
-Posts published today: count blog_posts + seo_posts + geo_posts published today if those tables exist.
-Posts this week: same tables, last 7 days.
-Active agents: count of settings tables where is_running is true, across all detected agent settings tables.
-Errors today: count of rows from all detected agent error tables (blog_errors, seo_errors, geo_errors, store_errors, voice_errors, pay_errors, sms_errors, stream_errors, code_errors, gitlab_errors, linear_errors, crawl_errors, perplexity_errors, alert_errors, telegram_errors, contentful_errors, supabase_errors, security_errors, run_errors) from last 24 hours. Red background tint if above zero.
-Last publish: most recent published_at across all content tables if any exist.
-Security score: latest score from security_scans if security_settings exists. Green above 80, amber 60-79, red below 60. Dash if not installed.
+Navigation — show only installed agents (detected by settings table existing):
 
-Row 2 — agent status grid. One compact card per installed agent. Four columns on large screens, three on medium, two on small. Each card: agent name in small bold text, status dot top right, one primary metric below the name, last run time in muted text, small Run Now button. Metrics: posts today for content agents, revenue today for Pay (sum of pay_transactions amount_cents where status succeeded today divided by 100), messages sent today for SMS, episodes today for Voice, streams processed for Stream, commits processed for Code and GitLab, issues synced for Linear, intel items found today for Crawl, brand citation rate for Perplexity (brand_mentioned true divided by total in perplexity_citations), alerts sent today for Alert and Telegram, entries synced today for Contentful, milestones reached total for Supabase, current security score for Security.
+Overview (always)
 
-Row 3 — two columns.
+Content — Blogger, SEO, GEO, Crawl, Perplexity, Repurpose, Trend
 
-Left: unified activity feed. Reverse chronological list of every action across all agents in the last 24 hours. Sources: run_activity if run_settings exists, plus last published_at from each content table as synthetic activity rows labelled by agent. Each row: coloured dot (green success, red error, gold optimisation), agent name in muted small text, action description, timestamp. Maximum 50 rows. Scrollable. Filter pills: All, Errors Only, Content, Commerce, Security.
+Commerce — Store, Pay, SMS, Drop, Print, Mail, Churn
 
-Right: error log. All errors from all agent error tables in the last 24 hours grouped by agent. Each group: agent name header in small red text, errors listed below with function name, error message truncated to 120 characters, time. If no errors: large green checkmark and text: No errors in the last 24 hours. Clear All button at top marks all as read.
+Media — Voice, Stream, YouTube
 
----
+Developer — Code, GitLab, Linear, Auth, Design, Granola
 
-## Individual agent pages
+Channels — Alert, Telegram, Contentful, Supabase
 
-Each agent in the sidebar opens its own page at /admin/[agent]. All agent pages follow the same four-section layout.
+Security — Security
 
-Section 1 — Status bar. Full width. Left: agent name large, subtitle one sentence, status badge (Running green / Paused grey / Error red). Right: large on/off toggle updating is_running in that agent's settings table immediately. Green when running, grey when paused.
+Autonomous — Watch, Fix, Build, Intel, Agents
 
-Section 2 — Quick actions. Horizontal row of buttons. Each triggers one immediate edge function without navigating away. Button shows loading spinner while running, checkmark for 2 seconds on success, then reverts. Show an error toast if the function fails.
+System — Installs, Settings
 
-Section 3 — Stats and queue. Two columns. Left: four to six stat cards with the most important numbers for that agent. Right: the queue or upcoming items for that agent. Maximum 20 rows with View All link if more.
+Each nav item: small status dot right side (green/red/grey). Active item: gold left border.
 
-Section 4 — History log. Last 50 rows of what this agent produced or processed. Columns vary by agent but always include title or description, date, status badge. For content agents include a View link. Sortable by date descending. Search input filters by title or keyword. Paginate at 50 rows.
-
-Below Section 4 — collapsible Settings panel. Click to expand. Shows all setup form fields for that agent inline. Save Settings button updates the database. On save show a toast: Settings saved. No page reload.
-
-Below Settings — collapsible Error log. Click to expand. Last 10 errors from that agent's error table. Clear button marks as read. Red dot on the chevron if unread errors.
+Bottom of sidebar: Pause Everything / Resume Everything button. Updates master_running in run_settings if exists, otherwise toggles is_running across all agent settings tables.
 
 ---
 
-## Agent-specific page specs
+## Overview (/admin)
 
-LAZY BLOGGER (/admin/blogger — only show if blog_settings exists)
-Subtitle: Publishes SEO and GEO blog posts every 15 minutes.
-Quick actions: Publish One Now (blog-publish), link to /lazy-blogger-setup.
-Stats: Posts today, Posts this week, SEO posts total, GEO posts total, Research-grounded posts (where research_context is not ai-generated).
-Queue: Show the current product in rotation — read last_product_published from blog_settings, find it in the 20-product list, and display the NEXT product as "Next up: [product name]". Show the top keyword from seo_keywords where has_content is false and product_name matches the next product, with source tag and product badge. Show the full 20-product rotation as a horizontal scrollable list of small pills with the current position highlighted in gold.
-History: last 50 blog_posts with title, type tag, research badge, published date, View link.
-Settings: all blog_settings fields.
+Stat row — show only what exists:
+- Posts today (blog_posts + seo_posts + geo_posts)
+- Posts this week
+- Active agents (is_running true across all settings tables)
+- Errors today (all _errors tables, last 24h — red tint if above zero)
+- Revenue today (pay_transactions succeeded today)
+- Security score (security_scans latest — green 80+, amber 60-79, red below 60)
+- Installs total (installs table count)
 
-LAZY SEO (/admin/seo — only show if seo_settings exists)
+Agent grid — one card per installed agent. Shows: name, status dot, one primary metric, last run time, Run Now button.
+
+Two columns below:
+
+Left — activity feed. Last 50 actions across all agents from run_activity + synthetic rows from content tables. Filter pills: All / Errors / Content / Commerce / Security / Autonomous.
+
+Right — error log. All _errors tables last 24h grouped by agent. If none: green checkmark. Clear All button.
+
+---
+
+## Agent pages
+
+All follow the same layout:
+1. Status bar — name, subtitle, status badge, is_running toggle
+2. Quick actions — buttons that trigger edge functions immediately with loading/success/error states
+3. Stats + queue — two columns
+4. History — last 50 rows, searchable, paginated
+5. Settings — collapsible, saves without page reload
+6. Error log — collapsible, last 10 errors, clear button
+
+---
+
+BLOGGER (/admin/blogger — blog_settings)
+Subtitle: Publishes blog posts every 15 minutes.
+Actions: Publish Now (blog-publish).
+Stats: Posts today, this week, SEO posts total, GEO posts total.
+Queue: next product in rotation, top unwritten keyword with source badge.
+History: blog_posts — title, type, date, View link.
+
+SEO (/admin/seo — seo_settings)
 Subtitle: Discovers keywords and publishes ranking articles.
-Quick actions: Publish SEO Post Now (seo-publish), Discover Keywords Now (seo-discover).
-Stats: Posts published, Keywords discovered, Keywords with content, Keywords remaining.
-Source breakdown: stat pills showing how many keywords from seo-discover vs crawl vs perplexity.
-Queue: seo_keywords where has_content is false ordered by priority descending. Show keyword, priority, source tag (blue=seo-discover, orange=crawl, purple=perplexity), created date. Publish This button per row.
-History: last 50 seo_posts with title, keyword, published date, View link.
-Settings: all seo_settings fields.
+Actions: Publish Now (seo-publish), Discover Now (seo-discover).
+Stats: Posts published, keywords found, keywords remaining.
+Queue: seo_keywords where has_content false — keyword, priority, source badge, Publish button.
+History: seo_posts — title, keyword, date, View link.
 
-LAZY GEO (/admin/geo — only show if geo_settings exists)
-Subtitle: Publishes content cited by ChatGPT, Claude, and Perplexity.
-Quick actions: Publish GEO Post Now (geo-publish), Discover Queries Now (geo-discover), Test Citations Now (geo-test).
-Stats: Posts published, Queries discovered, Queries with content, Citation rate percentage.
-Source breakdown: queries from geo-discover vs perplexity.
-Queue: geo_queries where has_content is false ordered by priority. Show query, type tag (green=informational, gold=commercial, purple=navigational), source tag, priority. Publish This button per row.
-Citation panel: last 10 geo_citations with query, brand mentioned yes/no, confidence, test method badge (simulated or real), date.
-History: last 50 geo_posts with title, product badge, target query, published date, View link.
-Settings: all geo_settings fields.
+GEO (/admin/geo — geo_settings)
+Subtitle: Publishes content cited by AI search engines.
+Actions: Publish Now (geo-publish), Discover Now (geo-discover), Test Citations (geo-test).
+Stats: Posts published, queries found, citation rate.
+Queue: geo_queries where has_content false — query, type, source, Publish button.
+History: geo_posts — title, product, date, View link.
 
-LAZY CRAWL (/admin/crawl — only show if crawl_settings exists)
-Subtitle: Monitors competitors and feeds real intelligence into your content agents.
-Quick actions: Crawl All Targets Now (crawl-run), Publish Intelligence Now (crawl-publish).
-Stats: Active targets, Pages crawled today, Intel items found today, Keywords fed to SEO, Leads found total.
-Queue: all crawl_targets with name, URL, type tag, frequency, last crawled, next crawl, active toggle, Crawl Now button per row.
-Intelligence feed: last 20 crawl_intel rows with intel type tag, title, description, actioned badge, date.
-History: last 50 crawl_results with URL, target name, crawled date, processed badge.
-Settings: all crawl_settings fields plus all crawl_targets in an editable list with add/remove.
+CRAWL (/admin/crawl — crawl_settings)
+Subtitle: Monitors competitors and feeds intelligence into your content agents.
+Actions: Crawl Now (crawl-run), Publish Intel (crawl-publish).
+Stats: Active targets, pages crawled today, intel items today, leads total.
+Queue: crawl_targets — name, URL, last crawled, Crawl Now button per row.
+History: crawl_intel — type, title, actioned badge, date.
 
-LAZY PERPLEXITY (/admin/perplexity — only show if perplexity_settings exists)
-Subtitle: Researches your niche with live web data and tests brand citation rates.
-Quick actions: Research Now (perplexity-research), Test Citations Now (perplexity-test-citations), Improve Content Now (perplexity-improve-content).
-Stats: Research calls this week, Brand citation rate, Content published with citations, Keywords fed to SEO.
-Queue: perplexity_research where processed is false. Show query, type tag, citation count, date.
-Citation rate chart: line chart using recharts of brand citation rate per week for last 8 weeks.
-History: last 50 perplexity_content with title, citations count badge, published date, View link.
-Settings: all perplexity_settings fields.
+PERPLEXITY (/admin/perplexity — perplexity_settings)
+Subtitle: Researches your niche and tests brand citation rates.
+Actions: Research Now (perplexity-research), Test Citations (perplexity-test-citations).
+Stats: Research calls this week, brand citation rate, content published.
+History: perplexity_content — title, citations count, date, View link.
 
-LAZY STORE (/admin/store — only show if store_settings exists)
-Subtitle: Discovers products, writes listings, optimises conversion, and runs promotions.
-Quick actions: Discover Products Now (store-discover), Optimise Listings Now (store-optimise), Run Promotions Now (store-promote), Publish Content Now (store-content).
-Stats: Products listed, Active promotions, Average conversion rate, Content published.
-Queue: store_products where description is null or empty. Show name, category, price, date, Write Listing button calling store-listings for that product.
-History: last 50 store_products ordered by created_at with name, price, views, sales, conversion rate, last optimised, promotion badge.
-Settings: all store_settings fields.
+REPURPOSE (/admin/repurpose — repurpose_settings)
+Subtitle: Repurposes existing content into new formats automatically.
+Actions: Run Now (repurpose-run).
+Stats: Jobs run this week, output pieces created, source posts repurposed.
+History: repurpose_output — source title, output format badge, date, View link.
 
-LAZY PAY (/admin/pay — only show if pay_settings exists)
+TREND (/admin/trend — trend_settings)
+Subtitle: Discovers trending topics and seeds content engines.
+Actions: Scan Now (trend-scan), Seed Engines (trend-seed).
+Stats: Topics found this week, topics seeded to SEO, topics seeded to GEO.
+History: trend_topics — topic, category, seeded badge, date.
+
+STORE (/admin/store — store_settings)
+Subtitle: Discovers products, writes listings, optimises conversion.
+Actions: Discover (store-discover), Optimise (store-optimise), Promote (store-promote), Publish Content (store-content).
+Stats: Products listed, active promotions, avg conversion rate, content published.
+History: store_products — name, price, sales, conversion rate, date.
+
+PAY (/admin/pay — pay_settings)
 Subtitle: Stripe payments with self-improving conversion optimisation.
-Quick actions: Optimise Now (pay-optimise), Run Recovery Now (pay-recover).
-Stats: MRR, Total revenue, Active subscribers, Abandoned checkouts, Recovery rate.
-Queue: pay_abandoned where recovery_email_sent is false and converted is false. Show customer email, product, abandoned time, Send Recovery button.
-Optimisation log: last 10 pay_optimisation_log rows with product name, old conversion rate, new description preview, date.
-History: last 50 pay_transactions with customer email, product, amount, status badge, date.
-Settings: all pay_settings fields (not Stripe keys — those update via the Settings page).
+Actions: Optimise Now (pay-optimise), Run Recovery (pay-recover).
+Stats: MRR, total revenue, active subscribers, abandoned checkouts, recovery rate.
+Queue: pay_abandoned where recovery not sent — email, product, time, Send Recovery button.
+History: pay_transactions — email, product, amount, status badge, date.
 
-LAZY SMS (/admin/sms — only show if sms_settings exists)
+SMS (/admin/sms — sms_settings)
 Subtitle: Automated SMS sequences that improve themselves.
-Quick actions: Run Sequences Now (sms-sequences-run), Optimise Messages Now (sms-optimise).
-Stats: Messages sent today, Delivery rate, Response rate, Opted-out contacts, Active sequences.
-Queue: all sms_sequences with name, trigger, delay, template, sends, responses, response rate, last optimised, active toggle. Optimise This button on sequences with response rate below 5%.
-History: last 50 sms_messages with direction badge, phone number, message type, status badge, sent time.
-Settings: all sms_settings fields.
+Actions: Run Sequences (sms-sequences-run), Optimise (sms-optimise).
+Stats: Sent today, delivery rate, response rate, opted out.
+History: sms_messages — direction badge, number, type, status, time.
 
-LAZY VOICE (/admin/voice — only show if voice_settings exists)
-Subtitle: Narrates every post in your ElevenLabs voice automatically.
-Quick actions: Generate Audio Now (voice-narrate), View RSS Feed (links to voice-rss function URL).
-Stats: Episodes generated, Total audio hours, Episodes this week, Posts without audio.
-Queue: posts from blog_posts, seo_posts, geo_posts with no matching voice_episodes row. Show title, type, published date, Narrate Now button.
-History: last 50 voice_episodes with title, source table badge, duration, published date, Play button.
-Settings: all voice_settings fields (not ElevenLabs API key — that updates via Settings page).
+DROP (/admin/drop — drop_settings)
+Subtitle: Syncs dropshipping products from AutoDS and publishes content.
+Actions: Sync Now (drop-sync), Publish Content (drop-content), Optimise (drop-optimise).
+Stats: Products synced, content published, last sync time.
+History: drop_products — name, price, content badge, date.
 
-LAZY STREAM (/admin/stream — only show if stream_settings exists)
-Subtitle: Turns every Twitch stream into blog posts, SEO articles, and highlights.
-Quick actions: Process Last Stream Now (stream-process for most recent ended session), Optimise Content Now (stream-optimise).
-Stats: Streams processed, Content published, Clips saved, Average views per piece. Live status badge: green dot Currently Live or Last stream date.
-Queue: stream_sessions where status is ended and not yet processed. Show title, game, ended date, Process Now button.
-History: last 50 stream_content with title, content type tag, stream it came from, published date, views, View link.
-Settings: all stream_settings fields.
+PRINT (/admin/print — print_settings)
+Subtitle: Syncs Printful products and publishes print-on-demand content.
+Actions: Sync Now (print-sync), Publish Content (print-content), Optimise (print-optimise).
+Stats: Products synced, content published, last sync time.
+History: print_products — name, price, content badge, date.
 
-LAZY CODE (/admin/code — only show if code_settings exists)
-Subtitle: Turns every GitHub commit into changelogs and developer blog posts.
-Quick actions: Sync Roadmap Now (code-sync-roadmap), Optimise Content Now (code-optimise).
-Stats: Commits processed, Content published, Open roadmap items, Completed roadmap items, Last webhook received.
-Queue: code_commits where processed is false ordered by committed_at descending. Show sha (7 chars), plain English summary, significance badge, author, date.
-History: last 50 code_content with title, content type badge, published date, views, View link.
-Settings: all code_settings fields.
+MAIL (/admin/mail — mail_settings)
+Subtitle: Automated email campaigns that improve themselves.
+Actions: Send Campaign (mail-campaign), Optimise (mail-optimise).
+Stats: Campaigns sent this month, subscribers, avg open rate, avg click rate.
+History: mail_campaigns — subject, recipients, open rate, click rate, date.
 
-LAZY GITLAB (/admin/gitlab — only show if gitlab_settings exists)
-Subtitle: Turns every GitLab commit and merge request into changelogs and developer posts.
-Quick actions: Sync Roadmap Now (gitlab-sync-roadmap), Optimise Content Now (gitlab-optimise).
-Stats: Commits processed, MRs processed, Content published, Open roadmap items, Last webhook received.
-Queue: gitlab_commits where processed is false. Show sha (7 chars), summary, significance badge, author, date.
-History: last 50 gitlab_content with title, type badge, published date, views, View link.
-Settings: all gitlab_settings fields.
+CHURN (/admin/churn — churn_settings)
+Subtitle: Detects churn signals and triggers retention actions automatically.
+Actions: Analyse Now (churn-analyse).
+Stats: Signals detected this week, actions triggered, users retained, churn rate.
+History: churn_signals — user, signal type, action taken, outcome badge, date.
 
-LAZY LINEAR (/admin/linear — only show if linear_settings exists)
-Subtitle: Turns Linear cycles and issues into product updates and changelogs.
-Quick actions: Sync Now (linear-sync-all), Velocity Report Now (linear-velocity-report), Optimise Now (linear-optimise).
-Stats: Issues synced, Cycles completed, Content published, Last sync time.
-Queue: linear_cycles where completed_at is not null and processed is false. Show cycle name, number, completion date, issues completed count, Write Summary button.
-History: last 50 linear_content with title, type badge, published date, views, View link.
-Settings: all linear_settings fields.
+VOICE (/admin/voice — voice_settings)
+Subtitle: Narrates every post in your ElevenLabs voice.
+Actions: Narrate Now (voice-narrate).
+Stats: Episodes generated, audio hours total, posts without audio.
+Queue: blog_posts/seo_posts/geo_posts with no voice_episodes row — title, type, Narrate Now button.
+History: voice_episodes — title, source badge, duration, date, Play button.
 
-LAZY ALERT (/admin/alert — only show if alert_settings exists)
+STREAM (/admin/stream — stream_settings)
+Subtitle: Turns every Twitch stream into blog posts and SEO content.
+Actions: Process Last Stream (stream-process), Optimise (stream-optimise).
+Stats: Streams processed, content published, clips saved. Live status badge.
+Queue: stream_sessions ended but unprocessed — title, game, date, Process button.
+History: stream_content — title, type badge, views, date.
+
+YOUTUBE (/admin/youtube — youtube_settings)
+Subtitle: Turns every YouTube video into transcripts, SEO, GEO, and chapter markers.
+Actions: Sync Now (youtube-sync), Fetch Comments (youtube-extract-comments), Track Performance (youtube-track-performance).
+Stats: Videos processed, content published, comments extracted, top video this week.
+History: youtube_videos — title, processed badge, content count, date.
+
+CODE (/admin/code — code_settings)
+Subtitle: Turns every GitHub commit into changelogs and developer posts.
+Actions: Sync Roadmap (code-sync-roadmap), Optimise (code-optimise).
+Stats: Commits processed, content published, open roadmap items, last webhook.
+Queue: code_commits where processed false — sha, summary, significance badge, date.
+History: code_content — title, type badge, date, View link.
+
+GITLAB (/admin/gitlab — gitlab_settings)
+Subtitle: Turns every GitLab commit into changelogs and developer posts.
+Actions: Sync Roadmap (gitlab-sync-roadmap), Optimise (gitlab-optimise).
+Stats: Commits processed, MRs processed, content published, last webhook.
+History: gitlab_content — title, type badge, date, View link.
+
+LINEAR (/admin/linear — linear_settings)
+Subtitle: Turns Linear cycles and issues into product updates.
+Actions: Sync Now (linear-sync-all), Velocity Report (linear-velocity-report).
+Stats: Issues synced, cycles completed, content published, last sync.
+Queue: linear_cycles completed but unprocessed — cycle name, issues count, Write Summary button.
+History: linear_content — title, type badge, date, View link.
+
+AUTH (/admin/auth — auth_settings)
+Subtitle: Authentication system — Google Sign-In, email login, role management.
+Stats: Total users, signups today, signups this week, admins, last signup time.
+User table: user_profiles — email, name, role badge, joined date, onboarded badge. Edit role inline.
+Settings: all auth_settings fields.
+
+DESIGN (/admin/design — design_settings)
+Subtitle: Visual design and component library management.
+Actions: Run Design Upgrade (design-upgrade).
+Stats: Last upgrade date, components updated, design version.
+History: design_errors — function, error, date.
+
+GRANOLA (/admin/granola — granola_settings)
+Subtitle: Turns meeting notes from Granola into blog posts and product updates.
+Actions: Sync Now (granola-sync), Publish Content (granola-publish).
+Stats: Meetings synced, content published, last sync time.
+Queue: granola_meetings where processed false — title, type, date, Publish button.
+History: granola_content — title, meeting source, type badge, date, View link.
+
+ALERT (/admin/alert — alert_settings)
 Subtitle: Real-time Slack alerts for every agent event.
-Quick actions: Send Test Message, Send Briefing Now (alert-briefing).
-Stats: Alerts sent today, Alerts this week, Success rate, Last alert sent time.
-Toggle grid: all alert_settings boolean toggles as labelled on/off switches. Updates in real time, no save button.
-History: last 50 alert_log rows with agent badge, event type, message preview, sent time, success badge.
-Settings: all alert_settings fields.
+Actions: Send Test, Briefing Now (alert-briefing).
+Stats: Alerts today, this week, success rate, last alert time.
+Toggle grid: all alert_settings boolean toggles, update in real time.
+History: alert_log — agent badge, event type, message preview, time, success badge.
 
-LAZY TELEGRAM (/admin/telegram — only show if telegram_settings exists)
-Subtitle: Real-time Telegram alerts and bot commands for every agent.
-Quick actions: Send Test Message, Send Briefing Now (telegram-briefing), Register Webhook (calls Telegram setWebhook API).
-Stats: Messages sent today, Messages this week, Success rate, Last message time.
+TELEGRAM (/admin/telegram — telegram_settings)
+Subtitle: Real-time Telegram alerts and bot commands.
+Actions: Send Test, Briefing Now (telegram-briefing), Register Webhook.
+Stats: Messages today, this week, success rate. Webhook status badge.
 Toggle grid: all telegram_settings boolean toggles.
-Webhook status: show current webhook URL and a Registered / Not Registered badge.
-History: last 50 telegram_log rows with agent badge, event type, message preview, sent time, success badge.
-Settings: all telegram_settings fields.
+History: telegram_log — agent badge, event type, message preview, time, success badge.
 
-LAZY CONTENTFUL (/admin/contentful — only show if contentful_settings exists)
-Subtitle: Two-way content sync between your Lovable site and Contentful.
-Quick actions: Pull from Contentful Now (contentful-pull), Push to Contentful Now (contentful-push).
-Stats: Entries pulled from Contentful, Posts pushed to Contentful, Last pull time, Last push time, Sync failures today.
-Queue: contentful_sync_log where status is failed. Show direction badge, entry title, error, date, Retry button.
-History: last 50 contentful_sync_log rows with direction badge, type, entry title, status badge, time.
-Settings: all contentful_settings fields.
+CONTENTFUL (/admin/contentful — contentful_settings)
+Subtitle: Two-way content sync with Contentful.
+Actions: Pull Now (contentful-pull), Push Now (contentful-push).
+Stats: Entries pulled, posts pushed, last pull, last push, sync failures today.
+Queue: contentful_sync_log where failed — direction, title, error, Retry button.
+History: contentful_sync_log — direction badge, type, title, status, time.
 
-LAZY SUPABASE (/admin/supabase — only show if supabase_settings exists)
-Subtitle: Monitors database milestones and publishes product update posts.
-Quick actions: Check Now (supabase-monitor), Send Report Now (supabase-weekly-report).
-Stats: Current user count, Signups today, Milestones reached total, Content published, Last check time.
-Queue: supabase_milestones where post_published is false. Show type, value, reached date, Publish Post button.
-History: last 50 supabase_milestones with type, value, reached date, post published badge.
-Settings: all supabase_settings fields.
+SUPABASE (/admin/supabase — supabase_settings)
+Subtitle: Monitors database milestones and publishes product updates.
+Actions: Check Now (supabase-monitor), Weekly Report (supabase-weekly-report).
+Stats: Current users, signups today, milestones reached, content published.
+Queue: supabase_milestones where post_published false — type, value, date, Publish button.
+History: supabase_milestones — type, value, date, published badge.
 
-LAZY SECURITY (/admin/security — only show if security_settings exists)
-Subtitle: Automated Aikido pentests and continuous vulnerability monitoring.
-Quick actions: Run Pentest Now (security-scan), Run Quick Scan (security-monitor).
-Stats: Current security score (large, colour coded green/amber/red), Open critical vulnerabilities (red if above zero), Open high vulnerabilities (orange if above zero), Last pentest date, Next pentest date.
-Open vulnerabilities: always visible if any critical or high issues are open — not collapsible. Show severity badge, title, category, first found date, remediation hint, Mark Fixed button. If none: green banner No critical or high vulnerabilities open.
-History: last 50 security_scans with date, type badge, status badge, score, critical count, high count, View Report button showing the matching security_reports in a modal.
-Settings: all security_settings fields except the Aikido API key — that updates via the main Settings page.
+SECURITY (/admin/security — security_settings)
+Subtitle: Automated pentests and vulnerability monitoring.
+Actions: Run Pentest (security-scan), Quick Scan (security-monitor).
+Stats: Security score (large, colour-coded), open critical (red if above zero), open high, last pentest, next pentest.
+Vulnerabilities: always visible if any critical/high open — not collapsible. Severity badge, title, first found, Mark Fixed button. If none: green banner.
+History: security_scans — date, type, status, score, critical count, View Report button.
+
+WATCH (/admin/watch — watch_settings)
+Subtitle: Monitors all agent error tables and opens GitHub issues automatically.
+Actions: Run Now (watch-monitor).
+Stats: Agents monitored, issues opened this month, issues resolved, last run time.
+Open issues: watch_issues where resolved false — agent badge, issue title as GitHub link, severity badge, error count, Mark Resolved button.
+Run history: watch_runs — started time, status badge, agents checked, issues opened, duration.
+Settings: error threshold, GitHub repo, Slack webhook status.
+
+FIX (/admin/fix — fix_settings)
+Subtitle: Reads agent performance data and opens GitHub PRs with prompt improvements.
+Actions: Run Now (fix-analyse).
+Stats: PRs opened this month, improvements merged, last run time, next run (Sunday 11pm UTC).
+Improvements table: fix_improvements — agent badge, problem, section improved, version change, PR link, PR status select.
+Run history: fix_runs — date, status badge, agents analysed, PRs opened, duration.
+
+BUILD (/admin/build — build_settings)
+Subtitle: Writes and deploys new Lazy engines from a spec.
+Actions: Build New Engine (build-engine).
+Stats: Engines built total, last build date.
+History: build_engines — engine name, status badge, PR link, date.
+
+INTEL (/admin/intel — intel_settings)
+Subtitle: Weekly competitive intelligence reports and content seeding.
+Actions: Run Now (intel-weekly), Seed Engines (intel-seed).
+Stats: Reports generated, topics seeded this week, last report date.
+History: intel_reports — title, topics count, seeded badge, date, View link.
+
+AGENTS (/admin/agents — agent_settings)
+Subtitle: Autonomous agents that monitor, fix, and improve your stack via GitHub.
+Stats: Issues opened, PRs opened, improvements merged, last run time.
+History: agent_runs — agent name, status badge, output summary, date.
+
+INSTALLS (/admin/installs — installs table)
+Subtitle: Every engine install registered from your users.
+Stats: Total installs, unique sites, most popular engine, installs this week.
+Bar chart (recharts): installs per engine sorted descending.
+Table: installs — site URL (clickable), engine badge colour-coded by category, version, installed date. Search by engine or site URL.
 
 ---
 
-## Settings page (/admin/settings)
+## Settings (/admin/settings)
 
-Three sections.
+Site settings: site URL, brand name, business description, support email. Propagate to All Agents button pushes values to all agent settings tables.
 
-Site settings: site URL, brand name, business description, support email. These update run_settings if that table exists, and if not update each detected agent settings table that has those fields. A Propagate to All Agents button pushes updated values to all agent settings tables simultaneously.
+API keys: one section per installed service. Connection status badge. Password input, show/hide toggle, Test Connection button. Services: ElevenLabs, Stripe, Twilio, Twitch, GitHub, GitLab, Linear, Firecrawl, Perplexity, Aikido, Slack, Telegram, Contentful, Supabase service role, AutoDS, Printful, Resend, Granola.
 
-API keys: one section per service. Show only services whose agent is installed (detected by settings table). Each section: service name, connection status badge (Connected green if secret exists / Not connected grey), password input to update the key, show/hide eye toggle, Test Connection button that verifies the key works. On success: Connected badge for 3 seconds. On failure: error message in red. Services to show if installed: ElevenLabs (test by fetching voices list), Stripe (test by fetching account), Twilio (test by fetching account info), Twitch (test by fetching public stream), GitHub (test by fetching user profile), GitLab (test by fetching user profile), Linear (test by fetching team info), Firecrawl (test by fetching account info), Perplexity (test with a simple completion), Aikido (test by fetching project list), Slack (test by posting to webhook), Telegram (test by fetching bot info), Contentful (test by fetching space info), Supabase service role (test by fetching table list).
+Weekly schedule: read-only visual timeline of the full weekly cron schedule. Seven columns, one per day. Colour coded: content gold, commerce green, media blue, developer purple, autonomous red.
 
-Weekly schedule: a read-only visual timeline showing the full weekly publishing cadence. Seven columns, one per day. Each column shows scheduled runs as stacked time blocks. Each block shows agent name and function. Colour coded by category: content agents gold, commerce green, media blue, developer purple, channels grey, security red. Build this from the cron schedules defined in each installed agent rather than hardcoding — read the cron expressions and render them as human-readable time blocks.
-
----
-
-## Interaction rules
-
-Every action that calls an edge function shows a loading spinner on the button. On success: green checkmark for 2 seconds and a success toast bottom right. On failure: red X and error toast with the message. Never reload the page. Never navigate away. Tables refresh automatically after a function completes. Sidebar error dots poll every 60 seconds.
-
-Every table with more than 50 rows shows pagination — Previous and Next buttons with current page and total. Every table has a search input that filters visible rows by the most relevant text field.
-
----
-
-## Routes
-
-/admin — Overview page (default)
-/admin/blogger, /admin/seo, /admin/geo, /admin/crawl, /admin/perplexity
-/admin/store, /admin/pay, /admin/sms
-/admin/voice, /admin/stream
-/admin/code, /admin/gitlab, /admin/linear
-/admin/alert, /admin/telegram, /admin/contentful, /admin/supabase
-/admin/security
-/admin/settings
-
-Use client-side routing. Direct linking to any route works correctly. Navigating between pages does not trigger a full page reload. Sidebar highlights the active route. Only show routes for installed agents.
+Version status: table of all installed agents showing installed version vs latest (from https://lazyunicorn.ai/api/versions), status badge, Get Latest Prompt link per row.
 
 ---
 
 ## Version checker
 
-Add a PromptVersionChecker component that mounts at the top of every admin page.
+On mount fetch https://lazyunicorn.ai/api/versions with 5 second timeout. Fail silently.
 
-On mount fetch https://lazyunicorn.ai/api/versions with a 5-second timeout. If the fetch fails silently exit — never show an error, never block the page.
+Compare each installed agent's prompt_version against the API response. If any are out of date show a gold banner: Updates available for [n] agent(s) — View Updates button, Dismiss button. Dismiss stores dismissed versions in localStorage under lazy-version-dismissed.
 
-For each installed agent query its settings table for the prompt_version field. Compare each installed version against the API response. An agent is out of date if its installed version is numerically lower — compare by splitting on dots and comparing each segment as an integer.
+---
 
-If all agents are up to date render nothing.
+## Interaction rules
 
-If one or more agents are out of date render a gold banner at the very top of the admin above the sidebar content area. Left side: update icon and text Updates available for [n] agent[s]. Right side: View Updates button and Dismiss button.
+All edge function calls: loading spinner on button, success toast + green checkmark for 2 seconds, error toast on failure. Never reload the page. Tables refresh after function completes. Status dots poll every 60 seconds.
 
-Clicking View Updates opens a slide-out panel from the right. One row per out-of-date agent showing: agent name, installed version in a grey badge, latest version in a gold badge with up arrow, upgrade_complexity badge from the API (drop-in=green, setup-required=amber, breaking=red), View Changelog button linking to https://lazyunicorn.ai/changelog, Get Latest Prompt button linking to https://lazyunicorn.ai/downloads/[agent-slug]-prompt.txt.
+All tables: search input filtering by main text field. Pagination at 50 rows with Previous/Next.
 
-Below the list: "Drop-in updates can be pasted directly. Setup-required updates need a visit to the agent setup page after pasting. Breaking updates require following the upgrade instructions on the changelog."
+---
 
-Dismiss stores the dismissed versions in localStorage under the key lazy-version-dismissed as a JSON object of agent slug to dismissed version string. The banner reappears when a newer version is released.
+## Routes
 
-On the /admin/settings page add a Version Status section above the API keys section. Show a table: Agent, Installed Version, Latest Version, Status badge (Up to date green / Update available gold / Unknown grey). A Check for Updates button re-fetches the API. A Last checked timestamp below the button.
+/admin, /admin/settings
+/admin/blogger, /admin/seo, /admin/geo, /admin/crawl, /admin/perplexity, /admin/repurpose, /admin/trend
+/admin/store, /admin/pay, /admin/sms, /admin/drop, /admin/print, /admin/mail, /admin/churn
+/admin/voice, /admin/stream, /admin/youtube
+/admin/code, /admin/gitlab, /admin/linear, /admin/auth, /admin/design, /admin/granola
+/admin/alert, /admin/telegram, /admin/contentful, /admin/supabase
+/admin/security
+/admin/watch, /admin/fix, /admin/build, /admin/intel, /admin/agents
+/admin/installs
 
-On each individual agent page /admin/[agent] add a small version badge in the Section 1 status bar next to the agent name showing the installed prompt_version in muted grey. If an update is available change the badge to gold and show: Installed: [old] → [new] available. Clicking the badge opens the slide-out panel filtered to that agent.
-
-
-## Backlink Badge
-Add a small "Powered by Lazy Unicorn" backlink badge in the footer of every public-facing page. Use this exact HTML:
-<a href="https://www.lazyunicorn.ai" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#0a0a08;color:#f0ead6;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(240,234,214,0.2)">🦄 Powered by Lazy Unicorn</a>
-Style it to sit at the bottom of the page footer, centered, with subtle opacity (60%) that increases to 100% on hover.
-
+Client-side routing. Direct links work. No full page reloads between pages. Only show routes for installed agents.
