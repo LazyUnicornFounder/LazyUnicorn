@@ -1,6 +1,13 @@
 # Lazy Intel
 
-> Category: 🤖 Agents · Version: 0.0.2
+> Category: ⚙️ Ops · Version: 0.0.3
+
+## Prompt
+
+````
+# lazy-intel
+
+> Version: 0.0.2
 
 ## Prompt
 
@@ -11,7 +18,7 @@
 
 Add an autonomous performance intelligence agent called Lazy Intel to this project. Every Monday at 6am it reads all available content analytics, YouTube performance, customer discovery signals, comment intelligence, and competitor data — generates a weekly content strategy brief — and automatically adds the best SEO keywords and GEO queries to your content queues. Your strategy writes itself.
 
-Note: Lazy Intel uses no external APIs. It reads your existing Supabase tables from other installed Lazy engines. The more engines installed, the richer the intelligence.
+Note: Lazy Intel uses no external APIs. It reads your existing Supabase tables from other installed Lazy agents. The more agents installed, the richer the intelligence.
 
 ---
 
@@ -33,7 +40,7 @@ intel_errors: id (uuid, primary key, default gen_random_uuid()), function_name (
 
 Create a page at /lazy-intel-setup.
 
-Welcome message: 'Lazy Intel reads everything your engines produce — blog analytics, YouTube performance, customer call signals, comment intelligence, competitor data — and turns it into a weekly content strategy. Every Monday morning your SEO and GEO queues are already updated for the week.'
+Welcome message: 'Lazy Intel reads everything your agents produce — blog analytics, YouTube performance, customer call signals, comment intelligence, competitor data — and turns it into a weekly content strategy. Every Monday morning your SEO and GEO queues are already updated for the week.'
 
 Form fields:
 - Brand name (text)
@@ -63,7 +70,7 @@ Also triggered on setup and manually from admin.
 2. Insert into intel_runs with status running.
 3. Gather all available intelligence — for each data source try the query, catch errors for non-existent tables silently, track data_sources_read count:
 
-Blog performance: query blog_posts — count total posts, count posts per post_type in last 30 days, find the post_type with highest count (top performing engine), find any post_type with 0 posts in last 14 days despite the engine being installed (detected by settings table existing).
+Blog performance: query blog_posts — count total posts, count posts per post_type in last 30 days, find the post_type with highest count (top performing agent), find any post_type with 0 posts in last 14 days despite the agent being installed (detected by settings table existing).
 
 SEO coverage: query seo_posts — count by target_keyword pattern to find keyword clusters, find keywords added in last 7 days, count total keywords covered.
 
@@ -81,7 +88,7 @@ Perplexity research (if perplexity_research exists): fetch most recent 10 querie
 
 4. Assemble all gathered data into a structured intelligence package JSON.
 5. Call the built-in Lovable AI for weekly strategy synthesis:
-'You are the autonomous content strategist for [brand_name] — [niche_description]. Today is Monday. Here is everything you know from last week: [intelligence package JSON]. Generate the weekly content intelligence brief. Return only a valid JSON object with these fields: top_performing_topic (string — the single topic getting most traction across all signals), underserved_topics (array of 3 strings — topics with clear demand signals but insufficient content coverage), recommended_seo_keywords (array of 5 strings — specific long-tail keyword phrases to target this week, based on questions asked and competitor gaps), recommended_geo_queries (array of 3 strings — specific questions people ask AI engines that your content should answer), weekly_summary (2 punchy sentences: first sentence what worked last week, second sentence the main opportunity for this week), data_quality_note (one sentence rating the data quality — e.g. Strong data from 6 sources or Limited data — only blog posts available). No preamble. No code fences.'
+'You are the autonomous content strategist for [brand_name] — [niche_description]. Today is Monday. Here is everything you know from last week: [intelligence package JSON]. Generate the weekly content intelligence brief. Return only a valid JSON object with these fields: top_performing_topic (string — the single topic getting most traction across all signals), underserved_topics (array of 3 strings — topics with clear demand signals but insufficient content coverage), recommended_seo_keywords (array of 5 strings — specific long-tail keyword phrases to target this week, based on questions asked and competitor gaps), recommended_geo_queries (array of 3 strings — specific questions people ask AI agents that your content should answer), weekly_summary (2 punchy sentences: first sentence what worked last week, second sentence the main opportunity for this week), data_quality_note (one sentence rating the data quality — e.g. Strong data from 6 sources or Limited data — only blog posts available). No preamble. No code fences.'
 6. Parse response.
 7. Insert into intel_briefs with all fields, week_of set to today's date, data_sources_used as a comma-separated list of which tables were successfully queried.
 8. If auto_add_keywords is true and seo_keywords table exists: for each keyword in recommended_seo_keywords insert a row with keyword text, source set to lazy-intel, priority set to high, created_at now. Skip duplicates.
@@ -108,7 +115,7 @@ The /admin/intel section shows:
 
 This week's brief card — prominently displayed at the top. Shows the most recent intel_briefs row: week_of date, top_performing_topic in a gold badge, underserved_topics as three clickable tags (clicking adds to SEO queue), recommended keywords as a list with Add to Queue buttons, recommended GEO queries with Add to Queue buttons, weekly_summary in a large readable font, data_sources_used as small badges. A Regenerate Brief button triggers intel-analyse immediately.
 
-Data source status panel: a grid showing all data sources Lazy Intel can read and whether each table exists in the project (green Connected / grey Not installed). Sources shown: blog_posts, seo_posts, geo_posts, youtube_videos, youtube_intelligence, granola_intelligence, crawl_intel, perplexity_research. This motivates installing more engines.
+Data source status panel: a grid showing all data sources Lazy Intel can read and whether each table exists in the project (green Connected / grey Not installed). Sources shown: blog_posts, seo_posts, geo_posts, youtube_videos, youtube_intelligence, granola_intelligence, crawl_intel, perplexity_research. This motivates installing more agents.
 
 Brief history: all intel_briefs ordered by created_at descending. Last 8 rows shown as collapsed accordion cards. Each card shows week_of date and top_performing_topic as the header. Expand to see full brief details.
 
@@ -126,6 +133,7 @@ Add an Admin link to the main site navigation pointing to /admin.
 Do not add /lazy-intel-setup to public navigation.
 
 
+````
 ````
 
 ---
