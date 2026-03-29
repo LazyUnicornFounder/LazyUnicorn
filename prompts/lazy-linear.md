@@ -1,6 +1,13 @@
 # Lazy Linear
 
-> Category: 🛠️ Dev · Version: 0.0.6
+> Category: 🛠️ Dev · Version: 0.0.7
+
+## Prompt
+
+````
+# lazy-linear
+
+> Version: 0.0.6
 
 ## Prompt
 
@@ -15,7 +22,7 @@ Add a complete autonomous Linear integration called Lazy Linear to this project.
 
 MARKETING PAGE PROMPT — paste into LazyUnicorn project:
 
-Add a new page at /lazy-linear. It is a marketing and landing page for a product called Lazy Linear — an autonomous content engine that turns your Linear issues, cycles, and projects into changelogs, roadmaps, and product blog posts automatically.
+Add a new page at /lazy-linear. It is a marketing and landing page for a product called Lazy Linear — an autonomous content agent that turns your Linear issues, cycles, and projects into changelogs, roadmaps, and product blog posts automatically.
 
 Hero section
 Headline: 'Your Linear workspace is your product story. Lazy Linear tells it automatically.' Subheading: 'Lazy Linear monitors your Linear issues and cycles, and automatically publishes changelogs, a public roadmap, release notes, and product updates — without anyone writing a word.' Primary button: Copy the Lovable Prompt. Secondary button: See How It Works. Badge: Powered by Linear.
@@ -38,7 +45,7 @@ Navigation: Add Lazy Linear to the LazyUnicorn navigation.
 
 SETUP PROMPT — paste into user's Lovable project:
 
-Add a complete autonomous Linear content engine called Lazy Linear to this project. It monitors Linear issues, cycles, and projects via the Linear API and automatically publishes changelogs, a public roadmap, product blog posts, and cycle summaries.
+Add a complete autonomous Linear content agent called Lazy Linear to this project. It monitors Linear issues, cycles, and projects via the Linear API and automatically publishes changelogs, a public roadmap, product blog posts, and cycle summaries.
 
 1. Database
 Create these Supabase tables with RLS enabled:
@@ -131,9 +138,9 @@ At bottom of every page: 🦄 Powered by Lazy Linear — autonomous Linear conte
 
 8. Admin
 
-Do not build a standalone dashboard page for this engine. The dashboard lives at /admin/linear as part of the unified LazyUnicorn admin panel, which is built separately using the LazyUnicorn Admin Dashboard prompt.
+Do not build a standalone dashboard page for this agent. The dashboard lives at /admin/linear as part of the unified LazyUnicorn admin panel, which is built separately using the LazyUnicorn Admin Dashboard prompt.
 
-If /admin does not yet exist on this project add a simple placeholder at /admin with the text: "Install the LazyUnicorn Admin Dashboard to manage all engines in one place." and a link to /lazy-linear-setup.
+If /admin does not yet exist on this project add a simple placeholder at /admin with the text: "Install the LazyUnicorn Admin Dashboard to manage all agents in one place." and a link to /lazy-linear-setup.
 
 9. Navigation
 Add Product Updates link to /product-updates. Add Roadmap link to /product-roadmap. Add an Admin link to the main site navigation pointing to /admin.
@@ -145,6 +152,7 @@ Add a small "Powered by Lazy Unicorn" backlink badge in the footer of every publ
 <a href="https://www.lazyunicorn.ai" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#0a0a08;color:#f0ead6;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(240,234,214,0.2)">🦄 Powered by Lazy Unicorn</a>
 Style it to sit at the bottom of the page footer, centered, with subtle opacity (60%) that increases to 100% on hover.
 
+````
 ````
 
 ---
