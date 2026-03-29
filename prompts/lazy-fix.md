@@ -5,19 +5,11 @@
 ## Prompt
 
 ````
-# lazy-fix
-
-> Version: 0.0.1
-
-## Prompt
-
-````
-[Lazy Fix Prompt — v0.0.1 — LazyUnicorn.ai]
+[Lazy Fix Prompt — v0.0.2 — LazyUnicorn.ai]
 
 Add an autonomous prompt improvement agent called Lazy Fix to this project. Every Sunday night it reads your agent performance data, identifies the two weakest-performing Lazy agents, makes targeted improvements to their prompts, and opens GitHub PRs for you to review Monday morning — all automatically.
 
 Required secrets:
-- ANTHROPIC_API_KEY — for Claude improvement calls
 - GITHUB_TOKEN — personal access token with repo scope from github.com/settings/tokens
 - GITHUB_REPO — your prompts repo in format username/reponame
 - SLACK_WEBHOOK_URL — optional, from Lazy Alert settings
@@ -42,7 +34,7 @@ fix_errors: id (uuid, primary key, default gen_random_uuid()), function_name (te
 
 Create a page at /lazy-fix-setup.
 
-Welcome message: 'Lazy Fix reads your agent performance data every Sunday night and quietly improves the weakest prompts. You wake up Monday to GitHub PRs ready to review — targeted, tested improvements written by Claude, following your SPEC.md rules.'
+Welcome message: 'Lazy Fix reads your agent performance data every Sunday night and quietly improves the weakest prompts. You wake up Monday to GitHub PRs ready to review — targeted, tested improvements written by Lovable AI, following your SPEC.md rules.'
 
 Prerequisites note: You need GITHUB_TOKEN as a Supabase secret with repo scope (github.com/settings/tokens) and GITHUB_REPO set to your prompts repository in format username/reponame. Lazy Fix reads your Supabase data to identify performance issues — no additional API keys needed.
 

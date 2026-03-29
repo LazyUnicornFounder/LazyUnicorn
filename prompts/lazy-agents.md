@@ -5,21 +5,13 @@
 ## Prompt
 
 ````
-# lazy-agents
-
-> Version: 0.0.2
-
-## Prompt
-
-````
 # lazy-agents — vv0.0.1
 
-[Lazy Agents Prompt — v0.0.1 — LazyUnicorn.ai]
+[Lazy Agents Prompt — v0.0.3 — LazyUnicorn.ai]
 
 Add four autonomous agent edge functions to this project. These agents monitor, fix, improve, and extend the LazyUnicorn prompt stack automatically — running on schedules inside Supabase without any manual input after setup.
 
 Required secrets (already set from other agents):
-- ANTHROPIC_API_KEY — for all agent AI calls
 - GITHUB_TOKEN — for opening PRs and issues (repo scope)
 - GITHUB_REPO — your repo name e.g. yourusername/lazyunicorn
 - SLACK_WEBHOOK_URL — optional, from Lazy Alert settings

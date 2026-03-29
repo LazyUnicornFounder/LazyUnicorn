@@ -5,21 +5,13 @@
 ## Prompt
 
 ````
-# lazy-build
-
-> Version: 0.0.2
-
-## Prompt
-
-````
 # lazy-build — vv0.0.1
 
-[Lazy Build Prompt — v0.0.1 — LazyUnicorn.ai]
+[Lazy Build Prompt — v0.0.3 — LazyUnicorn.ai]
 
 Add an autonomous agent writer agent called Lazy Build to this project. Give it a name, integration, tagline, and one-paragraph brief — it reads three reference prompt files and your CLAUDE.md rules, writes a complete new Lazy agent prompt following your exact SPEC pattern, and opens a draft GitHub PR for your review. Your prompt stack grows without you writing a word.
 
 Required secrets:
-- ANTHROPIC_API_KEY — for Claude writing calls
 - GITHUB_TOKEN — personal access token with repo scope from github.com/settings/tokens
 - GITHUB_REPO — your prompts repo in format username/reponame
 
@@ -129,7 +121,7 @@ New agent form at the top of the page — this is the primary UI. Fields:
 - Tagline (text, required, max 60 chars) — one punchy line e.g. Your domain. Your site. One tab.
 - Category (select: Lazy Content / Lazy Commerce / Lazy Media / Lazy Dev / Lazy Channels / Lazy Shield / Lazy Agents / New category)
 - Description (textarea, required, min 50 chars) — describe what the agent does, what problem it solves, what it produces, and how it connects to the rest of the stack
-Submit button: Build Agent — calls build-agent and shows a loading state: Claude is writing your prompt...
+Submit button: Build Agent — calls build-agent and shows a loading state: Lovable AI is writing your prompt...
 
 On success: show a success card with the PR URL, a green badge, and a message: 'Your prompt is ready. Review the PR on GitHub — Claude has been asked to audit it.'
 

@@ -5,19 +5,11 @@
 ## Prompt
 
 ````
-# lazy-watch
+[Lazy Watch Prompt — v0.0.2 — LazyUnicorn.ai]
 
-> Version: 0.0.1
-
-## Prompt
-
-````
-[Lazy Watch Prompt — v0.0.1 — LazyUnicorn.ai]
-
-Add an autonomous error monitoring agent called Lazy Watch to this project. It reads every Lazy agent error table in your Supabase project every hour, diagnoses issues using Claude, opens GitHub issues with full diagnosis and fix recommendations, and pings Slack — all automatically with no manual input required after setup.
+Add an autonomous error monitoring agent called Lazy Watch to this project. It reads every Lazy agent error table in your Supabase project every hour, diagnoses issues using Lovable AI, opens GitHub issues with full diagnosis and fix recommendations, and pings Slack — all automatically with no manual input required after setup.
 
 Required secrets:
-- ANTHROPIC_API_KEY — for Claude diagnosis calls
 - GITHUB_TOKEN — personal access token with repo scope from github.com/settings/tokens
 - GITHUB_REPO — your prompts repo in format username/reponame
 - SLACK_WEBHOOK_URL — optional, from Lazy Alert settings
@@ -42,7 +34,7 @@ watch_errors: id (uuid, primary key, default gen_random_uuid()), function_name (
 
 Create a page at /lazy-watch-setup.
 
-Welcome message: 'Lazy Watch monitors every Lazy agent in your stack every hour. When errors spike it calls Claude to diagnose the root cause, opens a GitHub issue with a fix recommendation, and tags @claude to investigate — automatically, while you sleep.'
+Welcome message: 'Lazy Watch monitors every Lazy agent in your stack every hour. When errors spike it uses Lovable AI to diagnose the root cause, opens a GitHub issue with a fix recommendation, and tags @claude to investigate — automatically, while you sleep.'
 
 Prerequisites note: You need a GitHub personal access token with repo scope. Create one at github.com/settings/tokens. Set it as GITHUB_TOKEN in your Supabase secrets. Also set GITHUB_REPO as a secret in the format username/reponame pointing to your LazyUnicorn prompts repository.
 
