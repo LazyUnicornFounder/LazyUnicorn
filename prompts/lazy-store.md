@@ -1,6 +1,13 @@
 # Lazy Store
 
-> Category: 🛒 Commerce · Version: 0.0.5
+> Category: 🛒 Commerce · Version: 0.0.6
+
+## Prompt
+
+````
+# lazy-store
+
+> Version: 0.0.5
 
 ## Prompt
 
@@ -9,7 +16,7 @@
 
 [Lazy Store Prompt — v0.0.4 — LazyUnicorn.ai]
 
-Add an autonomous e-commerce engine called Lazy Store to this project. It automatically discovers products, writes listings, monitors pricing, runs promotions, optimises conversion, and publishes SEO content — with no manual input required after setup. Payments are handled by Stripe checkout. All management pages are admin-only.
+Add an autonomous e-commerce agent called Lazy Store to this project. It automatically discovers products, writes listings, monitors pricing, runs promotions, optimises conversion, and publishes SEO content — with no manual input required after setup. Payments are handled by Stripe checkout. All management pages are admin-only.
 
 ---
 
@@ -215,9 +222,9 @@ Show payment success message and link to /store.
 
 ## 6. Admin
 
-Do not build a standalone dashboard page for this engine. The dashboard lives at /admin/store as part of the unified LazyUnicorn admin panel, which is built separately using the LazyUnicorn Admin Dashboard prompt. This engine only needs its setup page, database tables, edge functions, and public pages.
+Do not build a standalone dashboard page for this agent. The dashboard lives at /admin/store as part of the unified LazyUnicorn admin panel, which is built separately using the LazyUnicorn Admin Dashboard prompt. This agent only needs its setup page, database tables, edge functions, and public pages.
 
-If /admin does not yet exist on this project add a simple placeholder at /admin with the text: "Install the LazyUnicorn Admin Dashboard to manage all engines in one place." and a link to /lazy-store-setup.
+If /admin does not yet exist on this project add a simple placeholder at /admin with the text: "Install the LazyUnicorn Admin Dashboard to manage all agents in one place." and a link to /lazy-store-setup.
 
 ## 7. Navigation
 
@@ -231,6 +238,7 @@ Add a small "Powered by Lazy Unicorn" backlink badge in the footer of every publ
 <a href="https://www.lazyunicorn.ai" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#0a0a08;color:#f0ead6;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(240,234,214,0.2)">🦄 Powered by Lazy Unicorn</a>
 Style it to sit at the bottom of the page footer, centered, with subtle opacity (60%) that increases to 100% on hover.
 
+````
 ````
 
 ---
