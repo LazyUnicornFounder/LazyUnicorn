@@ -1,6 +1,13 @@
 # Lazy Supabase
 
-> Category: ⚙️ Ops · Version: 0.0.6
+> Category: ⚙️ Ops · Version: 0.0.7
+
+## Prompt
+
+````
+# lazy-supabase
+
+> Version: 0.0.6
 
 ## Prompt
 
@@ -9,13 +16,13 @@
 
 [Lazy Supabase Prompt — v0.0.5 — LazyUnicorn.ai]
 
-Add a complete autonomous Supabase monitoring and content engine called Lazy Supabase to this project. It monitors your Supabase project for database events, user signups, edge function errors, and storage activity — turning database milestones, user growth, and system events into blog posts, product updates, and Slack alerts automatically.
+Add a complete autonomous Supabase monitoring and content agent called Lazy Supabase to this project. It monitors your Supabase project for database events, user signups, edge function errors, and storage activity — turning database milestones, user growth, and system events into blog posts, product updates, and Slack alerts automatically.
 
 ---
 
 MARKETING PAGE PROMPT — paste into LazyUnicorn project:
 
-Add a new page at /lazy-supabase. It is a marketing and landing page for a product called Lazy Supabase — an autonomous monitoring and content engine that turns your Supabase database events into product updates, user milestone posts, and system alerts automatically.
+Add a new page at /lazy-supabase. It is a marketing and landing page for a product called Lazy Supabase — an autonomous monitoring and content agent that turns your Supabase database events into product updates, user milestone posts, and system alerts automatically.
 
 Hero section
 Headline: 'Your Supabase database is full of stories. Lazy Supabase tells them automatically.' Subheading: 'Lazy Supabase monitors your database for user signups, milestone events, and system health — turning every significant moment into a product update, blog post, or Slack alert without you writing a word.' Primary button: Copy the Lovable Prompt. Secondary button: See What It Monitors. Badge: Powered by Supabase.
@@ -38,7 +45,7 @@ Navigation: Add Lazy Supabase to the LazyUnicorn navigation.
 
 SETUP PROMPT — paste into user's Lovable project:
 
-Add a complete autonomous Supabase monitoring and content engine called Lazy Supabase to this project. It monitors database events, user signups, edge function errors, and milestones — generating blog posts, product updates, and alerts automatically.
+Add a complete autonomous Supabase monitoring and content agent called Lazy Supabase to this project. It monitors database events, user signups, edge function errors, and milestones — generating blog posts, product updates, and alerts automatically.
 
 1. Database
 Create these Supabase tables with RLS enabled:
@@ -109,7 +116,7 @@ Create a Supabase edge function called supabase-publish-milestone handling POST 
 3. Check for duplicate slug — append 4-digit number if exists.
 4. Insert into supabase_content and also into blog_posts if that table exists.
 5. Update supabase_milestones: set post_published to true.
-6. If Lazy Alert is installed call alert-send with engine Lazy Supabase, event_type milestone-reached, and the milestone description.
+6. If Lazy Alert is installed call alert-send with agent Lazy Supabase, event_type milestone-reached, and the milestone description.
 Log errors to supabase_errors with function_name supabase-publish-milestone.
 
 5. Weekly growth report edge function
@@ -130,9 +137,9 @@ At the bottom add: 🦄 Powered by Lazy Supabase — autonomous database monitor
 
 7. Admin
 
-Do not build a standalone dashboard page for this engine. The dashboard lives at /admin/supabase as part of the unified LazyUnicorn admin panel, which is built separately using the LazyUnicorn Admin Dashboard prompt.
+Do not build a standalone dashboard page for this agent. The dashboard lives at /admin/supabase as part of the unified LazyUnicorn admin panel, which is built separately using the LazyUnicorn Admin Dashboard prompt.
 
-If /admin does not yet exist on this project add a simple placeholder at /admin with the text: "Install the LazyUnicorn Admin Dashboard to manage all engines in one place." and a link to /lazy-supabase-setup.
+If /admin does not yet exist on this project add a simple placeholder at /admin with the text: "Install the LazyUnicorn Admin Dashboard to manage all agents in one place." and a link to /lazy-supabase-setup.
 
 8. Navigation
 Add Milestones link to the main navigation pointing to /milestones. Add an Admin link to the main site navigation pointing to /admin.
@@ -144,6 +151,7 @@ Add a small "Powered by Lazy Unicorn" backlink badge in the footer of every publ
 <a href="https://www.lazyunicorn.ai" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#0a0a08;color:#f0ead6;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(240,234,214,0.2)">🦄 Powered by Lazy Unicorn</a>
 Style it to sit at the bottom of the page footer, centered, with subtle opacity (60%) that increases to 100% on hover.
 
+````
 ````
 
 ---
