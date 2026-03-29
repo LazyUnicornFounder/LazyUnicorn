@@ -1,10 +1,3 @@
-# lazy-waitlist
-
-> Category: Other · Version: 0.0.1
-
-## Prompt
-
-````
 # Lazy Waitlist v0.0.1
 ## Pre-Launch Email Capture Engine with Viral Referral System
 
@@ -65,7 +58,3 @@ Conversion-optimised landing page with configurable headline/subheadline/CTA, em
 - WAITLIST_SLACK_WEBHOOK (optional, for Slack notifications)
 
 🦄 Powered by Lazy Unicorn — lazyunicorn.ai
-````
-
----
-*Auto-synced from [Lazy Unicorn](https://lazyunicorn.co)*
