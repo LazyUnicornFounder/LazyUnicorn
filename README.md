@@ -69,7 +69,6 @@ Most engines work immediately with no setup. Some require external API keys or c
 | Lazy Security | ⚙️ Ops | [View prompt](prompts/lazy-security.md) |
 | Lazy Watch | ⚙️ Ops | [View prompt](prompts/lazy-watch.md) |
 | Lazy Intel | ⚙️ Ops | [View prompt](prompts/lazy-intel.md) |
-| Lazy Agents | ⚙️ Ops | [View prompt](prompts/lazy-agents.md) |
 
 ## 📄 License
 
