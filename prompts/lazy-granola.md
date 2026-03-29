@@ -1,15 +1,22 @@
 # Lazy Granola
 
-> Category: 🛠️ Dev · Version: 0.0.2
+> Category: 🛠️ Dev · Version: 0.0.3
+
+## Prompt
+
+````
+# lazy-granola
+
+> Version: 0.0.2
 
 ## Prompt
 
 ````
 [Lazy Granola Prompt — v0.0.1 — LazyUnicorn.ai]
 
-Add an autonomous meeting-to-content engine called Lazy Granola to this project. It connects to Granola via the Granola MCP server, detects new meetings, and automatically turns them into blog posts, product updates, Linear issues, customer intelligence, and Slack summaries — without you writing anything after the meeting ends.
+Add an autonomous meeting-to-content agent called Lazy Granola to this project. It connects to Granola via the Granola MCP server, detects new meetings, and automatically turns them into blog posts, product updates, Linear issues, customer intelligence, and Slack summaries — without you writing anything after the meeting ends.
 
-Note: Lazy Granola uses the Granola MCP server as a personal connector in Lovable. You must connect Granola in Settings → Connectors → Personal connectors before this engine can fetch meeting data. The engine reads from Granola — it does not write back to it.
+Note: Lazy Granola uses the Granola MCP server as a personal connector in Lovable. You must connect Granola in Settings → Connectors → Personal connectors before this agent can fetch meeting data. The agent reads from Granola — it does not write back to it.
 
 ---
 
@@ -45,7 +52,7 @@ Form fields:
 - Create Linear issues from action items (toggle, default on) — requires Lazy Linear to be installed. Action items from meetings become Linear issues automatically.
 - Send Slack summary after each meeting (toggle, default on) — requires a Slack webhook URL below.
 - Publish product updates from sprint/planning meetings (toggle, default on) — planning and product review meetings become product update posts.
-- Feed customer intelligence to content engines (toggle, default on) — customer calls feed insights into Lazy Blogger and Lazy Perplexity as research context.
+- Feed customer intelligence to content agents (toggle, default on) — customer calls feed insights into Lazy Blogger and Lazy Perplexity as research context.
 - Weekly digest (toggle, default on) — publishes a summary of the week's meetings every Monday.
 - Weekly digest day (select: Monday / Friday)
 - Slack webhook URL for meeting summaries (text, optional)
@@ -174,7 +181,7 @@ If blog_posts table exists: meeting-generated posts appear automatically on /blo
 
 If no blog_posts table exists: create a public page at /meetings showing all granola_outputs where output_type is blog-post or weekly-digest and published is true. Each card shows title, meeting type tag, excerpt, date. Links to /meetings/[slug].
 
-Customer intelligence is never published publicly. granola_intelligence is internal only and feeds the content engines as research context.
+Customer intelligence is never published publicly. granola_intelligence is internal only and feeds the content agents as research context.
 
 ---
 
@@ -201,6 +208,7 @@ Add an Admin link to the main site navigation pointing to /admin.
 If the /meetings page was created add a Meetings link to the main navigation.
 Do not add /lazy-granola-setup to public navigation.
 
+````
 ````
 
 ---
