@@ -115,7 +115,6 @@ Add an Admin link to the main site navigation pointing to /admin.
 Do not add /lazy-fix-setup to public navigation.
 
 ````
-````
 
 ---
 *Auto-synced from [Lazy Unicorn](https://lazyunicorn.co)*
