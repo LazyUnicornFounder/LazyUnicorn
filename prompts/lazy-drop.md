@@ -1,6 +1,13 @@
 # Lazy Drop
 
-> Category: 🛒 Commerce · Version: 0.0.3
+> Category: 🛒 Commerce · Version: 0.0.4
+
+## Prompt
+
+````
+# lazy-drop
+
+> Version: 0.0.3
 
 ## Prompt
 
@@ -9,7 +16,7 @@
 
 [Lazy Drop Prompt — v0.0.1 — LazyUnicorn.ai]
 
-Add a complete autonomous dropshipping engine called Lazy Drop to this project. It connects your Lovable site to AutoDS — giving you access to 800M+ products from 25+ global suppliers, automatic price and stock monitoring, one-click product import, and fully automated order fulfilment. Your store discovers trending products, writes their listings, monitors prices, and fulfils orders automatically. You do nothing after setup.
+Add a complete autonomous dropshipping agent called Lazy Drop to this project. It connects your Lovable site to AutoDS — giving you access to 800M+ products from 25+ global suppliers, automatic price and stock monitoring, one-click product import, and fully automated order fulfilment. Your store discovers trending products, writes their listings, monitors prices, and fulfils orders automatically. You do nothing after setup.
 
 Note: Store all AutoDS credentials as Supabase secrets. Never store in the database.
 Required secrets: AUTODS_API_KEY, AUTODS_STORE_ID
@@ -219,6 +226,7 @@ Add an Admin link to the main site navigation pointing to /admin.
 Do not add /lazy-drop-setup to public navigation.
 
 
+````
 ````
 
 ---
