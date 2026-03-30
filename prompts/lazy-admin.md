@@ -1,6 +1,6 @@
-[LazyUnicorn Admin Dashboard Prompt — v0.0.11 — LazyUnicorn.ai]
+[LazyUnicorn Admin Dashboard Prompt — v0.0.12 — LazyUnicorn.ai]
 
-Rebuild the entire admin dashboard at /admin from scratch. Replace everything currently there. This is a unified control panel for all LazyUnicorn agents. It detects which agents are installed by checking which database tables exist and shows only those panels.
+Rebuild the entire admin dashboard at /admin from scratch. Replace everything currently there. This is a unified control panel for all LazyUnicorn agents. It detects which agents are installed by checking which Supabase tables exist and renders only those.
 
 IMPORTANT: Do not change anything outside /admin.
 
@@ -8,56 +8,54 @@ IMPORTANT: Do not change anything outside /admin.
 
 ## Design
 
-Three-column layout like a modern docs site (Mintlify-style): fixed left nav sidebar + wide scrollable main content + fixed right sidebar. Dark background #0a0a08. Text #f0ead6 cream. Gold accent #c9a84c. Borders rgba(240,234,214,0.08) — subtle warm white. Font: Space Grotesk. Status dots are the only use of green/amber/red — everything else stays in the LazyUnicorn palette.
+Three-column layout: fixed left nav sidebar + wide scrollable main content + fixed right sidebar. Dark background #0a0a08. Text #f0ead6 cream. Gold accent #c9a84c. Borders rgba(240,234,214,0.08). Font: Space Grotesk. Status dots are the only use of green/amber/red.
 
-Font sizes: top bar logo 15px bold, sidebar section headers 11px bold uppercase letter-spaced, sidebar agent items 14px, main content page title 28px bold, section labels 11px uppercase letter-spaced, table text 13px, right sidebar labels 10px uppercase letter-spaced, right sidebar values 18px bold.
+Font sizes: top bar 15px bold, sidebar section headers 11px bold uppercase letter-spaced, sidebar items 14px, page title 28px bold, section labels 11px uppercase letter-spaced, table text 13px, right sidebar labels 10px uppercase, right sidebar values 18px bold.
 
 ---
 
 ## Top bar
 
-Fixed, full-width, height ~52px. Background #0a0a08, bottom border rgba(240,234,214,0.08).
+Fixed, full-width, height 52px. Background #0a0a08, border-bottom rgba(240,234,214,0.08).
 
-Left: 🦄 LAZY UNICORN in 15px bold cream.
+Left: 🦄 LAZY UNICORN — 15px bold cream.
 
-Center: Search input — placeholder "Search agents..." with a ⌘K hint on the right. 400px wide, background rgba(240,234,214,0.05), border rgba(240,234,214,0.1), border-radius 6px, 14px text.
+Center: Search input — placeholder "Search agents..." with ⌘K hint. 400px wide, background rgba(240,234,214,0.05), border rgba(240,234,214,0.1), border-radius 6px.
 
-Right: PAUSE ALL text button (12px, muted cream, on click sets is_running false on all agent settings tables and toggles to RESUME ALL) · ⚙ icon linking to /admin/settings · gold pill "LAZY CLOUD ↗" linking to https://lazyunicorn.ai/cloud.
+Right: PAUSE ALL button — sets is_running = false on all settings tables, toggles to RESUME ALL. ⚙ icon → /admin/settings. Gold pill "LAZY CLOUD ↗" → https://lazyunicorn.ai/cloud.
 
 ---
 
-## Three-column layout
+## Three-column shell
 
-All /admin pages use this shell:
+Used on all /admin pages:
 
-**Left sidebar** — 240px fixed, full height, border-right rgba(240,234,214,0.08), scrollable.
-
-**Main content** — flex:1, padding 32px 40px, scrollable.
-
-**Right sidebar** — 220px fixed, full height, border-left rgba(240,234,214,0.08), padding 24px 20px.
+- Left sidebar: 240px fixed, border-right rgba(240,234,214,0.08), scrollable
+- Main content: flex:1, padding 32px 40px, scrollable
+- Right sidebar: 220px fixed, border-left rgba(240,234,214,0.08), padding 24px 20px
 
 ---
 
 ## Left sidebar
 
-Top: 🦄 Lazy in 15px bold, below it "[n] of 36 running" in 11px muted. Padding 20px 16px, border-bottom rgba(240,234,214,0.06).
+Top section: 🦄 Lazy 15px bold + "[n] of 36 running" 11px muted. Count = number of settings tables where is_running = true. Padding 20px 16px, border-bottom rgba(240,234,214,0.06).
 
-Below that: grouped navigation. Each group has a section header (11px bold uppercase letter-spaced, color rgba(240,234,214,0.35), padding 16px 16px 6px). Below the header: a list of agent items.
+Navigation groups:
 
-Each agent item: 36px tall, padding 0 16px, display flex, align-items center, gap 10px, cursor pointer, border-radius 4px (with 4px horizontal margin), font-size 14px, color rgba(240,234,214,0.7). On hover: background rgba(240,234,214,0.04). When active/selected: background rgba(201,168,76,0.1), color #f0ead6, font-weight 600.
+Each group header: 11px bold uppercase letter-spaced, rgba(240,234,214,0.35), padding 16px 16px 6px.
 
-Left of each agent name: a 7px status dot (circle):
-- Running: #4ade80
-- Error: #f87171
-- Needs setup: #c9a84c
-- Not set up / not installed: rgba(240,234,214,0.2)
+Each agent item: 36px tall, padding 0 16px, 14px, gap 10px, border-radius 4px, margin 0 4px. Hover: rgba(240,234,214,0.04). Active: rgba(201,168,76,0.1), #f0ead6, font-weight 600.
 
-Clicking an agent item navigates to /admin/[slug]. Clicking a section header filters the main content table to that category.
+Status dot (7px circle) left of name:
+- is_running true + no errors in last hour → #4ade80
+- errors in last hour in agent's _errors table → #f87171
+- settings table exists, setup_complete false → #c9a84c
+- settings table does not exist → rgba(240,234,214,0.2)
 
-An "All Agents" item sits above the first section group (no section header above it). It is active by default and shows all agents in the main table.
+"All Agents" item (no group header above it) — active by default.
 
-Groups and their agents:
-- (no header) → All Agents
+Groups:
+- (none) → All Agents
 - CONTENT → Blogger, SEO, GEO, Crawl, Perplexity, Repurpose, Trend
 - COMMERCE → Store, Drop, Print, Pay, Mail, SMS, Churn
 - MEDIA → Voice, Stream, YouTube
@@ -65,259 +63,559 @@ Groups and their agents:
 - MONITOR → Alert, Telegram, Supabase, Security, Watch
 - INTELLIGENCE → Fix, Build, Intel, Agents
 
-Platform tools (Run, Admin, Cloud, Waitlist) are not shown in the sidebar.
+Clicking a group header filters the main table to that category. Clicking an agent item navigates to /admin/[slug].
 
 ---
 
 ## Overview (/admin)
 
-Main content area shows the agent table. Right sidebar shows quick stats.
+### Right sidebar — Quick Stats
+
+Title: "QUICK STATS". Each stat: 10px muted label, 18px bold value, 20px gap.
+
+- **Posts Today** — `SELECT COUNT(*) FROM blog_posts WHERE DATE(published_at) = CURRENT_DATE` + same for seo_posts + geo_posts. Only count from tables that exist.
+- **Agents Active** — count of settings tables where is_running = true, shown as "[n]/36"
+- **Revenue Today** — `SELECT COALESCE(SUM(amount_cents),0)/100 FROM pay_transactions WHERE DATE(created_at) = CURRENT_DATE AND status = 'succeeded'`. Gold text. Only show if pay_settings exists.
+- **Errors Today** — sum of COUNT(*) from every _errors table where DATE(created_at) = CURRENT_DATE. Red if > 0.
+- **Security Score** — `SELECT score FROM security_scans ORDER BY created_at DESC LIMIT 1`. Color: #4ade80 if >= 80, #c9a84c if 60–79, #f87171 if < 60. Only show if security_settings exists.
 
 ### Agent table
 
-Header row: 7 columns — AGENT · STATUS · CATEGORY · ACTIVITY · LAST RUN · NEXT RUN · VERSION. 11px bold uppercase letter-spaced, color rgba(240,234,214,0.3). Border-bottom rgba(240,234,214,0.1). Padding 10px 0.
+7-column grid. Header row: 11px bold uppercase letter-spaced, rgba(240,234,214,0.3), border-bottom rgba(240,234,214,0.1).
 
-Column widths are proportional using flex fractions — fill the full available width with no empty space: Agent 2fr, Status 1.2fr, Category 1fr, Activity 1.8fr, Last Run 1fr, Next Run 1fr, Version 1.4fr.
+Column widths (fr): Agent 2, Status 1.2, Category 1, Activity 1.8, Last Run 1, Next Run 1, Version 1.4.
 
-**AGENT column** — agent name in 14px bold cream. Inline action button immediately after the name (same row, tight). Button style depends on row state:
-- Error row: gold "FIX →" button (red fill, white text, small pill)
-- Running row: ghost "MANAGE" button (subtle border, muted text)
-- Needs setup row: gold fill "SET UP" button (#c9a84c background, dark text)
-- Not set up row: ghost "SET UP" button (gold fill)
+Row sections in order:
+1. Error rows (errors in last hour) — background rgba(248,113,113,0.03)
+2. Running rows (setup_complete true, is_running true, no errors last hour)
+3. "NOT SET UP YET" divider row (10px muted caps) — then all not-set-up rows at opacity 0.45
 
-**STATUS column** — colored badge with dot:
-- Error: "● ERROR" red badge (rgba(248,113,113,0.15) bg, #f87171 text)
-- Running: "● RUNNING" green badge (rgba(74,222,128,0.1) bg, #4ade80 text)
-- Needs setup: "● NEEDS SETUP" amber badge (rgba(201,168,76,0.15) bg, #c9a84c text)
-- Not set up: "NOT SET UP" muted badge (rgba(240,234,214,0.05) bg, rgba(240,234,214,0.25) text)
+**AGENT column** — 14px bold cream + inline button:
+- Error: red fill "FIX →" pill
+- Running: ghost "MANAGE" pill
+- Needs setup (table exists, setup_complete false): gold fill "SET UP"
+- Not installed: ghost "SET UP"
 
-**CATEGORY column** — category name in 12px muted text.
+**STATUS column** — badge:
+- Error: "● ERROR" rgba(248,113,113,0.15) bg, #f87171 text
+- Running: "● RUNNING" rgba(74,222,128,0.1) bg, #4ade80 text
+- Needs setup: "● NEEDS SETUP" rgba(201,168,76,0.15) bg, #c9a84c text
+- Not set up: "NOT SET UP" rgba(240,234,214,0.05) bg, rgba(240,234,214,0.25) text
 
-**ACTIVITY column** — for running agents: most meaningful recent activity (e.g. "4 posts today", "12 keywords this week", "0 issues this week"). For error agents: the error message in red (e.g. "Missing AIKIDO_API_KEY"). For not set up agents: one-line description of what the agent does.
+**CATEGORY column** — 12px muted text.
 
-**LAST RUN column** — relative time (e.g. "12 mins ago", "1 hr ago"). "Never" if has never run.
+**ACTIVITY column** — exact query per agent:
+- Blogger: `COUNT(*) FROM blog_posts WHERE DATE(published_at) = CURRENT_DATE` → "[n] posts today"
+- SEO: `COUNT(*) FROM seo_keywords WHERE has_content = false` → "[n] keywords queued"
+- GEO: `COUNT(*) FROM geo_queries WHERE brand_cited = true` / `COUNT(*) FROM geo_queries WHERE has_content = true` → "[n]% citation rate"
+- Crawl: `COUNT(*) FROM crawl_intel WHERE actioned = false AND created_at >= NOW() - INTERVAL '7 days'` → "[n] intel items"
+- Perplexity: `COUNT(*) FROM perplexity_citations WHERE brand_mentioned = true` / total → "[n]% cited"
+- Pay: `COALESCE(SUM(amount_cents),0)/100 FROM pay_transactions WHERE DATE(created_at) = CURRENT_DATE AND status = 'succeeded'` → "$[n] today"
+- Mail: `COUNT(*) FROM mail_subscribers WHERE status = 'confirmed'` → "[n] subscribers"
+- SMS: `COUNT(*) FROM sms_contacts WHERE opted_out = false` → "[n] contacts"
+- Voice: `COUNT(*) FROM voice_episodes WHERE status = 'published'` → "[n] episodes"
+- Security: `score FROM security_scans ORDER BY created_at DESC LIMIT 1` → "Score: [n]" (coloured)
+- Watch: `COUNT(*) FROM watch_issues WHERE resolved = false` → "[n] issues open"
+- Alert: `COUNT(*) FROM alert_log WHERE DATE(sent_at) = CURRENT_DATE` → "[n] alerts today"
+- Fix: `COUNT(*) FROM fix_improvements WHERE DATE(created_at) >= DATE_TRUNC('month', CURRENT_DATE)` → "[n] PRs this month"
+- Intel: most recent `top_performing_topic FROM intel_briefs ORDER BY created_at DESC LIMIT 1` → topic name, truncated to 30 chars
+- Run: `action FROM run_activity ORDER BY created_at DESC LIMIT 1` → last action, truncated
+- Repurpose, Trend, Churn, Store, Drop, Print, Stream, YouTube, Code, GitLab, Linear, Contentful, Design, Auth, Granola, Telegram, Supabase, Agents, Build, Waitlist: one-line description of what the agent does (static text from the list below)
 
-**NEXT RUN column** — relative time (e.g. "in 3 mins", "in 59 mins"). "—" if not scheduled.
+Static descriptions for not-set-up agents:
+- Repurpose: "Repurpose posts into LinkedIn, tweets, email"
+- Trend: "Seed trending topics into SEO and GEO"
+- Churn: "Detect and prevent user churn"
+- Store: "List and promote Shopify products"
+- Drop: "Sync and publish AutoDS products"
+- Print: "Sync and publish Printful products"
+- Stream: "Process Twitch streams into content"
+- YouTube: "Sync YouTube videos and comments"
+- Code: "Turn GitHub commits into content"
+- GitLab: "Turn GitLab activity into content"
+- Linear: "Sync Linear issues to public roadmap"
+- Contentful: "Pull and publish Contentful entries"
+- Design: "Auto-upgrade design components"
+- Auth: "Manage users and roles"
+- Granola: "Sync and publish meeting notes"
+- Telegram: "Daily briefings via Telegram bot"
+- Supabase: "Monitor signups and milestones"
+- Agents: "Run all 4 intelligence agents"
+- Build: "Build new agent prompts automatically"
+- Waitlist: "Manage waitlist signups"
 
-**VERSION column** — version string (e.g. "v0.0.9"). If prompt_version is behind the latest from https://lazyunicorn.ai/api/versions, append a small gold UPDATE badge next to the version.
+**LAST RUN column** — exact source per agent (show relative time, "Never" if null):
+- Blogger: `MAX(published_at) FROM blog_posts`
+- SEO: `MAX(published_at) FROM seo_posts`
+- GEO: `MAX(published_at) FROM geo_posts`
+- Crawl: `MAX(crawled_at) FROM crawl_results`
+- Perplexity: `MAX(researched_at) FROM perplexity_research`
+- Pay: `MAX(created_at) FROM pay_transactions`
+- Mail: `MAX(sent_at) FROM mail_sent`
+- SMS: `MAX(sent_at) FROM sms_messages WHERE direction = 'outbound'`
+- Voice: `MAX(created_at) FROM voice_episodes`
+- Security: `MAX(completed_at) FROM security_scans`
+- Watch: `MAX(completed_at) FROM watch_runs`
+- Alert: `MAX(sent_at) FROM alert_log`
+- Fix: `MAX(completed_at) FROM fix_runs`
+- Intel: `MAX(completed_at) FROM intel_runs`
+- Run: `MAX(created_at) FROM run_activity`
+- All others: `MAX(created_at) FROM [agent]_errors` as a fallback, or "Never"
 
-### Row sections
+**NEXT RUN column** — calculate from known cron schedule (show relative time, "—" if not running):
+- Blogger: every 15 min — next :00, :15, :30, or :45
+- SEO publish: daily at 8am UTC (if posts_per_day=1), or 8am+6pm (if 2), or 6am/12pm/6pm/11pm (if 4)
+- SEO discover: next Monday 6am UTC
+- GEO publish: daily at 9am UTC (posts_per_day=1) up to 4x/day
+- GEO discover: next Monday or Thursday 7am UTC (whichever is sooner)
+- GEO test: next Sunday 9am UTC
+- Security scan: show `next_pentest_at` from security_settings
+- Security poll: every 10 min
+- Watch: next top of hour
+- Pay recover: next day 10am UTC; Pay optimise: next Sunday 11am UTC
+- Alert monitor: every 5 min; Alert briefing: next day at `daily_briefing_time` from alert_settings (default 8am UTC)
+- Mail broadcast: next `newsletter_day` 9am UTC; Mail optimise: next Sunday 11am UTC
+- SMS sequences: next top of hour; SMS optimise: next Sunday 12pm UTC
+- Voice: next :00 or :30
+- Crawl run: next :00 or :30; Crawl publish: next day 6am UTC
+- Perplexity research: next day 5am UTC; Perplexity test: next Sunday 10am UTC
+- Fix: next Sunday 11pm UTC
+- Intel: next Monday 6am UTC
+- Run orchestrator: next :00 or :30; Run health: next top of hour; Run weekly: next Monday 7am UTC
 
-Rows are grouped into three sections in this order:
-
-1. **Error rows** — agents with errors in the last hour. Row background: rgba(248,113,113,0.03). Shown without a section label.
-
-2. **Running rows** — agents where setup_complete is true and is_running is true and no recent errors. No section label.
-
-3. **NOT SET UP YET** divider — subtle separator row with the label "NOT SET UP YET" in 10px muted caps. Below it: all agents where the settings table does not exist or setup_complete is false. These rows are dimmed (opacity 0.45).
-
-Within the "not set up" section, agents where the settings table exists but setup_complete is false (needs setup) appear before agents where the settings table does not exist (not installed).
-
-Below the last not-set-up row, if more than 5 not-set-up agents exist: show "+ [n] more agents not set up" in muted text.
-
-### Right sidebar — overview
-
-Title: "QUICK STATS" in 10px bold uppercase letter-spaced, color rgba(240,234,214,0.3), margin-bottom 16px.
-
-Show the following stats as stacked rows. Each row: label in 10px muted uppercase, value in 18px bold cream below it, margin-bottom 20px.
-
-Only show a stat if its data source exists (settings table present). If no agents are installed at all, show "No agents set up yet" in muted text.
-
-- Posts Today — sum of blog_posts + seo_posts + geo_posts published today
-- Agents Active — "[n]/36" (count of settings tables where is_running is true)
-- Revenue Today — "$[amount]" in gold — only if pay_settings exists
-- Errors Today — count across all _errors tables today — show value in #f87171 if above zero
-- Security Score — from security_scans, coloured #4ade80 / #c9a84c / #f87171 — only if security_settings exists
-
-### Agent state mapping
-
-Each agent maps to a known settings table. Use this mapping to determine state:
-
-Blogger → blog_settings, SEO → seo_settings, GEO → geo_settings, Crawl → crawl_settings, Perplexity → perplexity_settings, Store → store_settings, Drop → drop_settings, Print → print_settings, Pay → pay_settings, SMS → sms_settings, Mail → mail_settings, Voice → voice_settings, Stream → stream_settings, YouTube → youtube_settings, Code → code_settings, GitLab → gitlab_settings, Linear → linear_settings, Contentful → contentful_settings, Design → design_settings, Auth → auth_settings, Granola → granola_settings, Alert → alert_settings, Telegram → telegram_settings, Supabase → supabase_settings, Security → security_settings, Watch → watch_settings, Fix → fix_settings, Build → build_settings, Intel → intel_settings, Repurpose → repurpose_settings, Trend → trend_settings, Churn → churn_settings, Agents → agent_settings, Run → run_settings, Waitlist → waitlist_settings
-
-### Required secrets per agent (for ACTIVITY column error text)
-
-- Security: AIKIDO_API_KEY and aikido_project_id in security_settings
-- Watch: GITHUB_TOKEN and GITHUB_REPO in watch_settings
-- Agents: GITHUB_TOKEN and GITHUB_REPO in agent_settings
-- Fix: GITHUB_TOKEN and GITHUB_REPO in fix_settings
-- Build: GITHUB_TOKEN and GITHUB_REPO in build_settings
-- YouTube: youtube_channel_id in youtube_settings
-- GitLab: gitlab_url and gitlab_token in gitlab_settings
-- Linear: linear_api_key in linear_settings
-- Contentful: contentful_space_id in contentful_settings
-- Pay: stripe_secret_key in pay_settings
-- SMS: twilio_account_sid in sms_settings
-- Voice: elevenlabs_api_key in voice_settings
-- Stream: twitch_channel in stream_settings
-- Mail: resend_api_key in mail_settings
-- Granola: granola_api_key in granola_settings
+**VERSION column** — `prompt_version` from each agent's settings table. If behind latest from https://lazyunicorn.ai/api/versions (fetched on mount, 5s timeout, fail silently), show gold "UPDATE" badge.
 
 ---
 
-## Agent detail page
+## Agent detail pages
 
-Reached by clicking an agent item in the left sidebar or MANAGE in the table. URL: /admin/[agent-slug]. The left sidebar remains visible with that agent highlighted as active.
+Reached by clicking sidebar item or MANAGE button. URL: /admin/[slug]. Left sidebar stays visible, that agent highlighted active. Back button → /admin.
 
-### Main content
+All detail pages use the three-column shell. Right sidebar shows ACTIONS for that agent.
 
-**Header** — agent name in 28px bold cream, status dot + status label in 13px muted text beside it, ON/OFF toggle on the far right (updates is_running in that agent's settings table).
+---
 
-**2×2 stat grid** — 4 most meaningful metrics for that agent. Large number (24px bold), muted 10px uppercase label below. Border rgba(240,234,214,0.08), border-radius 8px, padding 16px.
+### Blogger (/admin/blogger)
 
-**NEXT UP** section — 13px muted label "NEXT UP", below it the next scheduled action in 14px cream.
+**Header** — "Lazy Blogger", status dot + label, ON/OFF toggle updates `is_running` in blog_settings.
 
-**Recent activity** — last 3 rows (timestamp + description + optional external link), 13px text, separated by subtle dividers.
+**Stats grid (2×2)**
+- Posts Today: `COUNT(*) FROM blog_posts WHERE DATE(published_at) = CURRENT_DATE`
+- Posts This Week: `COUNT(*) FROM blog_posts WHERE published_at >= DATE_TRUNC('week', CURRENT_DATE)`
+- SEO Posts: `COUNT(*) FROM blog_posts WHERE post_type = 'seo'`
+- GEO Posts: `COUNT(*) FROM blog_posts WHERE post_type = 'geo'`
 
-**Settings section** — heading "SETTINGS" in 11px uppercase letter-spaced. Key/value rows, each with an inline pencil icon. Clicking pencil makes value editable with Save/Cancel inline. Shows the most important 3–5 fields from that agent's settings table.
+**Next up** — `last_product_published` from blog_settings — show the next product in rotation.
 
-**Error log** — collapsed by default with a toggle chevron. When expanded: last 10 rows from that agent's _errors table ordered by created_at desc. When no errors: "No errors in the last 24 hours" in muted text. Clear button removes all rows.
+**Recent activity** — last 3 rows from blog_posts ORDER BY published_at DESC — show title + published_at + link slug.
 
-### Right sidebar — agent detail
+**Settings** (inline editable) — brand_name, posts_per_day, post_mode, tone, target_keywords from blog_settings.
 
-Title: "ACTIONS" in 10px bold uppercase letter-spaced, color rgba(240,234,214,0.3), margin-bottom 16px.
+**Error log** — blog_errors ORDER BY created_at DESC LIMIT 10.
 
-Primary action button: gold fill (#c9a84c background, #0a0a08 text), full width, 13px bold uppercase with arrow. Example: "PUBLISH NOW →".
+**Right sidebar actions**
+- Primary: "PUBLISH NOW →" → calls edge function `blog-publish`
+- Secondary: "VIEW ALL POSTS ↗" → links to /blog
 
-Secondary action buttons below it: ghost style (border rgba(240,234,214,0.12), muted text), full width, 13px bold uppercase.
+---
 
-Below buttons: a "REQUIREMENTS" section listing required API secrets for this agent. Each row: secret name in 12px monospace + green checkmark if last call succeeded, red warning icon if missing.
+### SEO (/admin/seo)
 
-### Per-agent metrics and actions
+**Stats grid**
+- Posts Published: `COUNT(*) FROM seo_posts`
+- Keywords Found: `COUNT(*) FROM seo_keywords`
+- Keywords Queued: `COUNT(*) FROM seo_keywords WHERE has_content = false`
+- Top Priority: `MAX(priority) FROM seo_keywords WHERE has_content = false`
 
-Blogger — Stats: posts today, posts this week, SEO posts total, GEO posts total. Next up: next product in rotation + top unwritten keyword. Primary action: PUBLISH NOW (blog-publish). Secondary: VIEW ALL POSTS.
+**Next up** — `keyword FROM seo_keywords WHERE has_content = false ORDER BY priority DESC LIMIT 1`
 
-SEO — Stats: posts published, keywords found, keywords remaining, avg position. Next up: top unused keyword. Primary action: PUBLISH NOW (seo-publish). Secondary: DISCOVER KEYWORDS (seo-discover).
+**Recent activity** — last 3 seo_posts ORDER BY published_at DESC.
 
-GEO — Stats: posts published, queries found, citation rate, queries remaining. Primary action: PUBLISH NOW (geo-publish). Secondary: DISCOVER QUERIES (geo-discover), TEST CITATIONS (geo-test).
+**Settings** — site_url, posts_per_day, competitors, target_keywords from seo_settings.
 
-Crawl — Stats: active targets, pages crawled today, intel items today, leads total. Primary action: CRAWL NOW (crawl-run). Secondary: PUBLISH INTEL (crawl-publish).
+**Error log** — seo_errors.
 
-Perplexity — Stats: research calls this week, brand citation rate, content published. Primary action: RESEARCH NOW (perplexity-research). Secondary: TEST CITATIONS (perplexity-test-citations).
+**Right sidebar**
+- Primary: "PUBLISH NOW →" → `seo-publish`
+- Secondary: "DISCOVER KEYWORDS →" → `seo-discover`
 
-Contentful — Stats: entries pulled, posts pushed, last pull, sync failures today. Primary action: PULL NOW (contentful-pull). Secondary: PUSH NOW (contentful-push).
+---
 
-Store — Stats: products listed, active promotions, avg conversion rate, content published. Primary action: DISCOVER (store-discover). Secondary: OPTIMISE (store-optimise), PROMOTE (store-promote).
+### GEO (/admin/geo)
 
-Drop — Stats: products synced, content published, last sync time. Primary action: SYNC NOW (drop-sync). Secondary: PUBLISH CONTENT (drop-content).
+**Stats grid**
+- Posts Published: `COUNT(*) FROM geo_posts`
+- Queries Found: `COUNT(*) FROM geo_queries`
+- Cited: `COUNT(*) FROM geo_queries WHERE brand_cited = true`
+- Citation Rate: cited / COUNT(*) WHERE has_content = true, shown as "%"
 
-Print — Stats: products synced, content published, last sync time. Primary action: SYNC NOW (print-sync). Secondary: PUBLISH CONTENT (print-content).
+**Next up** — `query FROM geo_queries WHERE has_content = false ORDER BY priority DESC LIMIT 1`
 
-Pay — Stats: MRR, total revenue, active subscribers, abandoned checkouts. Primary action: OPTIMISE NOW (pay-optimise). Secondary: RUN RECOVERY (pay-recover).
+**Recent activity** — last 3 geo_posts ORDER BY published_at DESC.
 
-SMS — Stats: sent today, delivery rate, response rate, opted out. Primary action: RUN SEQUENCES (sms-sequences-run). Secondary: OPTIMISE (sms-optimise).
+**Settings** — brand_name, posts_per_day, niche_topics, competitors from geo_settings.
 
-Mail — Stats: campaigns sent this month, subscribers, avg open rate, avg click rate. Primary action: SEND CAMPAIGN (mail-campaign). Secondary: OPTIMISE (mail-optimise).
+**Error log** — geo_errors.
 
-Voice — Stats: episodes generated, audio hours total, posts without audio. Primary action: NARRATE NOW (voice-narrate).
+**Right sidebar**
+- Primary: "PUBLISH NOW →" → `geo-publish`
+- Secondary: "DISCOVER QUERIES →" → `geo-discover`
+- Secondary: "TEST CITATIONS →" → `geo-test`
 
-Stream — Stats: streams processed, content published, clips saved. Primary action: PROCESS LAST STREAM (stream-process).
+---
 
-YouTube — Stats: videos processed, content published, comments extracted. Primary action: SYNC NOW (youtube-sync). Secondary: FETCH COMMENTS (youtube-extract-comments).
+### Crawl (/admin/crawl)
 
-Code — Stats: commits processed, content published, open roadmap items. Primary action: SYNC ROADMAP (code-sync-roadmap).
+**Stats grid**
+- Active Targets: `COUNT(*) FROM crawl_targets WHERE active = true`
+- Pages Crawled Today: `COUNT(*) FROM crawl_results WHERE DATE(crawled_at) = CURRENT_DATE`
+- Intel Items (unactioned): `COUNT(*) FROM crawl_intel WHERE actioned = false`
+- Leads Total: `COUNT(*) FROM crawl_leads`
 
-GitLab — Stats: commits processed, MRs processed, content published. Primary action: SYNC ROADMAP (gitlab-sync-roadmap).
+**Next up** — next crawl target due: `name FROM crawl_targets WHERE active = true ORDER BY last_crawled ASC LIMIT 1`
 
-Linear — Stats: issues synced, cycles completed, content published. Primary action: SYNC NOW (linear-sync-all). Secondary: VELOCITY REPORT (linear-velocity-report).
+**Recent activity** — last 3 crawl_intel rows ORDER BY created_at DESC — show title + intel_type.
 
-Design — Stats: last upgrade date, components updated, design version. Primary action: RUN UPGRADE (design-upgrade).
+**Settings** — brand_name, site_url, niche from crawl_settings. Show crawl_targets table inline (name, url, target_type, last_crawled, active toggle).
 
-Auth — Stats: total users, signups today, signups this week, admins. Primary action: none — show user table inline (user_profiles — email, name, role badge, joined, onboarded badge, edit role inline).
+**Error log** — crawl_errors.
 
-Granola — Stats: meetings synced, content published, last sync. Primary action: SYNC NOW (granola-sync). Secondary: PUBLISH CONTENT (granola-publish).
+**Right sidebar**
+- Primary: "CRAWL NOW →" → `crawl-run`
+- Secondary: "PUBLISH INTEL →" → `crawl-publish`
 
-Alert — Stats: alerts today, this week, success rate, last alert time. Primary action: SEND TEST. Secondary: BRIEFING NOW (alert-briefing). Show toggle grid for all alert_settings boolean fields.
+---
 
-Telegram — Stats: messages today, this week, success rate, webhook status. Primary action: SEND TEST. Secondary: BRIEFING NOW (telegram-briefing), REGISTER WEBHOOK. Show toggle grid for all telegram_settings boolean fields.
+### Perplexity (/admin/perplexity)
 
-Supabase — Stats: current users, signups today, milestones reached, content published. Primary action: CHECK NOW (supabase-monitor). Secondary: WEEKLY REPORT (supabase-weekly-report).
+**Stats grid**
+- Research Calls This Week: `COUNT(*) FROM perplexity_research WHERE created_at >= NOW() - INTERVAL '7 days'`
+- Brand Citations: `COUNT(*) FROM perplexity_citations WHERE brand_mentioned = true`
+- Citation Rate: brand_mentioned=true / total in perplexity_citations, as "%"
+- Content Published: `COUNT(*) FROM perplexity_content WHERE status = 'published'`
 
-Security — Stats: security score (large, colour-coded), open critical, open high, last pentest. Primary action: RUN PENTEST (security-scan). Secondary: QUICK SCAN (security-monitor). Show vulnerabilities table if any critical/high open.
+**Next up** — `query FROM perplexity_research WHERE processed = false ORDER BY researched_at ASC LIMIT 1`
 
-Watch — Stats: agents monitored, issues opened this month, issues resolved, last run. Primary action: RUN NOW (watch-monitor). Show open issues table inline.
+**Recent activity** — last 3 perplexity_content rows ORDER BY published_at DESC.
 
-Fix — Stats: PRs opened this month, improvements merged, last run. Primary action: RUN NOW (fix-analyse). Show improvements table inline.
+**Settings** — brand_name, site_url, research_topics, competitors from perplexity_settings.
 
-Build — Stats: agents built total, last build date. Primary action: BUILD NEW AGENT (build-engine).
+**Error log** — perplexity_errors.
 
-Intel — Stats: reports generated, topics seeded this week, last report date. Primary action: RUN NOW (intel-weekly). Secondary: SEED AGENTS (intel-seed).
+**Right sidebar**
+- Primary: "RESEARCH NOW →" → `perplexity-research`
+- Secondary: "TEST CITATIONS →" → `perplexity-test-citations`
+- Secondary: "IMPROVE CONTENT →" → `perplexity-improve-content`
 
-Repurpose — Stats: jobs run this week, output pieces created, source posts repurposed. Primary action: RUN NOW (repurpose-run).
+---
 
-Trend — Stats: topics found this week, seeded to SEO, seeded to GEO. Primary action: SCAN NOW (trend-scan). Secondary: SEED AGENTS (trend-seed).
+### Pay (/admin/pay)
 
-Churn — Stats: signals detected this week, actions triggered, users retained, churn rate. Primary action: ANALYSE NOW (churn-analyse).
+**Stats grid**
+- Revenue Today: `COALESCE(SUM(amount_cents),0)/100 FROM pay_transactions WHERE DATE(created_at) = CURRENT_DATE AND status = 'succeeded'`
+- Active Subscriptions: `COUNT(*) FROM pay_subscriptions WHERE status = 'active'`
+- Abandoned (unconverted): `COUNT(*) FROM pay_abandoned WHERE converted = false`
+- Products: `COUNT(*) FROM pay_products WHERE active = true`
 
-Agents — Stats: issues opened, PRs opened, improvements merged, last run. Primary action: RUN ALL NOW. Show 4 sub-agent status cards (error-monitor, prompt-improver, agent-writer, performance-intel).
+**Next up** — next pay-recover run: daily 10am UTC. Show time until next run.
+
+**Recent activity** — last 3 pay_transactions ORDER BY created_at DESC — show amount, product, status.
+
+**Settings** — business_name, currency, support_email, site_url from pay_settings.
+
+**Error log** — pay_errors.
+
+**Right sidebar**
+- Primary: "OPTIMISE PRODUCTS →" → `pay-optimise`
+- Secondary: "RUN RECOVERY →" → `pay-recover`
+
+---
+
+### Mail (/admin/mail)
+
+**Stats grid**
+- Subscribers: `COUNT(*) FROM mail_subscribers WHERE status = 'confirmed'`
+- Pending Confirmation: `COUNT(*) FROM mail_subscribers WHERE status = 'pending'`
+- Broadcasts Sent: `COUNT(*) FROM mail_broadcasts WHERE status = 'sent'`
+- Avg Open Rate: `AVG(open_rate) FROM mail_broadcasts WHERE status = 'sent'` as "%"
+
+**Next up** — next newsletter broadcast based on newsletter_day + time from mail_settings.
+
+**Recent activity** — last 3 mail_broadcasts ORDER BY sent_at DESC — show subject, recipient_count, open_rate.
+
+**Settings** — brand_name, from_email, newsletter_frequency, newsletter_day, welcome_email_enabled from mail_settings.
+
+**Error log** — mail_errors.
+
+**Right sidebar**
+- Primary: "SEND BROADCAST →" → `mail-broadcast`
+- Secondary: "OPTIMISE SEQUENCES →" → `mail-optimise`
+- Secondary: "SEND TEST →" → `mail-send-test`
+
+---
+
+### SMS (/admin/sms)
+
+**Stats grid**
+- Active Contacts: `COUNT(*) FROM sms_contacts WHERE opted_out = false`
+- Messages Sent Today: `COUNT(*) FROM sms_messages WHERE direction = 'outbound' AND DATE(sent_at) = CURRENT_DATE`
+- Response Rate: `AVG(response_rate) FROM sms_sequences WHERE active = true` as "%"
+- Opt-outs: `COUNT(*) FROM sms_contacts WHERE opted_out = true`
+
+**Next up** — next sms-sequences-run: top of next hour.
+
+**Recent activity** — last 3 sms_messages WHERE direction = 'outbound' ORDER BY sent_at DESC.
+
+**Settings** — business_name, twilio_phone_number from sms_settings.
+
+**Error log** — sms_errors.
+
+**Right sidebar**
+- Primary: "RUN SEQUENCES →" → `sms-sequences-run`
+- Secondary: "OPTIMISE →" → `sms-optimise`
+
+---
+
+### Voice (/admin/voice)
+
+**Stats grid**
+- Episodes Published: `COUNT(*) FROM voice_episodes WHERE status = 'published'`
+- Total Duration: `SUM(duration_seconds)/3600 FROM voice_episodes WHERE status = 'published'` shown as "[n] hrs"
+- Posts Without Audio: `COUNT(*) FROM blog_posts WHERE slug NOT IN (SELECT post_slug FROM voice_episodes WHERE status = 'published')`
+- Last Episode: `MAX(created_at) FROM voice_episodes`
+
+**Next up** — oldest blog_post with no voice_episode entry.
+
+**Recent activity** — last 3 voice_episodes ORDER BY created_at DESC — show post_title + duration_seconds.
+
+**Settings** — podcast_title, voice_id, rss_enabled from voice_settings.
+
+**Error log** — voice_errors.
+
+**Right sidebar**
+- Primary: "NARRATE NOW →" → `voice-narrate`
+- Secondary: "VIEW RSS FEED ↗" → /voice-rss or similar
+
+---
+
+### Security (/admin/security)
+
+**Stats grid**
+- Security Score: latest `score` from security_scans. Large, colour-coded (#4ade80 ≥80, #c9a84c 60–79, #f87171 <60).
+- Critical Open: `COUNT(*) FROM security_vulnerabilities WHERE severity = 'critical' AND status = 'open'`
+- High Open: `COUNT(*) FROM security_vulnerabilities WHERE severity = 'high' AND status = 'open'`
+- Last Pentest: `MAX(completed_at) FROM security_scans WHERE scan_type = 'pentest'`
+
+**Next up** — `next_pentest_at` from security_settings.
+
+**Recent activity** — last 3 security_vulnerabilities ORDER BY first_found_at DESC — show title, severity badge, status.
+
+Below recent activity: inline table of security_vulnerabilities WHERE status = 'open' AND severity IN ('critical','high') — columns: title, severity badge, category, first_found_at.
+
+**Settings** — aikido_project_id, pentest_frequency, alert_critical, alert_high from security_settings.
+
+**Error log** — security_errors.
+
+**Right sidebar**
+- Primary: "RUN PENTEST →" → `security-scan`
+- Secondary: "QUICK SCAN →" → `security-monitor`
+
+---
+
+### Watch (/admin/watch)
+
+**Stats grid**
+- Agents Monitored: count of known agent settings tables that exist
+- Issues Open: `COUNT(*) FROM watch_issues WHERE resolved = false`
+- Issues This Month: `COUNT(*) FROM watch_issues WHERE created_at >= DATE_TRUNC('month', CURRENT_DATE)`
+- Last Run: `MAX(completed_at) FROM watch_runs`
+
+**Next up** — next top of hour.
+
+**Recent activity** — last 3 watch_issues ORDER BY created_at DESC — show agent_name, issue_title, severity badge, issue_url link.
+
+Below: inline table of watch_issues WHERE resolved = false — columns: agent, title, severity, created_at, GitHub link, "Mark Resolved" button (sets resolved = true).
+
+**Settings** — github_repo, error_threshold from watch_settings.
+
+**Error log** — watch_errors.
+
+**Right sidebar**
+- Primary: "RUN NOW →" → `watch-monitor`
+
+---
+
+### Alert (/admin/alert)
+
+**Stats grid**
+- Alerts Today: `COUNT(*) FROM alert_log WHERE DATE(sent_at) = CURRENT_DATE`
+- Failed: `COUNT(*) FROM alert_log WHERE DATE(sent_at) = CURRENT_DATE AND success = false`
+- Success Rate: success / total in alert_log last 7 days, as "%"
+- Last Briefing: `MAX(sent_at) FROM alert_log WHERE event_type = 'daily-briefing'`
+
+**Next up** — next daily briefing based on `daily_briefing_time` from alert_settings.
+
+**Recent activity** — last 5 alert_log rows ORDER BY sent_at DESC — show agent, event_type, sent_at, success badge.
+
+**Settings** — slack_webhook_url, daily_briefing_time. Then a toggle grid for all boolean fields in alert_settings: alert_payments, alert_sms_replies, alert_posts, alert_keywords, alert_citations, alert_products, alert_streams, alert_releases, alert_errors.
+
+**Error log** — alert_errors.
+
+**Right sidebar**
+- Primary: "SEND BRIEFING →" → `alert-briefing`
+- Secondary: "SEND TEST →" → `alert-send` with test payload
+
+---
+
+### Fix (/admin/fix)
+
+**Stats grid**
+- PRs Opened This Month: `COUNT(*) FROM fix_improvements WHERE created_at >= DATE_TRUNC('month', CURRENT_DATE)`
+- PRs Merged: `COUNT(*) FROM fix_improvements WHERE pr_status = 'merged'`
+- Agents Analysed (last run): `agents_analysed FROM fix_runs ORDER BY created_at DESC LIMIT 1`
+- Last Run: `MAX(completed_at) FROM fix_runs`
+
+**Next up** — next Sunday 11pm UTC.
+
+**Recent activity** — last 3 fix_improvements ORDER BY created_at DESC — show agent_name, improvement_description truncated, pr_url link, pr_status badge.
+
+**Settings** — github_repo, improvement_focus from fix_settings.
+
+**Error log** — fix_errors.
+
+**Right sidebar**
+- Primary: "RUN NOW →" → `fix-analyse`
+
+---
+
+### Intel (/admin/intel)
+
+**Stats grid**
+- Reports Generated: `COUNT(*) FROM intel_briefs`
+- Keywords Added This Week: `SUM(keywords_added) FROM intel_runs WHERE created_at >= NOW() - INTERVAL '7 days'`
+- GEO Queries Added This Week: `SUM(geo_queries_added) FROM intel_runs WHERE created_at >= NOW() - INTERVAL '7 days'`
+- Last Run: `MAX(completed_at) FROM intel_runs`
+
+**Next up** — next Monday 6am UTC.
+
+**Recent activity** — last 3 intel_briefs ORDER BY created_at DESC — show week_of, top_performing_topic, keywords_added count.
+
+Latest brief detail section: show full `weekly_summary`, `top_performing_topic`, first 3 items of `recommended_seo_keywords` and `recommended_geo_queries` from the most recent intel_briefs row.
+
+**Settings** — brand_name, niche_description, auto_add_keywords toggle, auto_add_geo_queries toggle from intel_settings.
+
+**Error log** — intel_errors.
+
+**Right sidebar**
+- Primary: "RUN NOW →" → `intel-analyse`
+- Secondary: "SEED AGENTS →" → `intel-analyse` (runs with seed_only flag)
+
+---
+
+### Run (/admin/run) — Lazy Run orchestrator
+
+**Stats grid**
+- Active Engines: `active_engines` from run_settings — show count
+- Master Status: `master_running` from run_settings — show ON/OFF badge
+- Errors Today: sum of _errors tables today across all agents
+- Last Orchestration: `MAX(created_at) FROM run_activity`
+
+**Next up** — next :00 or :30 (run-orchestrator runs every 30 min).
+
+**Recent activity** — last 10 run_activity rows ORDER BY created_at DESC — show engine, action, result badge (success/error).
+
+**Settings** — brand_name, site_url, business_description, target_audience, support_email, active_engines (comma-separated, editable) from run_settings. master_running toggle at top.
+
+**Error log** — run_errors.
+
+**Right sidebar**
+- Primary: "RUN NOW →" → `run-orchestrator`
+- Secondary: "WEEKLY REPORT →" → `run-weekly-report`
+- Secondary: "HEALTH CHECK →" → `run-health-check`
 
 ---
 
 ## Settings (/admin/settings)
 
-Site settings: site URL, brand name, business description, support email. Propagate to All Agents button pushes values to all agent settings tables.
+### Site settings
+Fields from run_settings (if installed) or a local config: site_url, brand_name, business_description, target_audience, support_email. "PROPAGATE TO ALL AGENTS →" button — on click, copies these values into every installed agent's settings table where the matching column exists.
 
-API keys: one section per installed service. Connection status badge. Password input, show/hide toggle, Test Connection button. Services: ElevenLabs, Stripe, Twilio, Twitch, GitHub, GitLab, Linear, Firecrawl, Perplexity, Aikido, Slack, Telegram, Contentful, Supabase service role, AutoDS, Printful, Resend, Granola.
+### API keys
+One section per service. Each section: service name, connection status badge (green "Connected" / red "Not configured"), password input with show/hide, "TEST CONNECTION" button that calls the relevant test edge function. Services and their test functions:
+- Resend → `mail-send-test`
+- Stripe → check pay_settings for stripe_secret_key presence
+- Twilio → check sms_settings for twilio_account_sid presence
+- ElevenLabs → check voice_settings for voice_id presence
+- Aikido → `security-monitor`
+- GitHub → check watch_settings/fix_settings for github_repo presence
+- Slack → `alert-send` with test payload
 
-Weekly schedule: read-only visual timeline of the full weekly cron schedule. Seven columns, one per day. Colour coded: content gold, commerce green, media blue, dev purple, ops red.
+### Weekly schedule
+Read-only visual calendar. Seven columns (Mon–Sun). For each known cron job, show a pill in the correct column. Colour-coded: Content gold, Commerce green, Media blue, Dev purple, Monitor red, Intelligence amber.
 
-Version status: table of all installed agents showing installed version vs latest (from https://lazyunicorn.ai/api/versions), status badge, Get Latest Prompt link per row.
+Schedule to render:
+- Mon 6am: SEO Discover, Intel Analyse, Run Weekly Report
+- Mon/Thu 7am: GEO Discover
+- Daily 5am: Perplexity Research
+- Daily 6am: Crawl Publish
+- Daily 8am: Alert Briefing (configurable)
+- Daily 9am: Mail Broadcast (configurable day)
+- Daily 10am: Pay Recover
+- Daily 3am: Security Monitor
+- Sun 9am: GEO Test
+- Sun 10am: Perplexity Test
+- Sun 11am: Pay Optimise, Mail Optimise
+- Sun 12pm: SMS Optimise
+- Sun 11pm: Fix Analyse
+- Wed 9am: Perplexity Improve
+
+### Version status
+Table: agent name, installed version (from prompt_version in each settings table), latest version (from https://lazyunicorn.ai/api/versions), status badge (Up to date / UPDATE AVAILABLE in gold), "Get Latest Prompt ↗" link to GitHub per row. Only show agents where the settings table exists.
 
 ---
 
 ## Version checker
 
-On mount fetch https://lazyunicorn.ai/api/versions with 5 second timeout. Fail silently.
-
-Compare each installed agent's prompt_version against the API response. If any are out of date show a gold banner: Updates available for [n] agent(s) — View Updates button, Dismiss button. Dismiss stores dismissed versions in localStorage under lazy-version-dismissed.
+On mount, fetch https://lazyunicorn.ai/api/versions with 5s timeout, fail silently. Compare each installed agent's prompt_version. If any out of date: gold banner at top of main content — "Updates available for [n] agent(s) — View Updates | Dismiss". Dismiss stores dismissed version set in localStorage key lazy-version-dismissed.
 
 ---
 
 ## Interaction rules
 
-All edge function calls: loading spinner on button, success toast + green checkmark for 2 seconds. Never reload the page. Stats and tables refresh after function completes. Status dots poll every 60 seconds.
+All edge function calls: show loading spinner on button, success toast + green checkmark for 2s on success, error callout with message on failure. Never reload the page. Stats and tables refresh after function call completes. Status dots poll every 60 seconds (re-query all settings tables).
 
-All tables: search input filtering by main text field. Pagination at 50 rows with Previous/Next.
+Tables: search input filtering by main text column. Pagination at 50 rows.
 
-Settings edits: inline pencil icon per row. On click, value becomes an input. Save button updates the settings table row. Cancel reverts. Show saving spinner. Success: row returns to read mode. Error: show error inline.
+Settings edits: inline pencil icon per row. Clicking opens inline input with Save/Cancel. Save → UPDATE that row in the settings table. Show spinner. On success: row returns to display. On error: show error inline.
 
 ---
 
-## Error handling — global rules
+## Error handling
 
-Never show a generic "failed" message anywhere in admin. Every failure must show what went wrong and exactly what to do next.
+Never show a generic "failed" message. Every failure shows what went wrong and what to do.
 
-**Agent not configured**
-Before rendering any agent panel, check if its settings table exists and setup_complete is true. If not, replace the entire panel with a setup card:
-- Title: "[Agent Name] is not configured"
-- Message: "Complete setup to activate this agent."
-- Button: "SET UP [AGENT NAME] →" linking to /lazy-[agent]-setup
-- Do not show action buttons, stats, or history
+**Agent not configured** — before rendering any agent panel, check settings table exists AND setup_complete = true. If not, show a setup card: "[Agent] is not configured. Complete setup to activate." + "SET UP [AGENT] →" button linking to /lazy-[slug]-setup. No stats, no action buttons.
 
-**Edge function call fails**
-When a button triggers an edge function and it returns an error, show a red callout with the actual error message. Below it show a "How to fix" section:
-- If the error contains "secret", "api key", or "unauthorized": "Add the required API key to your Supabase secrets — Project Settings → Edge Functions → Secrets"
-- If the error contains "not found" or "does not exist": "Check that all database tables were created. Re-run the setup page."
-- If the error contains "setup_complete": "Complete the setup page first."
-- For all other errors: show the raw error and a "View Error Log" button that scrolls to the error log section
+**Edge function error** — red callout with actual error message, then:
+- Contains "secret", "api key", "unauthorized" → "Add the required API key to Supabase secrets: Project Settings → Edge Functions → Secrets"
+- Contains "not found", "does not exist" → "Re-run the setup page at /lazy-[agent]-setup"
+- Other → show raw error + "View Error Log" button scrolling to error log section
 
-**Missing secrets**
-Each agent detail page that requires external API keys shows a Requirements section at the top of the right column. For each required secret: green checkmark if the last function call succeeded, red warning with the exact secret name and a link to Supabase secrets settings if it failed due to that secret being missing.
+**Timeout** — all data fetches have 10s timeout. On timeout: "Could not load data. Check your Supabase connection." + Retry button.
 
-**Empty states**
-If an agent is configured but has never run: "No data yet — click [primary action button] to run your first check."
-
-**Spinner with no resolution**
-Never show an indefinite spinner. All data fetches must have a 10 second timeout. On timeout show: "Could not load data. Check your Supabase connection." with a Retry button.
+**Empty state** — agent configured but zero rows in data table → "No data yet — click [primary action] to run for the first time."
 
 ---
 
 ## Routes
 
-/admin — overview (three-column: left nav sidebar + agent table + quick stats right sidebar)
-/admin/settings — site settings, API keys, weekly schedule, version status
-/admin/[agent-slug] — agent detail page for any installed agent
+/admin — overview (3-column: left nav + agent table + quick stats)
+/admin/settings — site settings, API keys, schedule, version status
+/admin/[slug] — agent detail page
 
-Agent slugs: blogger, seo, geo, crawl, perplexity, contentful, store, drop, print, pay, sms, mail, voice, stream, youtube, code, gitlab, linear, design, auth, granola, alert, telegram, supabase, security, watch, fix, build, intel, repurpose, trend, churn, agents
+Slugs: blogger, seo, geo, crawl, perplexity, store, drop, print, pay, mail, sms, voice, stream, youtube, code, gitlab, linear, contentful, design, auth, granola, alert, telegram, supabase, security, watch, fix, build, intel, repurpose, trend, churn, agents, run, waitlist
 
-Client-side routing. Direct links work. No full page reloads between pages. /admin/[slug] only accessible if that agent's settings table exists and setup_complete is true — otherwise redirect to /lazy-[agent]-setup.
+Client-side routing. No full page reloads. /admin/[slug] requires settings table to exist AND setup_complete = true — otherwise redirect to /lazy-[slug]-setup.
+
+Settings table → slug mapping:
+blog_settings → blogger, seo_settings → seo, geo_settings → geo, crawl_settings → crawl, perplexity_settings → perplexity, store_settings → store, drop_settings → drop, print_settings → print, pay_settings → pay, mail_settings → mail, sms_settings → sms, voice_settings → voice, stream_settings → stream, youtube_settings → youtube, code_settings → code, gitlab_settings → gitlab, linear_settings → linear, contentful_settings → contentful, design_settings → design, auth_settings → auth, granola_settings → granola, alert_settings → alert, telegram_settings → telegram, supabase_settings → supabase, security_settings → security, watch_settings → watch, fix_settings → fix, build_settings → build, intel_settings → intel, repurpose_settings → repurpose, trend_settings → trend, churn_settings → churn, agent_settings → agents, run_settings → run, waitlist_settings → waitlist
