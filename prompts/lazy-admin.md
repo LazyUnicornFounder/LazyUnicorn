@@ -1,4 +1,4 @@
-[LazyUnicorn Admin Dashboard Prompt — v0.0.10 — LazyUnicorn.ai]
+[LazyUnicorn Admin Dashboard Prompt — v0.0.11 — LazyUnicorn.ai]
 
 Rebuild the entire admin dashboard at /admin from scratch. Replace everything currently there. This is a unified control panel for all LazyUnicorn agents. It detects which agents are installed by checking which database tables exist and shows only those panels.
 
@@ -8,44 +8,74 @@ IMPORTANT: Do not change anything outside /admin.
 
 ## Design
 
-Dark background #0a0a08. Text #f0ead6 cream. Gold accent #c9a84c. Borders rgba(240,234,214,0.x) — subtle warm white. Font: Space Grotesk. Status dots are the only use of green/amber/red — everything else stays in the LazyUnicorn palette. No sidebar. No standalone dashboard pages. All navigation through top tabs.
+Three-column layout like a modern docs site (Mintlify-style): fixed left nav sidebar + wide scrollable main content + fixed right sidebar. Dark background #0a0a08. Text #f0ead6 cream. Gold accent #c9a84c. Borders rgba(240,234,214,0.08) — subtle warm white. Font: Space Grotesk. Status dots are the only use of green/amber/red — everything else stays in the LazyUnicorn palette.
+
+Font sizes: top bar logo 15px bold, sidebar section headers 11px bold uppercase letter-spaced, sidebar agent items 14px, main content page title 28px bold, section labels 11px uppercase letter-spaced, table text 13px, right sidebar labels 10px uppercase letter-spaced, right sidebar values 18px bold.
 
 ---
 
 ## Top bar
 
-Fixed across all /admin pages.
+Fixed, full-width, height ~52px. Background #0a0a08, bottom border rgba(240,234,214,0.08).
 
-Left side: 🦄 LAZY UNICORN logo. Next to it: live agent count — query all settings tables for is_running true and show as "● [n] AGENTS RUNNING" in green. If zero agents running show in muted grey. The top bar does not include category navigation — that lives in the left sidebar of the overview page.
+Left: 🦄 LAZY UNICORN in 15px bold cream.
 
-Right side: PAUSE ALL text button — on click sets is_running to false across all agent settings tables and updates the label to RESUME ALL. Next to it: ⚙ settings icon linking to /admin/settings. Next to it: gold pill link "LAZY CLOUD ↗" pointing to /lazy-cloud or https://lazyunicorn.ai/cloud.
+Center: Search input — placeholder "Search agents..." with a ⌘K hint on the right. 400px wide, background rgba(240,234,214,0.05), border rgba(240,234,214,0.1), border-radius 6px, 14px text.
+
+Right: PAUSE ALL text button (12px, muted cream, on click sets is_running false on all agent settings tables and toggles to RESUME ALL) · ⚙ icon linking to /admin/settings · gold pill "LAZY CLOUD ↗" linking to https://lazyunicorn.ai/cloud.
+
+---
+
+## Three-column layout
+
+All /admin pages use this shell:
+
+**Left sidebar** — 240px fixed, full height, border-right rgba(240,234,214,0.08), scrollable.
+
+**Main content** — flex:1, padding 32px 40px, scrollable.
+
+**Right sidebar** — 220px fixed, full height, border-left rgba(240,234,214,0.08), padding 24px 20px.
+
+---
+
+## Left sidebar
+
+Top: 🦄 Lazy in 15px bold, below it "[n] of 36 running" in 11px muted. Padding 20px 16px, border-bottom rgba(240,234,214,0.06).
+
+Below that: grouped navigation. Each group has a section header (11px bold uppercase letter-spaced, color rgba(240,234,214,0.35), padding 16px 16px 6px). Below the header: a list of agent items.
+
+Each agent item: 36px tall, padding 0 16px, display flex, align-items center, gap 10px, cursor pointer, border-radius 4px (with 4px horizontal margin), font-size 14px, color rgba(240,234,214,0.7). On hover: background rgba(240,234,214,0.04). When active/selected: background rgba(201,168,76,0.1), color #f0ead6, font-weight 600.
+
+Left of each agent name: a 7px status dot (circle):
+- Running: #4ade80
+- Error: #f87171
+- Needs setup: #c9a84c
+- Not set up / not installed: rgba(240,234,214,0.2)
+
+Clicking an agent item navigates to /admin/[slug]. Clicking a section header filters the main content table to that category.
+
+An "All Agents" item sits above the first section group (no section header above it). It is active by default and shows all agents in the main table.
+
+Groups and their agents:
+- (no header) → All Agents
+- CONTENT → Blogger, SEO, GEO, Crawl, Perplexity, Repurpose, Trend
+- COMMERCE → Store, Drop, Print, Pay, Mail, SMS, Churn
+- MEDIA → Voice, Stream, YouTube
+- DEV → Code, GitLab, Linear, Contentful, Design, Auth, Granola
+- MONITOR → Alert, Telegram, Supabase, Security, Watch
+- INTELLIGENCE → Fix, Build, Intel, Agents
+
+Platform tools (Run, Admin, Cloud, Waitlist) are not shown in the sidebar.
 
 ---
 
 ## Overview (/admin)
 
-The overview uses a two-panel layout: a narrow left sidebar for category navigation and a full-width scrollable table on the right. No top tabs.
-
-### Left sidebar
-
-Fixed 150px wide. Shows:
-- 🦄 Lazy logo + "[n] of 36 running" count in muted text
-- Category nav list: All (active by default), Content, Commerce, Media, Dev, Monitor, Intelligence. Big bold text (14px bold). Active item has gold left border and subtle gold background tint. Clicking a category filters the table to show only agents in that category.
-
-Categories and their agents:
-ALL — every agent
-CONTENT — Blogger, SEO, GEO, Crawl, Perplexity, Repurpose, Trend
-COMMERCE — Store, Drop, Print, Pay, Mail, SMS, Churn
-MEDIA — Voice, Stream, YouTube
-DEV — Code, GitLab, Linear, Contentful, Design, Auth, Granola
-MONITOR — Alert, Telegram, Supabase, Security, Watch
-INTELLIGENCE — Fix, Build, Intel, Agents
-
-Platform tools (Run, Admin, Cloud, Waitlist) are not shown in the table.
+Main content area shows the agent table. Right sidebar shows quick stats.
 
 ### Agent table
 
-7 columns: AGENT · STATUS · CATEGORY · ACTIVITY · LAST RUN · NEXT RUN · VERSION
+Header row: 7 columns — AGENT · STATUS · CATEGORY · ACTIVITY · LAST RUN · NEXT RUN · VERSION. 11px bold uppercase letter-spaced, color rgba(240,234,214,0.3). Border-bottom rgba(240,234,214,0.1). Padding 10px 0.
 
 Column widths are proportional using flex fractions — fill the full available width with no empty space: Agent 2fr, Status 1.2fr, Category 1fr, Activity 1.8fr, Last Run 1fr, Next Run 1fr, Version 1.4fr.
 
@@ -85,21 +115,19 @@ Within the "not set up" section, agents where the settings table exists but setu
 
 Below the last not-set-up row, if more than 5 not-set-up agents exist: show "+ [n] more agents not set up" in muted text.
 
-### Stats row
+### Right sidebar — overview
 
-Show above the table only when at least one agent settings table exists and setup_complete is true. If no agents are installed, skip it entirely.
+Title: "QUICK STATS" in 10px bold uppercase letter-spaced, color rgba(240,234,214,0.3), margin-bottom 16px.
 
-5 stats in equal-width columns:
+Show the following stats as stacked rows. Each row: label in 10px muted uppercase, value in 18px bold cream below it, margin-bottom 20px.
 
-Posts Today — sum of blog_posts + seo_posts + geo_posts published today where each table exists.
+Only show a stat if its data source exists (settings table present). If no agents are installed at all, show "No agents set up yet" in muted text.
 
-Agents Active — count of settings tables where is_running is true, shown as "[n]/36".
-
-Revenue Today — sum of pay_transactions where status is succeeded and created_at is today. Only show if pay_settings exists. Show as "$[amount]" in gold.
-
-Errors Today — count of all rows across all _errors tables where created_at is today. Show in red tint if above zero.
-
-Security Score — latest score from security_scans. Green if 80+, amber if 60–79, red if below 60. Only show if security_settings exists.
+- Posts Today — sum of blog_posts + seo_posts + geo_posts published today
+- Agents Active — "[n]/36" (count of settings tables where is_running is true)
+- Revenue Today — "$[amount]" in gold — only if pay_settings exists
+- Errors Today — count across all _errors tables today — show value in #f87171 if above zero
+- Security Score — from security_scans, coloured #4ade80 / #c9a84c / #f87171 — only if security_settings exists
 
 ### Agent state mapping
 
@@ -129,30 +157,31 @@ Blogger → blog_settings, SEO → seo_settings, GEO → geo_settings, Crawl →
 
 ## Agent detail page
 
-Reached by clicking MANAGE → on any installed agent card. URL: /admin/[agent-slug]. Back button returns to /admin.
+Reached by clicking an agent item in the left sidebar or MANAGE in the table. URL: /admin/[agent-slug]. The left sidebar remains visible with that agent highlighted as active.
 
-### Header
-Full-width. Agent name in large caps, subtitle in muted text, status dot + label, ON/OFF toggle (updates is_running in that agent's settings table).
+### Main content
 
-### Two-column layout — equal width
+**Header** — agent name in 28px bold cream, status dot + status label in 13px muted text beside it, ON/OFF toggle on the far right (updates is_running in that agent's settings table).
 
-**Left column — Status**
+**2×2 stat grid** — 4 most meaningful metrics for that agent. Large number (24px bold), muted 10px uppercase label below. Border rgba(240,234,214,0.08), border-radius 8px, padding 16px.
 
-2×2 stat grid showing the 4 most meaningful metrics for that agent. Use large numbers, muted labels in caps.
+**NEXT UP** section — 13px muted label "NEXT UP", below it the next scheduled action in 14px cream.
 
-Below the stat grid: "NEXT UP" section showing what the agent will do on its next run (next product in rotation for Blogger, next keyword for SEO, next scheduled pentest for Security, etc.).
+**Recent activity** — last 3 rows (timestamp + description + optional external link), 13px text, separated by subtle dividers.
 
-Below that: last 3 activity rows (most recent actions) with timestamps and external links where applicable (e.g. link to blog post, GitHub issue, YouTube video).
+**Settings section** — heading "SETTINGS" in 11px uppercase letter-spaced. Key/value rows, each with an inline pencil icon. Clicking pencil makes value editable with Save/Cancel inline. Shows the most important 3–5 fields from that agent's settings table.
 
-**Right column — Actions**
+**Error log** — collapsed by default with a toggle chevron. When expanded: last 10 rows from that agent's _errors table ordered by created_at desc. When no errors: "No errors in the last 24 hours" in muted text. Clear button removes all rows.
 
-Primary action button: gold fill, full width, uppercase with arrow (e.g. "PUBLISH NOW →", "RUN PENTEST →", "SYNC NOW →").
+### Right sidebar — agent detail
 
-Secondary action buttons: ghost style, full width, for less common actions (e.g. "VIEW ALL POSTS ↗", "DISCOVER KEYWORDS →").
+Title: "ACTIONS" in 10px bold uppercase letter-spaced, color rgba(240,234,214,0.3), margin-bottom 16px.
 
-Settings section: key/value rows, each with an inline edit pencil icon. Clicking the pencil makes the value editable inline and shows Save/Cancel. No separate settings page. Settings shown: the most important 3–5 fields from that agent's settings table.
+Primary action button: gold fill (#c9a84c background, #0a0a08 text), full width, 13px bold uppercase with arrow. Example: "PUBLISH NOW →".
 
-Error log section: collapsed by default with a toggle. When expanded shows the last 10 rows from that agent's _errors table ordered by created_at descending. When no errors: "No errors in the last 24 hours" in muted text. Clear button removes all rows from the _errors table.
+Secondary action buttons below it: ghost style (border rgba(240,234,214,0.12), muted text), full width, 13px bold uppercase.
+
+Below buttons: a "REQUIREMENTS" section listing required API secrets for this agent. Each row: secret name in 12px monospace + green checkmark if last call succeeded, red warning icon if missing.
 
 ### Per-agent metrics and actions
 
@@ -285,7 +314,7 @@ Never show an indefinite spinner. All data fetches must have a 10 second timeout
 
 ## Routes
 
-/admin — overview (tabs + stats + agent grid)
+/admin — overview (three-column: left nav sidebar + agent table + quick stats right sidebar)
 /admin/settings — site settings, API keys, weekly schedule, version status
 /admin/[agent-slug] — agent detail page for any installed agent
 
