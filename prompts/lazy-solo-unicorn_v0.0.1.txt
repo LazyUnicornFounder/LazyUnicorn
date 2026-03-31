@@ -7,3 +7,240 @@ Build a public leaderboard of solo founders ranked by verified monthly recurring
 IMPORTANT: Do not build a standalone dashboard. The admin panel lives at /admin/solo-unicorns as part of the unified LazyUnicorn admin panel.
 
 ---
+
+## 1. Database
+
+Create these Supabase tables with RLS enabled:
+
+**founders**
+id (uuid, primary key, default gen_random_uuid()),
+user_id (uuid, references auth.users, not null),
+company_name (text),
+logo_url (text),
+x_url (text),
+one_liner (text),
+stripe_account_id (text),
+mrr_cents (bigint, default 0),
+is_solo_attested (boolean, default false),
+is_verified (boolean, default false),
+is_visible (boolean, default true),
+last_synced_at (timestamptz),
+created_at (timestamptz, default now()),
+updated_at (timestamptz, default now())
+
+RLS policies for founders:
+- Authenticated users can INSERT their own row (user_id = auth.uid())
+- Authenticated users can SELECT and UPDATE their own row (user_id = auth.uid())
+- Public (anon) can SELECT rows where is_verified = true AND is_visible = true
+
+**mrr_history**
+id (uuid, primary key, default gen_random_uuid()),
+founder_id (uuid, references founders.id, not null),
+mrr_cents (bigint, not null),
+recorded_at (timestamptz, default now())
+
+RLS policies for mrr_history:
+- Authenticated users can SELECT rows where founder_id matches their founders.id
+- Service role only for INSERT (edge functions use service role key)
+
+**founders_errors**
+id (uuid, primary key, default gen_random_uuid()),
+founder_id (uuid, nullable),
+function_name (text),
+error_message (text),
+created_at (timestamptz, default now())
+
+RLS: service role only (no public access).
+
+**solo_unicorn_settings**
+id (uuid, primary key, default gen_random_uuid()),
+is_running (boolean, default true),
+setup_complete (boolean, default false),
+prompt_version (text, default 'v0.0.1'),
+created_at (timestamptz, default now())
+
+Insert one row on setup completion. RLS: authenticated users can SELECT; service role for updates.
+
+Create a Supabase Storage bucket named `founder-logos` with public read access.
+
+---
+
+## 2. Authentication — /join
+
+Create a /join page using Supabase Auth.
+
+Provide two sign-in options:
+1. Google OAuth (via Supabase Auth provider)
+2. Email + password (sign up and sign in)
+
+On successful auth, redirect to /dashboard.
+
+Add a link to /join in the main site navigation labeled "Join the Leaderboard".
+
+Do not add /join to the admin navigation.
+
+---
+
+## 3. Founder Dashboard — /dashboard
+
+This page is auth-protected. Redirect unauthenticated users to /join.
+
+On page load, check if the current user has a row in `founders` with is_verified = true.
+
+### Pre-verification state (no verified founders row exists for this user):
+
+Show a large, prominent button: "Verify your MRR with Stripe"
+
+Below the button, show a step-by-step tutorial:
+1. Click the button above to connect your Stripe account
+2. You will be redirected to Stripe — log in and authorize read-only access
+3. We will pull your current MRR from your active subscriptions
+4. Once verified, complete your profile to appear on the leaderboard
+
+Clicking the button calls the `stripe-oauth-connect` edge function, which redirects the user to Stripe.
+
+### Post-verification state (founders row exists with is_verified = true):
+
+Show the founder's current MRR formatted as "$X,XXX/mo".
+Show "Last synced: [last_synced_at formatted as relative time]".
+
+Show a profile form with these fields:
+- Company logo (image upload, stored in `founder-logos` Supabase Storage bucket, saved as logo_url)
+- Company name (text input, saved as company_name)
+- X / Twitter URL (text input, saved as x_url, placeholder: "https://x.com/yourhandle")
+- One-liner (text input, max 100 characters, saved as one_liner, placeholder: "What does your company do?")
+- Checkbox: "I confirm I am the sole founder of this company" (saved as is_solo_attested)
+
+Show a "Go Live on Leaderboard" button. On click:
+- Save all profile fields to the founders row
+- Set is_solo_attested to true if checkbox is checked
+- Redirect to / (the public leaderboard)
+- The founder will appear on the leaderboard immediately since is_verified is already true
+
+Allow founders to return to /dashboard at any time to update their profile. Changes save immediately on button click.
+
+---
+
+## 4. Public Leaderboard — /
+
+This page is public. No auth required.
+
+Fetch all rows from `founders` where is_verified = true AND is_visible = true, ordered by mrr_cents descending.
+
+Display as a ranked list. Each row contains these elements in order:
+1. Rank number (e.g. #1, #2, #3)
+2. Company logo (img tag using logo_url; show a placeholder avatar if logo_url is null)
+3. Company name (text)
+4. Founder X handle (link to x_url, display as @handle extracted from the URL)
+5. One-liner description (text)
+6. Current MRR formatted as "$X,XXX/mo" (convert from mrr_cents by dividing by 100)
+7. A horizontal progress bar showing MRR as a percentage of $1,000,000,000 (one billion dollars). The bar width = (mrr_cents / 100000000000) * 100, capped at 100%. Show the percentage as text next to the bar (e.g. "4.2% to $1B").
+
+$1,000,000,000 ($1B) is the leaderboard ceiling. Every founder's bar shows their progress toward that milestone.
+
+At the top of the page, show:
+- Page title: "Solo Unicorn Leaderboard"
+- Subtitle: "Verified MRR from real solo founders. Connect Stripe to join."
+- A "Join the Leaderboard" button linking to /join
+
+In the page footer, include: "Powered by LazyUnicorn.ai"
+
+---
+
+## 5. Edge Functions
+
+Store the following as Supabase secrets (never in the database):
+- STRIPE_CLIENT_ID — your Stripe Connect app's client_id
+- STRIPE_SECRET_KEY — your Stripe secret key
+- APP_URL — the deployed URL of this app (e.g. https://yourapp.lovable.app)
+
+### stripe-oauth-connect
+
+Trigger: called by the /dashboard page when the founder clicks "Verify your MRR with Stripe"
+
+Logic:
+1. Read STRIPE_CLIENT_ID and APP_URL from Supabase secrets
+2. Get the authenticated user's id from the JWT in the request Authorization header
+3. Build the Stripe OAuth URL:
+   https://connect.stripe.com/oauth/authorize?response_type=code&client_id={STRIPE_CLIENT_ID}&scope=read_only&redirect_uri={APP_URL}/api/stripe-oauth-callback&state={user_id}
+4. Return the URL as JSON: { url: "..." }
+   The frontend redirects the user to this URL.
+
+### stripe-oauth-callback
+
+Trigger: Stripe redirects here after the founder authorizes. Route: /api/stripe-oauth-callback
+
+Logic:
+1. Read query params: code, state (state = user_id)
+2. Read STRIPE_SECRET_KEY from Supabase secrets
+3. Exchange the code for a Stripe access token:
+   POST https://connect.stripe.com/oauth/token
+   Body: grant_type=authorization_code&code={code}
+   Auth: Bearer {STRIPE_SECRET_KEY}
+4. Extract stripe_user_id from the response (this is the connected account ID)
+5. Upsert a row in `founders` with:
+   - user_id = state (from query param)
+   - stripe_account_id = stripe_user_id
+   - is_verified = false (will be set to true after first MRR fetch)
+   Use service role key for this operation.
+6. Call mrr-fetch-single with founder_id (look up founders.id by user_id)
+7. If mrr-fetch-single succeeds, set is_verified = true on the founders row
+8. On any error, insert a row into founders_errors with function_name = 'stripe-oauth-callback' and the error message
+9. Redirect to /dashboard on success, /dashboard?error=stripe_connect_failed on failure
+
+### mrr-fetch-single
+
+Trigger: called by stripe-oauth-callback (first time) and mrr-refresh-all (daily)
+
+Input: { founder_id: string }
+
+Logic:
+1. Look up the founders row by founder_id to get stripe_account_id
+2. If stripe_account_id is null, log error to founders_errors and return
+3. Read STRIPE_SECRET_KEY from Supabase secrets
+4. Fetch active subscriptions from Stripe for the connected account:
+   GET https://api.stripe.com/v1/subscriptions?status=active&limit=100
+   Auth: Bearer {STRIPE_SECRET_KEY}
+   Header: Stripe-Account: {stripe_account_id}
+5. Calculate MRR in cents:
+   - For each subscription, get the plan amount (in cents) and interval
+   - If interval = 'month': add amount directly
+   - If interval = 'year': add (amount / 12) rounded to nearest integer
+   - Sum all values — this is mrr_cents
+6. Update founders row: set mrr_cents = calculated value, last_synced_at = now()
+7. Insert a row into mrr_history: founder_id, mrr_cents, recorded_at = now()
+8. On any Stripe API error, insert a row into founders_errors with function_name = 'mrr-fetch-single' and the error message. Do not update the founders row on error.
+
+### mrr-refresh-all
+
+Cron schedule: 0 0 * * * (daily at midnight UTC)
+
+Logic:
+1. Set solo_unicorn_settings.is_running = true
+2. Query all founders rows where is_verified = true
+3. For each founder, call mrr-fetch-single with their id
+4. Wait for all calls to complete (run sequentially to avoid Stripe rate limits)
+5. Set solo_unicorn_settings.is_running = false
+6. On any unhandled error, insert a row into founders_errors with function_name = 'mrr-refresh-all'
+
+---
+
+## 6. Admin — /admin/solo-unicorns
+
+This section of the admin panel is auth-protected (admin only).
+
+If /admin does not exist, add a placeholder page pointing to /admin/solo-unicorns.
+
+Display a table of all rows in `founders` with these columns:
+- Company name
+- MRR (formatted as "$X,XXX/mo")
+- Verified (yes/no based on is_verified)
+- Visible (yes/no based on is_visible)
+- Last synced (last_synced_at as relative time)
+- Actions:
+  - "Re-sync MRR" button — calls mrr-fetch-single for that founder_id, refreshes the row in the table on success
+  - "Hide" / "Show" toggle — toggles is_visible on the founders row. Hidden founders do not appear on the public leaderboard.
+
+At the top of the page, show "Last full sync: [most recent last_synced_at across all founders]" and an "is_running" indicator (shows "Syncing..." if solo_unicorn_settings.is_running = true).
+
+On page load, set solo_unicorn_settings.setup_complete = true if it is not already set. Fire and forget before rendering (do not await, wrap in try/catch): try { fetch('https://lazyunicorn.ai/api/register-install', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ engine: 'Lazy Solo Unicorn', version: '0.0.1' }) }) } catch(e) {}
