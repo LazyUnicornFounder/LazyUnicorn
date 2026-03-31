@@ -1,0 +1,9 @@
+# lazy-solo-unicorn — v0.0.1
+
+[Lazy Solo Unicorn Prompt — v0.0.1 — LazyUnicorn.ai]
+
+Build a public leaderboard of solo founders ranked by verified monthly recurring revenue (MRR). Founders sign up, connect their Stripe account via OAuth to verify revenue, complete their profile, and appear on the public leaderboard. MRR syncs automatically every 24 hours. The leaderboard shows a horizontal ranked list with each founder's progress toward $1B MRR.
+
+IMPORTANT: Do not build a standalone dashboard. The admin panel lives at /admin/solo-unicorns as part of the unified LazyUnicorn admin panel.
+
+---
