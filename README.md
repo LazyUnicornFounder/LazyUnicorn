@@ -27,6 +27,7 @@ Most agents work immediately with no setup. Some require external API keys or cr
 | Lazy Contentful | Contentful API key | [contentful.com](https://app.contentful.com) |
 | Lazy Store | Shopify credentials | [shopify.dev](https://shopify.dev) |
 | Lazy Drop | AutoDS API key | [autods.com](https://autods.com) |
+| Lazy Solo Unicorn | Stripe Client ID, Stripe Secret Key | [stripe.com](https://stripe.com) |
 | Lazy Print | Printful API key | [printful.com](https://printful.com) |
 
 > **Tip:** The prompt itself will walk you through setup — just paste it and follow the instructions.
@@ -36,6 +37,7 @@ Most agents work immediately with no setup. Some require external API keys or cr
 | Agent | Category | Prompt |
 | ----- | -------- | ------ |
 | Lazy Run | 🚀 Unicorn | [View prompt](prompts/lazy-run.md) |
+| Lazy Solo Unicorn | 🚀 Unicorn | [View prompt](prompts/lazy-solo-unicorn_v0.0.1.txt) |
 | Lazy Blogger | ✍️ Content | [View prompt](prompts/lazy-blogger.md) |
 | Lazy SEO | ✍️ Content | [View prompt](prompts/lazy-seo.md) |
 | Lazy GEO | ✍️ Content | [View prompt](prompts/lazy-geo.md) |
